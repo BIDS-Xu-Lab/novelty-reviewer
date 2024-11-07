@@ -59,7 +59,7 @@ async function onDatasetFileChange(e) {
 }
 
 async function onClickSaveDataset() {
-  console.log('saving dataset');
+  console.log('* saving dataset file ' + store.dataset_file.name);
   let content = Papa.unparse(
     store.items, { 
       delimiter: '\t' 
@@ -73,7 +73,7 @@ async function onClickSaveDataset() {
   );
 
   store.flag.has_decision_unsaved = false;
-  console.log('* saved!');
+  console.log('* saved to ' + store.dataset_file.name);
 }
 
 </script>
