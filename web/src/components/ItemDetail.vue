@@ -34,13 +34,14 @@ function highlightText(text) {
         <span class="year">
             {{ store.working_item?.year }}
         </span>
+        <br>
         <span>
             PMID: {{ store.working_item?.pmid }}
         </span>
     </div>
     <fieldset>
         <legend>Abstract</legend>
-        <div v-html="highlightText(store.working_item?.abstract)">
+            <div v-html="highlightText(store.working_item?.abstract)">
         </div>
     </fieldset>
     <fieldset>
@@ -72,7 +73,8 @@ function highlightText(text) {
     padding: 10px;
 }
 .info {
-    padding: 0 10px;
+    padding: 0 1rem;
+    margin: 0 0 1rem 0;
     font-style: italic;
 }
 .journal {

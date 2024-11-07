@@ -70,7 +70,11 @@ const items = ref([
             </template>
 
             <template #end> 
-                <SplitButton label="Sort" severity='info' size="small" :model="items"></SplitButton>
+                <SplitButton 
+                    label="Sort" 
+                    severity='secondary' 
+                    size="small" :model="items">
+                </SplitButton>
             </template>
         </Toolbar>
     </div>
@@ -132,7 +136,7 @@ const items = ref([
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 0 1rem;
     border-bottom: 1px solid #d4d4d4;
 }
 

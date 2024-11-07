@@ -37,17 +37,26 @@ const store = useDataStore();
 </div>
 
 <div class="footer">
-    <div>
+  <div>
+    {{ store.taxonomy_file?.fn }}:
+    <b>{{ store.taxonomy.length }}</b> taxonomies
+    |
+    <b>{{ store.items.length }}</b> items
+    |
+    <b>{{ store.n_results_by_human }}</b> by Human
+    + 
+    <b>{{ store.n_results_by_ai }}</b> by AI
+  </div>
+  <div>
+    <a href="https://github.com/BIDS-Xu-Lab/novelty-reviewer"
+      target="_blank">
       <i class="fa-brands fa-pagelines"></i>
       Novelty Reviewer
       v0.1.0
-    </div>
-    <div>
-      <a href="https://github.com/BIDS-Xu-Lab/novelty-reviewer"
-        target="_blank">
-        <i class="fa-brands fa-github"></i>
-      </a>
-    </div>
+      |
+      <i class="fa-brands fa-github"></i>
+    </a>
+  </div>
 </div>
 
 

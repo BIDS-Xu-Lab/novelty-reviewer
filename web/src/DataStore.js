@@ -15,7 +15,19 @@ state: () => ({
         
             "decision": "New theory",
             "decision_datetime": "2021-09-01T00:00:00Z",
-            "decision_by": "user",
+            "decision_by": "human",
+
+            "result_human": "New theory",
+
+            "result_openai": "New theory",
+            "result_raw_openai": "New theory",
+
+            "result_claude": "New other",
+            "result_raw_claude": "New other info",
+
+            "result_llama": "New tool",
+            "result_raw_llama": "New other tool",
+
         }
     ],
 
@@ -23,7 +35,11 @@ state: () => ({
     working_item_idx: -1,
 
     // taxonomy
-    taxonomy: [
+    taxonomy_file: null,
+    
+    /*
+    taxonomy is a list of objects, each object has two fields:
+    [
     {
         "name": "1 New Concept",
         "value": "New concept"
@@ -49,6 +65,26 @@ state: () => ({
         "value": "New Application"
     },
     ],
+     */
+    taxonomy: [],
+
+    ai_models: [
+    {
+        "id": "openai",
+        "name": "OpenAI",
+        "enabled": true
+    },
+    {
+        "id": "claude",
+        "name": "Claude",
+        "enabled": true
+    },
+    {
+        "id": "llama",
+        "name": "LLaMA",
+        "enabled": true
+    },
+    ],
 
     keywords: [
         'cancer',
@@ -72,6 +108,14 @@ getters: {
         }
         return this.items[this.working_item_idx];
     },
+
+    n_results_by_human(state) {
+        return this.items.filter(item => item.decision_by == "human").length;
+    },
+
+    n_results_by_ai(state) {
+        return this.items.filter(item => item.decision_by != "human").length;
+    },
 },  
 actions: {
     increment() {
@@ -90,6 +134,48 @@ actions: {
         return text.replace(re, function(matched){
             return "<mark>" + matched + "</mark>";
         });
-    }
+    },
+
+    setTaxonomyByText: function(text) {
+        // the given text is a string
+        // each line is a taxonomy item
+        // we need to split the text by line
+        // for those lines start with a number, such as 1, 1.1, 1.1.1, etc.
+        // we need to remove the number, just keep the text
+        // the result is a list of strings
+        let lines = text.split("\n");
+        let result = [];
+        for (let line of lines) {
+            // trim the line
+            line = line.trim();
+
+            // if line is empty, skip
+            if (line == "") {
+                continue;
+            }
+
+            // split
+            let parts = line.split(" ");
+
+            // get the first part
+            let num = parts[0];
+            if (num.match(/^\d+(\.\d+)*$/)) {
+                // this line has number, remove it
+                result.push({
+                    name: line,
+                    value: line.replace(/^\d+(\.\d+)*\s*/, "")
+                });
+            } else {
+                // this line does not have number
+                result.push({
+                    name: line,
+                    value: line
+                });
+            }
+        }
+
+        // update the local taxonomy
+        this.taxonomy = result;
+    },
 }
 });
