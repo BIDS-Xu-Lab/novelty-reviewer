@@ -9,13 +9,19 @@ const toast = useToast();
 const store = useDataStore();
 
 async function onTaxonomyFileChange(e) {
-  console.log(e.target.files[0]);
-  let f = await fs_helper.fs_read_file_system_handle(e.target.files[0]);
-  console.log(f);
+  let { fh, file } = await fs_helper.fsOpenFile({
+    types: [{
+          description: 'Text File',
+          accept: { 'text/plain': ['.txt'] }
+    }],
+    multiple: false,
+  });
+
+  let text = await file.text();
 
   // update the taxonomy list
-  store.taxonomy_file = f;
-  store.setTaxonomyByText(f.text)
+  store.taxonomy_file = fh;
+  store.setTaxonomyByText(text)
 }
 
 function onPromptFileChange(e) {
@@ -23,21 +29,29 @@ function onPromptFileChange(e) {
 }
 
 async function onDatasetFileChange(e) {
-  console.log(e.target.files[0]);
-  let fh = e.target.files[0];
+  let { fh, file } = await fs_helper.fsOpenFile({
+    types: [{
+          description: 'TSV Files',
+          accept: { 'text/plain': ['.tsv'] }
+    }],
+    multiple: false,
+  });
+  // console.log(e.target.files[0]);
+  // let fh = e.target.files[0];
   // let f = await fs_helper.fs_read_file_system_handle(e.target.files[0]);
   store.dataset_file = fh;
 
   Papa.parse(
-      fh,
+      file,
       {
         delimiter: '\t',
         skipEmptyLines: true,
         header: true,
         worker: true,
         step: (row) => {
-            console.log("Row data:", row.data);
-            store.items.push(row.data);
+            // console.log("Row data:", row.data);
+            let formatted_row = store.formatTsvRow(row.data);
+            store.items.push(formatted_row);
         },
       }
   );
@@ -53,12 +67,13 @@ async function onClickSaveDataset() {
   );
   
   // write back to the tsv file
-  // await fs_helper.fs_write_file_system_handle(
-  //   store.dataset_file, 
-  //   content
-  // );
+  await fs_helper.fsWriteFile(
+    store.dataset_file, 
+    content
+  );
 
-  toast.add({ severity: 'info', summary: 'Info', detail: 'Saved dataset file', life: 3000 });
+  store.flag.has_decision_unsaved = false;
+  console.log('* saved!');
 }
 
 </script>
@@ -70,7 +85,7 @@ async function onClickSaveDataset() {
   <div class="left">
 
     <div class="oper-item">
-      <label for="">
+      <label class="file-label">
         <i class="fa-regular fa-clipboard"></i>
         Taxonomy File
         <a href=""
@@ -78,16 +93,22 @@ async function onClickSaveDataset() {
           <i class="fa-regular fa-question-circle"></i>
         </a>
       </label>
-      <input type="file" 
-        accept=".txt"
-        @change="onTaxonomyFileChange" />
+      <div class="file-zone"
+        @click="onTaxonomyFileChange">
+        <template v-if="store.taxonomy_file">
+          {{ store.taxonomy_file.name }}
+        </template>
+        <template v-else>
+          Load the taxonomy file
+        </template>
+      </div>
     </div>
 
     <Divider layout="vertical" />
 
     <div class="oper-item">
 
-      <label for="">
+      <label class="file-label">
         <i class="fa-regular fa-file-code"></i>
         Prompt Template File
         <a href=""
@@ -104,7 +125,7 @@ async function onClickSaveDataset() {
 
     <div class="oper-item">
 
-      <label for="">
+      <label class="file-label">
         <i class="fa-regular fa-file-lines"></i>
         Dataset File
         <a href=""
@@ -112,9 +133,15 @@ async function onClickSaveDataset() {
           <i class="fa-regular fa-question-circle"></i>
         </a>
       </label>
-      <input type="file"
-        accept=".tsv"
-        @change="onDatasetFileChange" />
+      <div class="file-zone"
+        @click="onDatasetFileChange">
+        <template v-if="store.dataset_file">
+          {{ store.dataset_file.name }}
+        </template>
+        <template v-else>
+          Load the dataset file
+        </template>
+      </div>
     </div>
 
     <Divider layout="vertical" />
@@ -126,6 +153,17 @@ async function onClickSaveDataset() {
       icon="pi pi-save" 
       @click="onClickSaveDataset"
       severity="secondary" />
+
+    <div class="save-status">
+      <template v-if="store.flag.has_decision_unsaved">
+        <span style="color: red;">
+          Unsaved changes!
+        </span>
+      </template>
+      <template v-else>
+        <i class="fa-regular fa-circle-check"></i>
+      </template>
+    </div>
   </div>
 
   <div class="right">
@@ -158,5 +196,20 @@ async function onClickSaveDataset() {
   justify-content: start;
   padding: 0.5rem;
   width: 15rem;
+}
+.file-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #7f7f7f;
+  border-radius: 0.5rem;
+}
+.file-label {
+  font-size: 0.8rem;
+}
+.save-status {
+  font-size: 0.8rem;
+  margin: 0 0.5rem;
 }
 </style>

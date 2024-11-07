@@ -4,9 +4,10 @@ import { useDataStore } from "../DataStore";
 const store = useDataStore();
 
 function onClickAccept() {
-    store.working_item.decision = store.working_item.result_human;
-    store.working_item.decision_by = 'human';
-    store.working_item.decision_datetime = new Date().toLocaleString();
+    store.setWorkingItemDecision(
+        'human',
+        store.working_item.result_human
+    );
 }
 </script>
 

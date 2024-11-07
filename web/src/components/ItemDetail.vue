@@ -1,5 +1,7 @@
 <script setup>
 import { useDataStore } from "../DataStore";
+import { pubmed } from "../utils/pubmed";
+
 const store = useDataStore();
 
 function highlightText(text) {
@@ -12,8 +14,49 @@ function highlightText(text) {
     return text;
 }
 
-function onClickFetch() {
+async function onClickFetch() {
     console.log('fetching metadata');
+
+    // set the flag
+    store.flag.is_fetching_metadata = true;
+
+    let d = await pubmed.esummary(store.working_item.pmid);
+
+    // get title
+    let p = d.result[store.working_item.pmid];
+    console.log('* summary:', p);
+
+    // set title, journal, year
+    let title = p.title;
+    let journal = p.source;
+    if (p.hasOwnProperty('fulljournalname')) {
+        journal = p.fulljournalname;
+    }
+    let year = p.pubdate;
+    // let authors = [];
+    // if (p.hasOwnProperty('authors')) {
+    //     for (let a of p.authors) {
+    //         authors.push(a.name);
+    //     }
+    // }
+    // // join the name with ;
+    // store.working_item.authors = authors.join('; ');
+
+    // set information to the working item
+    store.working_item.title = title;
+    store.working_item.journal = journal;
+    store.working_item.year = year;
+
+    // get abstract
+    let abstract = await pubmed.efetch(store.working_item.pmid, 'abstract', 'text');
+
+    // need to convert the \n to <br>
+    abstract = abstract.replace(/\n/g, '<br>');
+    store.working_item.abstract = abstract;
+    console.log('* abstract:', abstract);
+
+    // finish
+    store.flag.is_fetching_metadata = false;
 }
 </script>
 
@@ -36,11 +79,17 @@ function onClickFetch() {
 
     </div>
 
-    <div v-if="store.working_item && store.has_working_item_title">
-        <div class="title">
+    <div v-if="store.working_item">
+        <div v-if="store.flag.is_fetching_metadata">
+            Fetching metadata... Please wait. 
+            <i class="fa-solid fa-spinner spin"></i>
+        </div>
+        <div v-if="store.has_working_item_title"
+            class="title">
             {{ store.working_item?.title }}
         </div>
-        <div class="info">
+        <div v-if="store.has_working_item_title"
+            class="info">
             <span class="journal">
                 {{ store.working_item?.journal }}
             </span>
@@ -52,10 +101,10 @@ function onClickFetch() {
                 PMID: {{ store.working_item?.pmid }}
             </span>
         </div>
-        <fieldset>
+        <fieldset v-if="store.has_working_item_abstract">
             <legend>Abstract</legend>
                 <div v-html="highlightText(store.working_item?.abstract)">
-            </div>
+                </div>
         </fieldset>
     </div>
     <fieldset>

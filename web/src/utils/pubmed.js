@@ -36,9 +36,9 @@ export const pubmed = {
         return data;
     },
 
-    efetch: async function(id, rettype='abstract') {
+    efetch: async function(id, rettype='abstract', retmode='xml') {
         const rsp = await fetch(
-            `${this.BASE}/efetch.fcgi?db=pubmed&retmode=xml&rettype=${rettype}&id=${id}`, 
+            `${this.BASE}/efetch.fcgi?db=pubmed&retmode=${retmode}&rettype=${rettype}&id=${id}`, 
             {
                 method: 'GET'
             }

@@ -85,7 +85,9 @@ const items = ref([
             class="item">
             <div class="left">
                 <span class="item-idx">
-                    {{ item_idx }}
+                    <template v-if="store.hasMetadata(item)">
+                        <i class="fa-regular fa-file-lines"></i>
+                    </template>
                 </span>
                 <span v-if="isDecided(item)"
                     class="item-icon item-checked">
@@ -171,7 +173,7 @@ const items = ref([
     align-items: center;
 }
 .item:hover {
-    background-color: #d4d4d4;
+    background-color: #eaeaea;
 }
 .item:hover .right {
     display: inline-block;

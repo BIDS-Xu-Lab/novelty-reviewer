@@ -95,12 +95,12 @@ state: () => ({
 
     flag: {
         enable_highlight: true,
-
+        is_fetching_metadata: false,
         is_saving_dataset_file: false,
+        has_decision_unsaved: false,
     },
 
     status: {
-        loading: false,
         error: null,
     },
 }),
@@ -125,6 +125,19 @@ getters: {
         return true;
     },
 
+    has_working_item_abstract(state) {
+        if (state.working_item_idx == -1) {
+            return false;
+        }
+        if (!state.items[state.working_item_idx].hasOwnProperty('abstract')) {
+            return false;
+        }
+        if (state.items[state.working_item_idx].abstract == null) {
+            return false;
+        }
+        return true;
+    },
+
     n_results_by_human(state) {
         return state.items.filter(item => item.decision_by == "human").length;
     },
@@ -134,6 +147,60 @@ getters: {
     },
 },  
 actions: {
+    setWorkingItemDecision(model, result) {
+        this.working_item.decision = result;
+        this.working_item.decision_by = model;
+        this.working_item.decision_datetime = new Date().toLocaleString();
+
+        this.flag.has_decision_unsaved = true;
+    },
+
+    hasMetadata: function(item) {
+        if (!item.hasOwnProperty('title')) {
+            return false;
+        }
+        if (item.title == null) {
+            return false;
+        }
+        return true;
+    },
+
+    formatTsvRow: function(row) {
+        let attrs = [
+            // basic information
+            'title',
+            'journal',
+            'year',
+            'conclusion',
+            'abstract',
+
+            // decision
+            'decision',
+            'decision_datetime',
+            'decision_by',
+
+            // results from different sources
+            'result_human',
+
+            'result_openai',
+            'result_raw_openai',
+
+            'result_claude',
+            'result_raw_claude',
+
+            'result_llama',
+            'result_raw_llama',
+        ];
+
+        for (let attr of attrs) {
+            if (!row.hasOwnProperty(attr)) {
+                row[attr] = null;
+            }
+        }
+
+        return row;
+    },
+
     increment() {
         this.count++;
     },
