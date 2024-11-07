@@ -128,3 +128,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+.DS_Store
+.vscode
+
+# ignore python cache
+__pycache__/
+*.pyc
+
+settings.toml

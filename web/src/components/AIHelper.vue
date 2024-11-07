@@ -1,0 +1,136 @@
+<script setup>
+import { useDataStore } from "../DataStore";
+const store = useDataStore();
+
+</script>
+
+<template>
+<div v-if="store.working_item_idx != -1"
+    class="ai-helper">
+    <div class="header">
+        <i class="fa-solid fa-robot"></i>
+        AI Helper
+    </div>
+    <div class="oper-bar">
+        <Button label="Review by All LLMs" severity="secondary" class="">
+            <template #icon>
+                <i class="fa-solid fa-bolt"></i>
+            </template>
+        </Button>
+
+    </div>
+    <div class="model-list">
+        <fieldset class="model">
+            <legend class="model-title">OpenAI Output</legend>
+
+            <div class="model-output">
+                <div>
+                        New Zealand
+                </div>
+
+                <div>
+                    <Button label="Review" severity="secondary">
+                        <template #icon>
+                            <i class="fa-solid fa-bolt"></i>
+                        </template>
+                    </Button>
+                    &nbsp;
+                    <Button label="Accept" 
+                        icon="pi pi-check"
+                        severity="success" />
+                </div>
+            </div>
+            
+        </fieldset>
+
+        <fieldset class="model">
+            <legend class="model-title">OpenAI Output</legend>
+
+            <div class="model-output">
+                <div>
+                        New Zealand
+                </div>
+
+                <div>
+                    <Button label="Review" severity="secondary">
+                        <template #icon>
+                            <i class="fa-solid fa-bolt"></i>
+                        </template>
+                    </Button>
+                    &nbsp;
+                    <Button label="Accept" 
+                        icon="pi pi-check"
+                        severity="success" />
+                </div>
+            </div>
+            
+        </fieldset>
+
+        <fieldset class="model">
+            <legend class="model-title">OpenAI Output</legend>
+
+            <div class="model-output">
+                <div>
+                        New Zealand
+                </div>
+
+                <div>
+                    <Button label="Review" severity="secondary">
+                        <template #icon>
+                            <i class="fa-solid fa-bolt"></i>
+                        </template>
+                    </Button>
+                    &nbsp;
+                    <Button label="Accept" 
+                        icon="pi pi-check"
+                        severity="success" />
+                </div>
+            </div>
+            
+        </fieldset>
+    </div>
+</div>
+</template>
+
+<style scoped>
+.header {
+    font-weight: bold;
+    height: 3rem;
+}
+.ai-helper {
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.oper-bar {
+    height: 2rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.model-list {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.model {
+    width: 100%;
+    margin: 1rem 0;
+}
+.model-title {
+    font-weight: bold;
+}
+.model-output {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+</style>

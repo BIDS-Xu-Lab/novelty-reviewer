@@ -1,0 +1,115 @@
+<script setup>
+import { ref } from "vue";
+import ItemList from "./components/ItemList.vue";
+import ItemDetail from "./components/ItemDetail.vue";
+import AIHelper from "./components/AIHelper.vue";
+import HeaderMenu from "./components/HeaderMenu.vue";
+import HumanReviewer from "./components/HumanReviewer.vue";
+
+import { useDataStore } from "./DataStore";
+
+const store = useDataStore();
+
+
+</script>
+
+<template>
+
+<div class="header">
+  <HeaderMenu />
+</div>
+
+<div class="main">
+  <div class="left">
+    <ItemList />
+  </div>
+
+  <div class="right">
+    <div class="main-info">
+      <ItemDetail />
+    </div>
+
+    <div class="review-panel">
+      <HumanReviewer />
+      <AIHelper />
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+    <div>
+      <i class="fa-brands fa-pagelines"></i>
+      Novelty Reviewer
+      v0.1.0
+    </div>
+    <div>
+      <a href="https://github.com/BIDS-Xu-Lab/novelty-reviewer"
+        target="_blank">
+        <i class="fa-brands fa-github"></i>
+      </a>
+    </div>
+</div>
+
+
+</template>
+
+<style scoped>
+.header {
+  height: 4rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #cacaca;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0 10px;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #cacaca;
+  justify-content: space-between;
+}
+.oper-bar {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.oper-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+}
+.main {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 7rem);
+  background-color: #d4d4d4;
+}
+.left {
+  width: 25rem;
+  height: calc(100vh - 7rem);
+  overflow-y: hidden;
+  background-color: #f4f4f4;
+}
+.right {
+  flex: 1;
+  width: calc(100% - 25rem);
+  padding: 10px;
+  height: calc(100vh - 7rem);
+  background-color: #e4e4e4;
+  display: flex;
+  flex-direction: row;
+}
+.main-info {
+  width: 50%;
+  overflow-y: hidden;
+}
+.review-panel {
+  width: 50%;
+  overflow-y: hidden;
+}
+</style>
