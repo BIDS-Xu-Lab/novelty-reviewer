@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { useDataStore } from "../DataStore";
 import * as fs_helper from "../utils/fs_helper";
 import Papa from "papaparse";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
 const store = useDataStore();
 
@@ -40,6 +42,23 @@ async function onDatasetFileChange(e) {
       }
   );
 
+}
+
+async function onClickSaveDataset() {
+  console.log('saving dataset');
+  let content = Papa.unparse(
+    store.items, { 
+      delimiter: '\t' 
+    }
+  );
+  
+  // write back to the tsv file
+  // await fs_helper.fs_write_file_system_handle(
+  //   store.dataset_file, 
+  //   content
+  // );
+
+  toast.add({ severity: 'info', summary: 'Info', detail: 'Saved dataset file', life: 3000 });
 }
 
 </script>
@@ -99,9 +118,14 @@ async function onDatasetFileChange(e) {
     </div>
 
     <Divider layout="vertical" />
-    <Button label="Load the files" icon="pi pi-upload" severity="secondary" />
+    <Button label="Load the files" 
+      icon="pi pi-upload" 
+      severity="secondary" />
     <Divider layout="vertical" />
-    <Button label="Save dataset file" icon="pi pi-save" severity="secondary" />
+    <Button label="Save dataset file" 
+      icon="pi pi-save" 
+      @click="onClickSaveDataset"
+      severity="secondary" />
   </div>
 
   <div class="right">

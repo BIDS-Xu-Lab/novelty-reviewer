@@ -95,6 +95,8 @@ state: () => ({
 
     flag: {
         enable_highlight: true,
+
+        is_saving_dataset_file: false,
     },
 
     status: {
