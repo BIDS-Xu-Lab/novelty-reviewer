@@ -3,33 +3,34 @@ import { defineStore } from 'pinia';
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
     // global variables for all components
-    items: [
-        {
-            "pmid": 36361634,
-            "title": "The Role of Telomerase in Breast Cancer's Response to Therapy.",
-            "journal": "Int J Mol Sci.",
-            "year": 2013,
-            "conclusion": "The model also makes several testable predictions, which can be used to validate or falsify the theory in future experiments.",
-            "abstract": "Currently, breast cancer appears to be the most widespread cancer in the world and the most common cause of cancer deaths. This specific type of cancer affects women in both developed and developing countries. Prevention and early diagnosis are very important factors for good prognosis. A characteristic feature of cancer cells is the ability of unlimited cell division, which makes them immortal. Telomeres, which are shortened with each cell division in normal cells, are rebuilt in cancer cells by the enzyme telomerase, which is expressed in more than 85% of cancers (up to 100% of adenocarcinomas, including breast cancer). Telomerase may have different functions that are related to telomeres or unrelated. It has been shown that high activity of the enzyme in cancer cells is associated with poor cell sensitivity to therapies. Therefore, telomerase has become a potential target for cancer therapies. The low efficacy of therapies has resulted in the search for new combined and more effective therapeutic methods, including the involvement of telomerase inhibitors and telomerase-targeted immunotherapy.",
-        
-        
-            "decision": "New theory",
-            "decision_datetime": "2021-09-01T00:00:00Z",
-            "decision_by": "human",
+    /*
+    {
+        "pmid": 36361634,
+        "title": "The Role of Telomerase in Breast Cancer's Response to Therapy.",
+        "journal": "Int J Mol Sci.",
+        "year": 2013,
+        "conclusion": "The model also makes several testable predictions, which can be used to validate or falsify the theory in future experiments.",
+        "abstract": "Currently, breast cancer appears to be the most widespread cancer in the world and the most common cause of cancer deaths. This specific type of cancer affects women in both developed and developing countries. Prevention and early diagnosis are very important factors for good prognosis. A characteristic feature of cancer cells is the ability of unlimited cell division, which makes them immortal. Telomeres, which are shortened with each cell division in normal cells, are rebuilt in cancer cells by the enzyme telomerase, which is expressed in more than 85% of cancers (up to 100% of adenocarcinomas, including breast cancer). Telomerase may have different functions that are related to telomeres or unrelated. It has been shown that high activity of the enzyme in cancer cells is associated with poor cell sensitivity to therapies. Therefore, telomerase has become a potential target for cancer therapies. The low efficacy of therapies has resulted in the search for new combined and more effective therapeutic methods, including the involvement of telomerase inhibitors and telomerase-targeted immunotherapy.",
+    
+    
+        "decision": "New theory",
+        "decision_datetime": "2021-09-01T00:00:00Z",
+        "decision_by": "human",
 
-            "result_human": "New theory",
+        "result_human": "New theory",
 
-            "result_openai": "New theory",
-            "result_raw_openai": "New theory",
+        "result_openai": "New theory",
+        "result_raw_openai": "New theory",
 
-            "result_claude": "New other",
-            "result_raw_claude": "New other info",
+        "result_claude": "New other",
+        "result_raw_claude": "New other info",
 
-            "result_llama": "New tool",
-            "result_raw_llama": "New other tool",
+        "result_llama": "New tool",
+        "result_raw_llama": "New other tool",
 
-        }
-    ],
+    }
+     */
+    items: [],
 
     // global functions for all components
     working_item_idx: -1,
@@ -103,18 +104,31 @@ state: () => ({
 }),
 getters: {
     working_item(state) {
-        if (this.working_item_idx == -1) {
+        if (state.working_item_idx == -1) {
             return null;
         }
-        return this.items[this.working_item_idx];
+        return state.items[state.working_item_idx];
+    },
+
+    has_working_item_title(state) {
+        if (state.working_item_idx == -1) {
+            return false;
+        }
+        if (!state.items[state.working_item_idx].hasOwnProperty('title')) {
+            return false;
+        }
+        if (state.items[state.working_item_idx].title == null) {
+            return false;
+        }
+        return true;
     },
 
     n_results_by_human(state) {
-        return this.items.filter(item => item.decision_by == "human").length;
+        return state.items.filter(item => item.decision_by == "human").length;
     },
 
     n_results_by_ai(state) {
-        return this.items.filter(item => item.decision_by != "human").length;
+        return state.items.filter(item => item.decision_by != "human").length;
     },
 },  
 actions: {

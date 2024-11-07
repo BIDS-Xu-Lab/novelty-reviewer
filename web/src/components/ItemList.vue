@@ -8,16 +8,16 @@ const store = useDataStore();
 const keyword = ref('');
 
 
-// make 100 records of this item
-for (let i = 0; i < 100; i++) {
-    // copy item 0
-    let item = JSON.parse(JSON.stringify(store.items[0]));
-    item.pmid = item.pmid + i*10;
+// // make 100 records of this item
+// for (let i = 0; i < 100; i++) {
+//     // copy item 0
+//     let item = JSON.parse(JSON.stringify(store.items[0]));
+//     item.pmid = item.pmid + i*10;
 
-    if (i%5==0) {item.decision = '';}
+//     if (i%5==0) {item.decision = '';}
 
-    store.items.push(item);
-}
+//     store.items.push(item);
+// }
 
 
 function isDecided(item) {
@@ -151,7 +151,7 @@ const items = ref([
 }
 
 .item-list-bottom {
-    position: relative;
+    position: absolute;
     bottom: 0;
     display: flex;
     flex-direction: row;

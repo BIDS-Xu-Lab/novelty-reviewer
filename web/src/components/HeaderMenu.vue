@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useDataStore } from "../DataStore";
 import * as fs_helper from "../utils/fs_helper";
+import Papa from "papaparse";
 
 const store = useDataStore();
 
@@ -19,8 +20,26 @@ function onPromptFileChange(e) {
   console.log(e.target.files[0]);
 }
 
-function onDatasetFileChange(e) {
+async function onDatasetFileChange(e) {
   console.log(e.target.files[0]);
+  let fh = e.target.files[0];
+  // let f = await fs_helper.fs_read_file_system_handle(e.target.files[0]);
+  store.dataset_file = fh;
+
+  Papa.parse(
+      fh,
+      {
+        delimiter: '\t',
+        skipEmptyLines: true,
+        header: true,
+        worker: true,
+        step: (row) => {
+            console.log("Row data:", row.data);
+            store.items.push(row.data);
+        },
+      }
+  );
+
 }
 
 </script>
@@ -74,7 +93,9 @@ function onDatasetFileChange(e) {
           <i class="fa-regular fa-question-circle"></i>
         </a>
       </label>
-      <input type="file" ref="file" @change="onDatasetFileChange" />
+      <input type="file"
+        accept=".tsv"
+        @change="onDatasetFileChange" />
     </div>
 
     <Divider layout="vertical" />

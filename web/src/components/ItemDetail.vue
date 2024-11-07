@@ -11,39 +11,53 @@ function highlightText(text) {
     }
     return text;
 }
+
+function onClickFetch() {
+    console.log('fetching metadata');
+}
 </script>
 
 <template>
 <div v-if="store.working_item_idx != -1"
     class="item-detail">
     <div class="oper-bar">
+        <Button 
+            severity="secondary"
+            label="Fetch Metadata"
+            icon="pi pi-download"
+            @click="onClickFetch">
+        </Button>
+        &nbsp;
         <Button label="Translate" severity="secondary">
             <template #icon>
                 <i class="fa-solid fa-language"></i>
             </template>
         </Button>
+
     </div>
 
-    <div class="title">
-        {{ store.working_item?.title }}
-    </div>
-    <div class="info">
-        <span class="journal">
-            {{ store.working_item?.journal }}
-        </span>
-        <span class="year">
-            {{ store.working_item?.year }}
-        </span>
-        <br>
-        <span>
-            PMID: {{ store.working_item?.pmid }}
-        </span>
-    </div>
-    <fieldset>
-        <legend>Abstract</legend>
-            <div v-html="highlightText(store.working_item?.abstract)">
+    <div v-if="store.working_item && store.has_working_item_title">
+        <div class="title">
+            {{ store.working_item?.title }}
         </div>
-    </fieldset>
+        <div class="info">
+            <span class="journal">
+                {{ store.working_item?.journal }}
+            </span>
+            <span class="year">
+                {{ store.working_item?.year }}
+            </span>
+            <br>
+            <span>
+                PMID: {{ store.working_item?.pmid }}
+            </span>
+        </div>
+        <fieldset>
+            <legend>Abstract</legend>
+                <div v-html="highlightText(store.working_item?.abstract)">
+            </div>
+        </fieldset>
+    </div>
     <fieldset>
         <legend>Conclusion</legend>
         <div v-html="highlightText(store.working_item?.conclusion)">
@@ -62,7 +76,8 @@ function highlightText(text) {
     flex-direction: column;
 }
 .oper-bar {
-    height: 2rem;
+    height: 3rem;
+    padding: 0 0 1rem 0;
     display: flex;
     justify-content: flex-start;
     align-items: center;

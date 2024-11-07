@@ -38,10 +38,13 @@ const store = useDataStore();
 
 <div class="footer">
   <div>
+    <i class="fa-regular fa-clipboard"></i>
     {{ store.taxonomy_file?.fn }}:
     <b>{{ store.taxonomy.length }}</b> taxonomies
     |
-    <b>{{ store.items.length }}</b> items
+    <i class="fa fa-database"></i>
+    {{ store.dataset_file?.name }}:
+    <b>{{ store.items.length }}</b> rows
     |
     <b>{{ store.n_results_by_human }}</b> by Human
     + 
