@@ -1,12 +1,35 @@
 <script setup>
 import { useDataStore } from "../DataStore";
+import { ai_helper } from "../utils/ai_helper";
+
 const store = useDataStore();
 
-function onClickAccept(model, result) {
-    store.setWorkingItemDecision(
-        model,
-        result
-    )
+async function onClickAccept(model, result) {
+
+}
+
+async function onClickReview(model) {
+    // set flag
+    store.flag.is_asking_ai = true;
+
+    console.log(`* AI Helper [${model}] is thinking ...`);
+    let d = await ai_helper.ask(
+        `I will provide a list of concepts, please randomly select one of them to echo for now: 
+
+- New tool
+- New gene
+- New approach
+`,
+        model
+    );
+
+    console.log(`* AI Helper [${model}]`, d);
+    console.log(`* AI Helper [${model}]`, d.choices[0].message.content);
+
+    let result_ai = d.choices[0].message.content;
+    
+    // update working item
+    store.setWorkingItemResult(model, result_ai);
 }
 </script>
 
@@ -26,8 +49,8 @@ function onClickAccept(model, result) {
 
     </div>
     <div class="model-list">
-        <fieldset v-for="model in store.ai_models"
-            class="model">
+        <fieldset v-for="model in store.config.ai_models"
+            class="model border border-solid border-gray-400 p-2 m-2">
             <legend class="model-title">
                 <i class="fa-solid fa-cube"></i>
                 {{ model.name }} Output
@@ -43,7 +66,9 @@ function onClickAccept(model, result) {
                 </div>
 
                 <div>
-                    <Button label="Review" severity="secondary">
+                    <Button label="Review" 
+                        @click="onClickReview(model.id)"
+                        severity="secondary">
                         <template #icon>
                             <i class="fa-solid fa-bolt"></i>
                         </template>

@@ -72,13 +72,13 @@ function onClickSaveKeywords() {
                     <p class="m-0">
                         API Server URL
                     </p>
-                    <InputText v-model="store.api_server_url" 
+                    <InputText v-model="store.config.api_server_url" 
                         style="width: 100%;"/>
 
                     <p class="">
                         API Server Token
                     </p>
-                    <InputText v-model="store.api_server_token" 
+                    <InputText v-model="store.config.api_server_token" 
                         style="width: 100%;"/>
                 </TabPanel>
 

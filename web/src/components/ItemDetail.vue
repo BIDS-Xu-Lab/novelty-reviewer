@@ -1,6 +1,7 @@
 <script setup>
 import { useDataStore } from "../DataStore";
 import { pubmed } from "../utils/pubmed";
+import { translator } from "../utils/translator";
 
 const store = useDataStore();
 
@@ -61,6 +62,19 @@ async function onClickFetch() {
     // update status
     store.flag.has_data_unsaved = true;
 }
+
+async function onClickTranslate() {
+    console.log('translating');
+
+    // set the flag
+    store.flag.is_translating = true;
+
+    let d = await translator.translate(
+        store.working_item.abstract
+    );
+
+    console.log('* translation:', d);
+}
 </script>
 
 <template>
@@ -74,7 +88,9 @@ async function onClickFetch() {
             @click="onClickFetch">
         </Button>
         &nbsp;
-        <Button label="Translate" severity="secondary">
+        <Button label="Translate" 
+            @click="onClickTranslate"
+            severity="secondary">
             <template #icon>
                 <i class="fa-solid fa-language"></i>
             </template>
@@ -105,7 +121,7 @@ async function onClickFetch() {
                 PMID: {{ store.working_item?.pmid }}
             </span>
         </div>
-        <fieldset>
+        <fieldset class="border border-solid border-gray-400 p-2 m-2">
             <legend>Conclusion</legend>
             <div v-if="store.has_working_item_conclusion"
                 v-html="highlightText(store.working_item?.conclusion)">
@@ -114,7 +130,7 @@ async function onClickFetch() {
                 No conclusion available.
             </div>
         </fieldset>
-        <fieldset>
+        <fieldset class="border border-solid border-gray-400 p-2 m-2">
             <legend>Abstract</legend>
                 <div v-if="store.has_working_item_abstract"
                     v-html="highlightText(store.working_item?.abstract)">

@@ -3,8 +3,30 @@ import { useToast } from "primevue/usetoast";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    api_server_url: "http://localhost:8123",
-    api_server_token: "",
+    config: {
+        api_server_url: "http://localhost:8123",
+        api_server_token: "",
+
+        ai_models: [
+        {
+            "id": "openai",
+            "name": "OpenAI",
+            "enabled": true
+        },
+        {
+            "id": "claude",
+            "name": "Claude",
+            "enabled": true
+        },
+        {
+            "id": "llama",
+            "name": "LLaMA",
+            "enabled": true
+        },
+        ],
+
+        keywords: [],
+    },
     // global variables for all components
     /*
     {
@@ -76,29 +98,11 @@ state: () => ({
     prompt_file: null,
     llm_prompt: null,
 
-    ai_models: [
-    {
-        "id": "openai",
-        "name": "OpenAI",
-        "enabled": true
-    },
-    {
-        "id": "claude",
-        "name": "Claude",
-        "enabled": true
-    },
-    {
-        "id": "llama",
-        "name": "LLaMA",
-        "enabled": true
-    },
-    ],
-
-    keywords: [],
-
     flag: {
         enable_highlight: true,
         is_fetching_metadata: false,
+        is_translating: false,
+        is_asking_ai: false,
         is_saving_dataset_file: false,
         has_data_unsaved: false,
 
@@ -194,6 +198,12 @@ actions: {
         this.working_item.decision_by = model;
         this.working_item.decision_datetime = new Date().toLocaleString();
 
+        this.flag.has_data_unsaved = true;
+    },
+
+    setWorkingItemResult(model, result) {
+        this.working_item['result_' + model] = result;
+        this.working_item['result_raw_' + model] = result;
         this.flag.has_data_unsaved = true;
     },
 

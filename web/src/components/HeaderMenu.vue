@@ -105,7 +105,7 @@ async function onClickClearDataset() {
 }
 
 function onClickSetting() {
-  store.flag.show_setting_panel = true;
+  store.flag.show_setting_panel = !store.flag.show_setting_panel;
 }
 </script>
 
