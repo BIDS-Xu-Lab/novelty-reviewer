@@ -11,7 +11,8 @@ state: () => ({
         {
             "id": "openai",
             "name": "OpenAI",
-            "enabled": true
+            "enabled": true,
+            "api_key": ""
         },
         {
             "id": "claude",

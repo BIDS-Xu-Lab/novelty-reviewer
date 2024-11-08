@@ -1,4 +1,22 @@
 export const ai_helper = {
+    service: {
+        // openai: {
+        //     endpoint: "https://api.openai.com/v1/chat/completions",
+        //     model_name: "gpt-4o-mini",
+        // },
+        openai: {
+            endpoint: "http://localhost:11434/v1/chat/completions",
+            model_name: "llama3.1",
+        },
+        llama: {
+            endpoint: "http://localhost:11434/v1/chat/completions",
+            model_name: "llama3.1",
+        },
+        claude: {
+            endpoint: "http://localhost:11434/v1/chat/completions",
+            model_name: "llama3.1",
+        }
+    },
 
     /**
      * Ask a single question to the AI
@@ -7,16 +25,28 @@ export const ai_helper = {
      * 
      * @param {string} text The text to ask
      */
-    ask: async function(text, model='openai') {
+    ask: async function(text, service='llama', model=null, api_key=null) {
+        // get config from service
+        let endpoint = this.service[service].endpoint;
+        let model_name = this.service[service].model_name;
+        if (model != null) { model_name = model; }
+
+        // customize header
+        let headers = {
+            'Content-Type': 'application/json',
+        };
+        if (api_key != null) {
+            headers['Authorization'] = `Bearer ${api_key}`;
+        }
+
+        // send request
         const rsp = await fetch(
-            'http://localhost:11434/v1/chat/completions',
+            endpoint,
             {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify({
-                    "model": "llama3.1",
+                    "model": model_name,
                     "messages": [
                         {
                             "role": "system",
