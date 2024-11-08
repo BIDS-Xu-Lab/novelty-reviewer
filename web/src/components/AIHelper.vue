@@ -1,14 +1,30 @@
 <script setup>
+import { ref } from "vue";
 import { useDataStore } from "../DataStore";
 import { ai_helper } from "../utils/ai_helper";
 
 const store = useDataStore();
 
-async function onClickAccept(model, result) {
+const status = ref({});
 
+const isReviewing = (model) => {
+    if (status.value.hasOwnProperty(model)) {
+        return status.value[model] == 'reviewing';
+    }
+
+    return false;
+}
+
+async function onClickAccept(model, result) {
+    store.setWorkingItemDecision(
+        model,
+        result
+    );
 }
 
 async function onClickReview(model) {
+    status.value[model] = 'reviewing';
+
     // set flag
     store.flag.is_asking_ai = true;
 
@@ -30,6 +46,14 @@ async function onClickReview(model) {
     
     // update working item
     store.setWorkingItemResult(model, result_ai);
+
+    status.value[model] = 'reviewed';
+}
+
+async function onClickReviewAll() {
+    for (let model of store.config.ai_models) {
+        onClickReview(model.id);
+    }
 }
 </script>
 
@@ -41,7 +65,10 @@ async function onClickReview(model) {
         AI Helper
     </div>
     <div class="oper-bar">
-        <Button label="Review by All AI Models" severity="secondary" class="">
+        <Button label="Review by All AI Models" 
+            @click="onClickReviewAll"
+            severity="secondary" 
+            class="">
             <template #icon>
                 <i class="fa-solid fa-bolt"></i>
             </template>
@@ -66,6 +93,10 @@ async function onClickReview(model) {
                 </div>
 
                 <div>
+                    <template v-if="isReviewing(model.id)">
+                        Reviewing ...
+                    </template>
+                    <template v-else>
                     <Button label="Review" 
                         @click="onClickReview(model.id)"
                         severity="secondary">
@@ -73,10 +104,11 @@ async function onClickReview(model) {
                             <i class="fa-solid fa-bolt"></i>
                         </template>
                     </Button>
-                    &nbsp;
+                    </template>
+                    
                     <Button label="Accept" 
                         icon="pi pi-check"
-                        @click="onClickAccept('openai', store.working_item['result_' + model.id])"
+                        @click="onClickAccept(model.id, store.working_item['result_' + model.id])"
                         severity="success" />
                 </div>
             </div>
