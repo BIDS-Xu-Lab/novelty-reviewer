@@ -1,5 +1,5 @@
 import "primeicons/primeicons.css";
-import './main.css';
+import './style.css';
 
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';

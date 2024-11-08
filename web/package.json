@@ -12,14 +12,17 @@
     "@primevue/themes": "^4.2.1",
     "papaparse": "^5.4.1",
     "pinia": "^2.2.6",
+    "postcss": "^8.4.47",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.1",
+    "tailwindcss-primeui": "^0.3.4",
     "vue": "^3.5.12"
   },
   "devDependencies": {
     "@primevue/auto-import-resolver": "^4.2.1",
     "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
+    "tailwindcss": "^3.4.14",
     "unplugin-vue-components": "^0.27.4",
     "vite": "^5.4.10"
   }

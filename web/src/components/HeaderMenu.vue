@@ -215,8 +215,8 @@ function onClickSetting() {
   <div class="right">
     <Button label="Setting" icon="pi pi-cog" 
       @click="onClickSetting"
+      class="mr-1"
       severity="secondary" />
-    &nbsp;
     <Button label="Help" icon="pi pi-question" severity="secondary" />
   </div>
 </div>
