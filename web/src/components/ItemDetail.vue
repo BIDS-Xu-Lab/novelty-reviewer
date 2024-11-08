@@ -1,9 +1,14 @@
 <script setup>
+import { ref } from "vue";
 import { useDataStore } from "../DataStore";
 import { pubmed } from "../utils/pubmed";
 import { translator } from "../utils/translator";
 
 const store = useDataStore();
+
+const status = ref({
+    is_translating: false,
+});
 
 function highlightText(text) {
     if (store.flag.enable_highlight) {
@@ -69,11 +74,19 @@ async function onClickTranslate() {
     // set the flag
     store.flag.is_translating = true;
 
+    // update the storage
+    store.translation[store.working_item.pmid] = {}
+
     let d = await translator.translate(
         store.working_item.abstract
     );
 
-    console.log('* translation:', d);
+    console.log('* translation:', d.translatedText);
+
+    store.translation[store.working_item.pmid]['abstract'] = d.translatedText;
+
+    // set the flag
+    store.flag.is_translating = false;
 }
 </script>
 
@@ -88,13 +101,19 @@ async function onClickTranslate() {
             @click="onClickFetch">
         </Button>
         &nbsp;
-        <Button label="Translate" 
-            @click="onClickTranslate"
-            severity="secondary">
-            <template #icon>
-                <i class="fa-solid fa-language"></i>
-            </template>
-        </Button>
+        <template v-if="store.flag.is_translating">
+            Translating... Please wait. 
+            <i class="fa-solid fa-spinner fa-spin"></i>
+        </template>
+        <template v-else>
+            <Button label="Translate" 
+                @click="onClickTranslate"
+                severity="secondary">
+                <template #icon>
+                    <i class="fa-solid fa-language"></i>
+                </template>
+            </Button>
+        </template>
 
     </div>
 
@@ -132,12 +151,15 @@ async function onClickTranslate() {
         </fieldset>
         <fieldset class="border border-solid border-gray-400 p-2 m-2">
             <legend>Abstract</legend>
-                <div v-if="store.has_working_item_abstract"
-                    v-html="highlightText(store.working_item?.abstract)">
-                </div>
-                <div v-else>
-                    No abstract available.
-                </div>
+            <div v-if="store.has_working_item_abstract"
+                v-html="highlightText(store.working_item?.abstract)">
+            </div>
+            <div v-else>
+                No abstract available.
+            </div>
+            <template v-if="store.hasWorkingItemTranslation('abstract')">
+                <div v-html="store.getWorkingItemTranslation('abstract')" class="translation-text"></div>
+            </template>
         </fieldset>
     </div>
 </div>
@@ -174,5 +196,12 @@ async function onClickTranslate() {
 }
 .year {
     color: blue;
+}
+.translation-text {
+    border-top: 1px solid #ccc;
+    padding: 1rem 0 0 0;
+    margin: 1rem 0 0 0;
+    font-size: 1rem;
+    color: #222222;
 }
 </style>

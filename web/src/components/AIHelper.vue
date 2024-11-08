@@ -23,14 +23,12 @@ async function onClickAccept(model, result) {
 }
 
 async function onClickReview(model) {
-    status.value[model] = 'reviewing';
-
     // set flag
-    store.flag.is_asking_ai = true;
+    status.value[model] = 'reviewing';
 
     console.log(`* AI Helper [${model}] is thinking ...`);
     let d = await ai_helper.ask(
-        `I will provide a list of concepts, please randomly select one of them to echo for now: 
+        `I will provide a list of concepts, please randomly select one of them to echo for now. Please exactly use what listed. Don't add any other words in the output.
 
 - New tool
 - New gene
@@ -55,6 +53,16 @@ async function onClickReviewAll() {
         onClickReview(model.id);
     }
 }
+
+function isAllReviewed() {
+    for (let model of store.config.ai_models) {
+        if (isReviewing(model.id)) {
+            return false;
+        }
+    }
+
+    return true;
+}
 </script>
 
 <template>
@@ -65,14 +73,19 @@ async function onClickReviewAll() {
         AI Helper
     </div>
     <div class="oper-bar">
-        <Button label="Review by All AI Models" 
-            @click="onClickReviewAll"
-            severity="secondary" 
-            class="">
-            <template #icon>
-                <i class="fa-solid fa-bolt"></i>
-            </template>
-        </Button>
+        <template v-if="isAllReviewed()">
+            <Button label="Review All" 
+                @click="onClickReviewAll"
+                severity="secondary">
+                <template #icon>
+                    <i class="fa-solid fa-bolt"></i>
+                </template>
+            </Button>
+        </template>
+        <template v-else>
+            Reviewing ... 
+            <i class="fa-solid fa-spinner fa-spin"></i>
+        </template>
 
     </div>
     <div class="model-list">
@@ -94,11 +107,15 @@ async function onClickReviewAll() {
 
                 <div>
                     <template v-if="isReviewing(model.id)">
-                        Reviewing ...
+                        <span class="mr-2">
+                            Reviewing
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                        </span>
                     </template>
                     <template v-else>
                     <Button label="Review" 
                         @click="onClickReview(model.id)"
+                        class="mr-2"
                         severity="secondary">
                         <template #icon>
                             <i class="fa-solid fa-bolt"></i>

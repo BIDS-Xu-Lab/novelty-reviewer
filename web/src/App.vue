@@ -57,7 +57,7 @@ const store = useDataStore();
     <a href="https://github.com/BIDS-Xu-Lab/novelty-reviewer"
       target="_blank">
       <i class="fa-brands fa-pagelines"></i>
-      Novelty Reviewer
+      Waffle
       v0.1.0
       |
       <i class="fa-brands fa-github"></i>
@@ -124,10 +124,12 @@ const store = useDataStore();
 }
 .main-info {
   width: 50%;
+  /* max-width: 600px; */
   overflow-y: hidden;
 }
 .review-panel {
   width: 50%;
+  max-width: 700px;
   overflow-y: hidden;
 }
 </style>

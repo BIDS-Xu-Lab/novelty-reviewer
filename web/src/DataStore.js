@@ -94,6 +94,9 @@ state: () => ({
      */
     taxonomy: [],
 
+    // translation
+    translation: {},
+
     // prompt
     prompt_file: null,
     llm_prompt: null,
@@ -102,7 +105,6 @@ state: () => ({
         enable_highlight: true,
         is_fetching_metadata: false,
         is_translating: false,
-        is_asking_ai: false,
         is_saving_dataset_file: false,
         has_data_unsaved: false,
 
@@ -215,6 +217,23 @@ actions: {
             return false;
         }
         return true;
+    },
+
+    hasWorkingItemTranslation: function(section) {
+        if (this.working_item_idx == -1) {
+            return false;
+        }
+        if (!this.translation.hasOwnProperty(this.working_item.pmid)) {
+            return false;
+        }
+        if (!this.translation[this.working_item.pmid].hasOwnProperty(section)) {
+            return false;
+        }
+        return true;
+    },
+
+    getWorkingItemTranslation: function(section) {
+        return this.translation[this.working_item.pmid][section];
     },
 
     formatTsvRow: function(row) {
