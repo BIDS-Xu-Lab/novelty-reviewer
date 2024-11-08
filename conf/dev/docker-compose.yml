@@ -1,0 +1,26 @@
+name: waffle
+
+services:
+
+  api:
+    build:
+      context: ../../
+      dockerfile: ./conf/spinup/Dockerfile
+    container_name: waffle-api
+    working_dir: /app
+    command: uvicorn api.main:app --reload --host 0.0.0.0 --port 8123
+    environment:
+      DEBUG: 1
+      BIKE_MODE: dev
+    volumes:
+      - ../../:/app
+      - ${API_LOGS_VOLUME}:/logs
+    ports:
+      - 8123:8123
+    restart: on-failure
+    networks:
+      - waffle-net
+
+networks:
+  waffle-net:
+    driver: bridge
