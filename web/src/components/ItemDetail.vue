@@ -106,15 +106,6 @@ async function onClickFetch() {
             </span>
         </div>
         <fieldset>
-            <legend>Abstract</legend>
-                <div v-if="store.has_working_item_abstract"
-                    v-html="highlightText(store.working_item?.abstract)">
-                </div>
-                <div v-else>
-                    No abstract available.
-                </div>
-        </fieldset>
-        <fieldset>
             <legend>Conclusion</legend>
             <div v-if="store.has_working_item_conclusion"
                 v-html="highlightText(store.working_item?.conclusion)">
@@ -122,6 +113,15 @@ async function onClickFetch() {
             <div v-else>
                 No conclusion available.
             </div>
+        </fieldset>
+        <fieldset>
+            <legend>Abstract</legend>
+                <div v-if="store.has_working_item_abstract"
+                    v-html="highlightText(store.working_item?.abstract)">
+                </div>
+                <div v-else>
+                    No abstract available.
+                </div>
         </fieldset>
     </div>
 </div>

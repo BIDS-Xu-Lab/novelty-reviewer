@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia';
+import { useToast } from "primevue/usetoast";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
+    api_server_url: "http://localhost:8123",
+    api_server_token: "",
     // global variables for all components
     /*
     {
@@ -100,11 +103,15 @@ state: () => ({
         has_data_unsaved: false,
 
         show_setting_panel: false,
+
+        enable_auto_save: false,
     },
 
     status: {
         error: null,
     },
+
+    toast: useToast(),
 }),
 getters: {
     working_item(state) {
@@ -152,6 +159,22 @@ getters: {
             return false;
         }
         if (state.items[state.working_item_idx].conclusion == null) {
+            return false;
+        }
+        return true;
+    },
+
+    has_working_item_decision(state) {
+        if (state.working_item_idx == -1) {
+            return false;
+        }
+        if (!state.items[state.working_item_idx].hasOwnProperty('decision')) {
+            return false;
+        }
+        if (state.items[state.working_item_idx].decision == null) {
+            return false;
+        }
+        if (state.items[state.working_item_idx].decision == '') {
             return false;
         }
         return true;
@@ -295,6 +318,15 @@ actions: {
         }
 
         console.log('* loaded settings from local storage');
+    },
+
+    msg: function(text, type='info') {
+        this.toast.add({
+            severity: type, 
+            summary: 'Info', 
+            detail: text,
+            life: 3000
+        });
     },
 }
 });

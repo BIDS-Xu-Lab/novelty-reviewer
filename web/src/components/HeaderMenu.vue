@@ -86,6 +86,7 @@ async function onClickSaveDataset() {
 
   store.flag.has_data_unsaved = false;
   console.log('* saved to ' + store.dataset_file.name);
+  store.msg('Saved to ' + store.dataset_file.name);
 }
 
 

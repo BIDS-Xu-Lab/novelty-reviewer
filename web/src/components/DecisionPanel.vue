@@ -19,13 +19,23 @@ function onClickAccept() {
     <b>Decision</b>
 </div>
 
-<div class="dp-info">
-    <div class="final">
+<div v-if="store.has_working_item_decision"
+    class="dp-info">
+    <div class="final final-yes">
         {{ store.working_item.decision }}
     </div>
     <div class="final-info">
         by {{ store.working_item.decision_by }} 
         @ {{ store.working_item.decision_datetime }}
+    </div>
+</div>
+<div v-else
+    class="dp-info">
+    <div class="final final-not">
+        Not Decided Yet
+    </div>
+    <div class="final-info">
+        Please make a decision
     </div>
 </div>
 </div>
@@ -49,7 +59,12 @@ function onClickAccept() {
     font-weight: bold;
     font-size: 1.5rem;
     height: 2rem;
+}
+.final-yes {
     color: green;
+}
+.final-not {
+    color: orange;
 }
 .final-info {
     font-style: italic;

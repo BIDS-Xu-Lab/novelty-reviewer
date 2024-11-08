@@ -68,6 +68,7 @@ const store = useDataStore();
 <SettingPanel></SettingPanel>
 
 
+<Toast />
 </template>
 
 <style scoped>

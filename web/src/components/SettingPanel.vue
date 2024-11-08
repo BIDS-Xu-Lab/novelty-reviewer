@@ -19,7 +19,10 @@ function onClickSaveKeywords() {
 
     // save into the local storage
     localStorage.setItem('keywords', JSON.stringify(store.keywords));
+
+    store.msg('Updated keywords');
 }
+
 </script>
 
 <template>
@@ -47,7 +50,7 @@ function onClickSaveKeywords() {
             <TabPanels>
                 <TabPanel value="0">
                     <p class="m-0">
-                        <label for="">Hightlight Keywords</label>
+                        Hightlight Keywords
                     </p>
                     <Textarea v-model="keywords" 
                         style="width: 100%;"
@@ -55,23 +58,39 @@ function onClickSaveKeywords() {
 
                     <p class="m-0">
                         <Button @click="onClickRefreshKeywords"
-                            label="Refresh"></Button>
+                            severity="secondary"
+                            label="Get current keywords"></Button>
                         &nbsp;
                         <Button @click="onClickSaveKeywords"
-                            label="Save"></Button>
+                            label="Update keywords"></Button>
                     </p>
+
                 </TabPanel>
+
+
                 <TabPanel value="1">
                     <p class="m-0">
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                        ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                        API Server URL
                     </p>
+                    <InputText v-model="store.api_server_url" 
+                        style="width: 100%;"/>
+
+                    <p class="">
+                        API Server Token
+                    </p>
+                    <InputText v-model="store.api_server_token" 
+                        style="width: 100%;"/>
                 </TabPanel>
+
+
                 <TabPanel value="2">
                     <p class="m-0">
-                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-                        qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                        Auto Save
                     </p>
+                    <Checkbox v-model="store.flag.enable_auto_save" 
+                        inputId="ingredient1" 
+                        binary />
+                    <label for="ingredient1"> Save dataset file when made any changes </label>
                 </TabPanel>
             </TabPanels>
         </Tabs>

@@ -16,7 +16,7 @@ function onClickAccept() {
     class="human-reviewer">
 <div class="header">
     <i class="fa-solid fa-user-doctor"></i>
-    Human Review Panel
+    Human Reviewer
 </div>
 
 <div class="hr-main">

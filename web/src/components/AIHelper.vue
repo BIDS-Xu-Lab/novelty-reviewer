@@ -18,7 +18,7 @@ function onClickAccept(model, result) {
         AI Helper
     </div>
     <div class="oper-bar">
-        <Button label="Review by All LLMs" severity="secondary" class="">
+        <Button label="Review by All AI Models" severity="secondary" class="">
             <template #icon>
                 <i class="fa-solid fa-bolt"></i>
             </template>
