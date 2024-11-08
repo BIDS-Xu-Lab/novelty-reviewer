@@ -69,6 +69,10 @@ state: () => ({
      */
     taxonomy: [],
 
+    // prompt
+    prompt_file: null,
+    llm_prompt: null,
+
     ai_models: [
     {
         "id": "openai",
@@ -87,17 +91,15 @@ state: () => ({
     },
     ],
 
-    keywords: [
-        'cancer',
-        'early',
-        'testable'
-    ],
+    keywords: [],
 
     flag: {
         enable_highlight: true,
         is_fetching_metadata: false,
         is_saving_dataset_file: false,
-        has_decision_unsaved: false,
+        has_data_unsaved: false,
+
+        show_setting_panel: false,
     },
 
     status: {
@@ -110,6 +112,10 @@ getters: {
             return null;
         }
         return state.items[state.working_item_idx];
+    },
+
+    keywords_list(state) {
+        return state.keywords.join("\n");
     },
 
     has_working_item_title(state) {
@@ -138,6 +144,19 @@ getters: {
         return true;
     },
 
+    has_working_item_conclusion(state) {
+        if (state.working_item_idx == -1) {
+            return false;
+        }
+        if (!state.items[state.working_item_idx].hasOwnProperty('conclusion')) {
+            return false;
+        }
+        if (state.items[state.working_item_idx].conclusion == null) {
+            return false;
+        }
+        return true;
+    },
+
     n_results_by_human(state) {
         return state.items.filter(item => item.decision_by == "human").length;
     },
@@ -152,7 +171,7 @@ actions: {
         this.working_item.decision_by = model;
         this.working_item.decision_datetime = new Date().toLocaleString();
 
-        this.flag.has_decision_unsaved = true;
+        this.flag.has_data_unsaved = true;
     },
 
     hasMetadata: function(item) {
@@ -259,6 +278,23 @@ actions: {
 
         // update the local taxonomy
         this.taxonomy = result;
+    },
+
+
+    setPrompt: function(text) {
+        this.llm_prompt = text;
+    },
+
+    loadSettingsFromLocalStorage: function() {
+        // get keywords from local storage
+        try {
+            let keywords = JSON.parse(localStorage.getItem("keywords"));
+            this.keywords = keywords;
+        } catch (e) {
+            console.log(e);
+        }
+
+        console.log('* loaded settings from local storage');
     },
 }
 });

@@ -57,6 +57,9 @@ async function onClickFetch() {
 
     // finish
     store.flag.is_fetching_metadata = false;
+
+    // update status
+    store.flag.has_data_unsaved = true;
 }
 </script>
 
@@ -93,6 +96,7 @@ async function onClickFetch() {
             <span class="journal">
                 {{ store.working_item?.journal }}
             </span>
+            &nbsp;
             <span class="year">
                 {{ store.working_item?.year }}
             </span>
@@ -101,17 +105,25 @@ async function onClickFetch() {
                 PMID: {{ store.working_item?.pmid }}
             </span>
         </div>
-        <fieldset v-if="store.has_working_item_abstract">
+        <fieldset>
             <legend>Abstract</legend>
-                <div v-html="highlightText(store.working_item?.abstract)">
+                <div v-if="store.has_working_item_abstract"
+                    v-html="highlightText(store.working_item?.abstract)">
+                </div>
+                <div v-else>
+                    No abstract available.
                 </div>
         </fieldset>
+        <fieldset>
+            <legend>Conclusion</legend>
+            <div v-if="store.has_working_item_conclusion"
+                v-html="highlightText(store.working_item?.conclusion)">
+            </div>
+            <div v-else>
+                No conclusion available.
+            </div>
+        </fieldset>
     </div>
-    <fieldset>
-        <legend>Conclusion</legend>
-        <div v-html="highlightText(store.working_item?.conclusion)">
-        </div>
-    </fieldset>
 </div>
 </template>
 

@@ -5,8 +5,10 @@ import ItemDetail from "./components/ItemDetail.vue";
 import AIHelper from "./components/AIHelper.vue";
 import HeaderMenu from "./components/HeaderMenu.vue";
 import HumanReviewer from "./components/HumanReviewer.vue";
+import SettingPanel from "./components/SettingPanel.vue";
 
 import { useDataStore } from "./DataStore";
+import DecisionPanel from "./components/DecisionPanel.vue";
 
 const store = useDataStore();
 
@@ -30,6 +32,7 @@ const store = useDataStore();
     </div>
 
     <div class="review-panel">
+      <DecisionPanel />
       <HumanReviewer />
       <AIHelper />
     </div>
@@ -61,6 +64,8 @@ const store = useDataStore();
     </a>
   </div>
 </div>
+
+<SettingPanel></SettingPanel>
 
 
 </template>

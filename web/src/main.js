@@ -24,5 +24,8 @@ app.use(ToastService);
 const store = useDataStore();
 window.store = store;
 
+// load the data from the local storage
+store.loadSettingsFromLocalStorage();
+
 
 app.mount('#app');

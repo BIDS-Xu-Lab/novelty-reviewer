@@ -24,8 +24,20 @@ async function onTaxonomyFileChange(e) {
   store.setTaxonomyByText(text)
 }
 
-function onPromptFileChange(e) {
-  console.log(e.target.files[0]);
+async function onPromptFileChange(e) {
+  let { fh, file } = await fs_helper.fsOpenFile({
+    types: [{
+          description: 'Text File',
+          accept: { 'text/plain': ['.txt'] }
+    }],
+    multiple: false,
+  });
+
+  let text = await file.text();
+
+  // update the taxonomy list
+  store.prompt_file = fh;
+  store.setPrompt(text)
 }
 
 async function onDatasetFileChange(e) {
@@ -72,10 +84,28 @@ async function onClickSaveDataset() {
     content
   );
 
-  store.flag.has_decision_unsaved = false;
+  store.flag.has_data_unsaved = false;
   console.log('* saved to ' + store.dataset_file.name);
 }
 
+
+async function onClickClearDataset() {
+  // if items are not empty, ask for confirmation
+  if (store.items.length > 0) {
+    let confirm = window.confirm('Are you sure to clear the dataset?');
+    if (!confirm) {
+      return;
+    }
+  }
+  store.items = [];
+  store.dataset_file = null;
+  store.flag.has_data_unsaved = false;
+  store.working_item_idx = -1;
+}
+
+function onClickSetting() {
+  store.flag.show_setting_panel = true;
+}
 </script>
 
 
@@ -94,6 +124,7 @@ async function onClickSaveDataset() {
         </a>
       </label>
       <div class="file-zone"
+        :class="{ 'file-zone-loaded': store.taxonomy_file }"
         @click="onTaxonomyFileChange">
         <template v-if="store.taxonomy_file">
           {{ store.taxonomy_file.name }}
@@ -116,9 +147,16 @@ async function onClickSaveDataset() {
           <i class="fa-regular fa-question-circle"></i>
         </a>
       </label>
-      <input type="file" 
-        accept=".txt" 
-        @change="onPromptFileChange" />
+      <div class="file-zone"
+        :class="{ 'file-zone-loaded': store.prompt_file }"
+        @click="onPromptFileChange">
+        <template v-if="store.prompt_file">
+          {{ store.prompt_file.name }}
+        </template>
+        <template v-else>
+          Load the prompt file
+        </template>
+      </div>
     </div>
 
     <Divider layout="vertical" />
@@ -134,6 +172,7 @@ async function onClickSaveDataset() {
         </a>
       </label>
       <div class="file-zone"
+        :class="{ 'file-zone-loaded': store.dataset_file }"
         @click="onDatasetFileChange">
         <template v-if="store.dataset_file">
           {{ store.dataset_file.name }}
@@ -145,9 +184,15 @@ async function onClickSaveDataset() {
     </div>
 
     <Divider layout="vertical" />
-    <Button label="Load the files" 
+    <!-- <Button label="Load the files" 
       icon="pi pi-upload" 
       severity="secondary" />
+    &nbsp; -->
+    <Button label="Clear Dataset"
+      severity="secondary"
+      @click="onClickClearDataset"
+      icon="pi pi-trash">
+    </Button>
     <Divider layout="vertical" />
     <Button label="Save dataset file" 
       icon="pi pi-save" 
@@ -155,7 +200,7 @@ async function onClickSaveDataset() {
       severity="secondary" />
 
     <div class="save-status">
-      <template v-if="store.flag.has_decision_unsaved">
+      <template v-if="store.flag.has_data_unsaved">
         <span style="color: red;">
           Unsaved changes!
         </span>
@@ -167,6 +212,10 @@ async function onClickSaveDataset() {
   </div>
 
   <div class="right">
+    <Button label="Setting" icon="pi pi-cog" 
+      @click="onClickSetting"
+      severity="secondary" />
+    &nbsp;
     <Button label="Help" icon="pi pi-question" severity="secondary" />
   </div>
 </div>
@@ -204,6 +253,10 @@ async function onClickSaveDataset() {
   cursor: pointer;
   border: 1px solid #7f7f7f;
   border-radius: 0.5rem;
+}
+.file-zone-loaded {
+  border-color: green;
+  color: #004900;
 }
 .file-label {
   font-size: 0.8rem;

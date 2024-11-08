@@ -19,34 +19,19 @@ function onClickAccept() {
     Human Review Panel
 </div>
 
-<div class="main">
-    <div class="left">
-        <select v-model="store.working_item.result_human"
-            class="review-select">
-            <option v-for="option in store.taxonomy"
-                :value="option.value">
-                {{ option.name }}
-            </option>
-        </select>
-        <Button label="Accept"
-            icon="pi pi-check" 
-            @click="onClickAccept"
-            severity="success">
-        </Button>
-    </div>
-
-    <div class="right">
-        <div class="">
-            Decision
-        </div>
-        <div class="final">
-            {{ store.working_item.decision }}
-        </div>
-        <div class="final-info">
-            by {{ store.working_item.decision_by }} 
-            @ {{ store.working_item.decision_datetime }}
-        </div>
-    </div>
+<div class="hr-main">
+    <select v-model="store.working_item.result_human"
+        class="review-select">
+        <option v-for="option in store.taxonomy"
+            :value="option.value">
+            {{ option.name }}
+        </option>
+    </select>
+    <Button label="Accept"
+        icon="pi pi-check" 
+        @click="onClickAccept"
+        severity="success">
+    </Button>
 </div>
 </div>
 </template>
@@ -67,7 +52,7 @@ function onClickAccept() {
     margin-bottom: 1rem;
 }
 .review-select {
-    width: 20rem;
+    width: 25rem;
     height: 2.5rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -79,11 +64,12 @@ function onClickAccept() {
     color: #333;
     margin-right: 0.5em;
 }
-.main {
+.hr-main {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: start;
+    justify-content: start;
+    align-items: center;
+    padding: 0 1rem 0 0;
 }
 .left {
     width: 30rem;
@@ -97,16 +83,5 @@ function onClickAccept() {
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
-.final {
-    font-weight: bold;
-    font-size: 1.5rem;
-    height: 2rem;
-    color: green;
-}
-.final-info {
-    font-style: italic;
-    font-size: 0.8rem;
-    color: #666;
 }
 </style>
