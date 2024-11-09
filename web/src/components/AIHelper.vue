@@ -27,13 +27,13 @@ async function onClickReview(model) {
     status.value[model] = 'reviewing';
 
     console.log(`* AI Helper [${model}] is thinking ...`);
-    let d = await ai_helper.ask(
-        `I will provide a list of concepts, please randomly select one of them to echo for now. Please exactly use what listed. Don't add any other words in the output.
 
-- New tool
-- New gene
-- New approach
-`,
+    let question = ai_helper.generateQuestionFromTemplate(
+        store.llm_prompt_template,
+        store.working_item
+    );
+    let d = await ai_helper.ask(
+        question,
         model
     );
 

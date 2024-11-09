@@ -18,6 +18,22 @@ export const ai_helper = {
         }
     },
 
+    SAMPLE_TEMPLATE: `I will provide a list of concepts, please randomly select one of them to echo for now. Please exactly use what listed. Don't add any other words in the output.
+
+- Nature
+- Science
+- Cell
+`,
+
+    generateQuestionFromTemplate: function(tpl, item) {
+        // TODO, format the text based on tpl
+        // and use item as input
+        if (tpl == null) {
+            return this.SAMPLE_TEMPLATE;
+        }
+        return tpl;
+    },
+
     /**
      * Ask a single question to the AI
      * 

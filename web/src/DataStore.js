@@ -96,11 +96,13 @@ state: () => ({
     taxonomy: [],
 
     // translation
+    // dictionary of paper and tranlsated texts
+    // 
     translation: {},
 
     // prompt
     prompt_file: null,
-    llm_prompt: null,
+    llm_prompt_template: null,
 
     flag: {
         enable_highlight: true,
@@ -335,7 +337,7 @@ actions: {
 
 
     setPrompt: function(text) {
-        this.llm_prompt = text;
+        this.llm_prompt_template = text;
     },
 
     loadSettingsFromLocalStorage: function() {
