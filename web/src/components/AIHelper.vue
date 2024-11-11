@@ -99,12 +99,13 @@ function isAllReviewed() {
             </legend>
 
             <div class="model-output">
-                <div>
-                    {{ store.working_item['result_' + model.id] }}
-                    <br>
-                    <span class="raw">
-                        RAW: {{ store.working_item['result_raw_' + model.id] }}
-                    </span>
+                <div class="model-output-detail">
+                    <div class="category">
+                        {{ store.working_item['result_' + model.id] }}
+                    </div>
+                    <div class="raw">
+                        Reason: {{ store.working_item['result_reason_' + model.id] }}
+                    </div>
                 </div>
 
                 <div>
@@ -179,8 +180,14 @@ function isAllReviewed() {
     justify-content: space-between;
     align-items: center;
 }
+.model-output-detail {
+    max-width: calc(100% - 200px);
+}
+.category {
+    font-weight: bold;
+}
 .raw {
     font-size: 0.7em;
-    color: #888;
+    color: #3d3d3d;
 }
 </style>

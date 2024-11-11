@@ -19,17 +19,17 @@ state: () => ({
             // for ollama, vllm, 
             "service_type": "openai",
             "name": "OpenAI 4o mini",
-            // "model_name": "gpt-4o-mini",
-            // "endpoint": "https://api.openai.com/v1/chat/completions",
-            "model_name": "llama3.1",
-            "endpoint": "http://localhost:11434/v1/chat/completions",
+            "model_name": "gpt-4o-mini",
+            "endpoint": "https://api.openai.com/v1/chat/completions",
+            // "model_name": "llama3.1",
+            // "endpoint": "http://localhost:11434/v1/chat/completions",
             "enabled": true,
             "api_key": ""
         },
         claude: {
             "id": "claude",
             "service_type": "openai",
-            "name": "Llama 3.1 8B",
+            "name": "Claude 3.5 Haki",
             "model_name": "llama3.1",
             "endpoint": "http://localhost:11434/v1/chat/completions",
             "enabled": true,
@@ -37,10 +37,10 @@ state: () => ({
         },
         llama: {
             "id": "llama",
-            "service_type": "openai",
-            "name": "Llama 3.2 3B",
+            "service_type": "ollama",
+            "name": "Llama 3.1 8B",
             "model_name": "llama3.1",
-            "endpoint": "http://localhost:11434/v1/chat/completions",
+            "endpoint": "http://localhost:11434/api/chat",
             "enabled": true,
             "api_key": ""
         },
@@ -66,13 +66,13 @@ state: () => ({
         "result_human": "New theory",
 
         "result_openai": "New theory",
-        "result_raw_openai": "New theory",
+        "result_reason_openai": "New theory",
 
         "result_claude": "New other",
-        "result_raw_claude": "New other info",
+        "result_reason_claude": "New other info",
 
         "result_llama": "New tool",
-        "result_raw_llama": "New other tool",
+        "result_reason_llama": "New other tool",
 
     }
      */
@@ -228,7 +228,7 @@ actions: {
 
     setWorkingItemResult(model_id, result) {
         this.working_item['result_' + model_id] = result.answer;
-        this.working_item['result_raw_' + model_id] = result.raw;
+        this.working_item['result_reason_' + model_id] = result.reason;
         this.flag.has_data_unsaved = true;
     },
 
@@ -277,13 +277,13 @@ actions: {
             'result_human',
 
             'result_openai',
-            'result_raw_openai',
+            'result_reason_openai',
 
             'result_claude',
-            'result_raw_claude',
+            'result_reason_claude',
 
             'result_llama',
-            'result_raw_llama',
+            'result_reason_llama',
         ];
 
         for (let attr of attrs) {

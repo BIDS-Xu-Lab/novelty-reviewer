@@ -1,22 +1,6 @@
+import { formatString } from "./toolbox";
+
 export const ai_helper = {
-    service: {
-        // openai: {
-        //     endpoint: "https://api.openai.com/v1/chat/completions",
-        //     model_name: "gpt-4o-mini",
-        // },
-        openai: {
-            endpoint: "http://localhost:11434/v1/chat/completions",
-            model_name: "llama3.1",
-        },
-        llama: {
-            endpoint: "http://localhost:11434/v1/chat/completions",
-            model_name: "llama3.1",
-        },
-        claude: {
-            endpoint: "http://localhost:11434/v1/chat/completions",
-            model_name: "llama3.1",
-        }
-    },
 
     SAMPLE_TEMPLATE: `I will provide a list of concepts, please randomly select one of them to echo for now. Please exactly use what listed. Don't add any other words in the output.
 
@@ -25,13 +9,32 @@ export const ai_helper = {
 - Cell
 `,
 
-    generateQuestionFromTemplate: function(tpl, item) {
+    generateQuestionFromTemplate: function(tpl, p) {
         // TODO, format the text based on tpl
         // and use item as input
         if (tpl == null) {
             return this.SAMPLE_TEMPLATE;
         }
-        return tpl;
+        let title = '';
+        if (p.hasOwnProperty('title')) { title = p.title; }
+        
+        let abstract = '';
+        if (p.hasOwnProperty('abstract')) { abstract = p.abstract; }
+
+        let conclusion = '';
+        if (p.hasOwnProperty('conclusion')) { conclusion = p.conclusion; }
+
+        // format question
+        let text = formatString(
+            tpl, 
+            {
+                title: title,
+                abstract: abstract,
+                conclusion: conclusion
+            }
+        )
+        
+        return text;
     },
 
     /**
@@ -43,8 +46,17 @@ export const ai_helper = {
      */
 
     ask: async function(question, config) {
+        console.log('* asking question\n', question);
+
         if (config.service_type == 'openai') {
             return await this._ask_openai(
+                question,
+                config
+            );
+        }
+
+        if (config.service_type == 'ollama') {
+            return await this._ask_ollama(
                 question,
                 config
             );
@@ -74,6 +86,10 @@ export const ai_helper = {
                 headers: headers,
                 body: JSON.stringify({
                     "model": model_name,
+                    "format": "json",
+                    "response_format": {
+                        "type": "json_object",
+                    },
                     "messages": [
                         {
                             "role": "system",
@@ -90,10 +106,15 @@ export const ai_helper = {
 
         const data = await rsp.json();
 
+        console.log(data);
+        
+        let s = data.choices[0].message.content;
+        let result = JSON.parse(s);
+
         // maybe format the response here before return
         let ret = {
-            raw: data.choices[0].message.content,
-            answer: data.choices[0].message.content
+            reason: result['reason'],
+            answer: result['category']
         };
         return ret;
 
@@ -103,6 +124,59 @@ export const ai_helper = {
     },
 
     _ask_claude: async function(question, config) {
+    },
+
+    _ask_ollama: async function(question, config) {
+        let endpoint = config.endpoint;
+
+        // e.g., "model_name": "gpt-4o-mini",
+        let model_name = config.model_name;
+
+        // customize header
+        let headers = {
+            'Content-Type': 'application/json',
+        };
+        if (config.api_key != null) {
+            headers['Authorization'] = `Bearer ${config.api_key}`;
+        }
+
+        // send request
+        const rsp = await fetch(
+            endpoint,
+            {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    "model": model_name,
+                    "format": "json",
+                    "stream": false,
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You are a helpful assistant."
+                        },
+                        {
+                            "role": "user",
+                            "content": question
+                        }
+                    ]
+                })
+            }
+        );
+
+        const data = await rsp.json();
+
+        console.log(data);
+
+        let s = data.message.content;
+        let result = JSON.parse(s);
+
+        // maybe format the response here before return
+        let ret = {
+            reason: result['reason'],
+            answer: result['category']
+        };
+        return ret;
     },
 
 }
