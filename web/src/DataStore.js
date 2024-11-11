@@ -7,24 +7,44 @@ state: () => ({
         api_server_url: "http://localhost:8123",
         api_server_token: "",
 
-        ai_models: [
-        {
+        // list of AI models
+        // each model has an id, name, enabled flag, and api_key
+        ai_models: {
+        openai: {
             "id": "openai",
-            "name": "OpenAI",
+            // service_type is the type of the AI service
+            // it can be openai, claude, etc.
+            // as not all AI services provide the same API interface
+            // we need to know which service is used
+            // for ollama, vllm, 
+            "service_type": "openai",
+            "name": "OpenAI 4o mini",
+            // "model_name": "gpt-4o-mini",
+            // "endpoint": "https://api.openai.com/v1/chat/completions",
+            "model_name": "llama3.1",
+            "endpoint": "http://localhost:11434/v1/chat/completions",
             "enabled": true,
             "api_key": ""
         },
-        {
+        claude: {
             "id": "claude",
-            "name": "Claude",
-            "enabled": true
+            "service_type": "openai",
+            "name": "Llama 3.1 8B",
+            "model_name": "llama3.1",
+            "endpoint": "http://localhost:11434/v1/chat/completions",
+            "enabled": true,
+            "api_key": ""
         },
-        {
+        llama: {
             "id": "llama",
-            "name": "LLaMA",
-            "enabled": true
+            "service_type": "openai",
+            "name": "Llama 3.2 3B",
+            "model_name": "llama3.1",
+            "endpoint": "http://localhost:11434/v1/chat/completions",
+            "enabled": true,
+            "api_key": ""
         },
-        ],
+        },
 
         keywords: [],
     },
@@ -198,17 +218,17 @@ getters: {
     },
 },  
 actions: {
-    setWorkingItemDecision(model, result) {
+    setWorkingItemDecision(model_id, result) {
         this.working_item.decision = result;
-        this.working_item.decision_by = model;
+        this.working_item.decision_by = model_id;
         this.working_item.decision_datetime = new Date().toLocaleString();
 
         this.flag.has_data_unsaved = true;
     },
 
-    setWorkingItemResult(model, result) {
-        this.working_item['result_' + model] = result;
-        this.working_item['result_raw_' + model] = result;
+    setWorkingItemResult(model_id, result) {
+        this.working_item['result_' + model_id] = result.answer;
+        this.working_item['result_raw_' + model_id] = result.raw;
         this.flag.has_data_unsaved = true;
     },
 

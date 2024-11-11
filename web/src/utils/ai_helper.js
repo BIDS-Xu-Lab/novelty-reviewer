@@ -41,18 +41,29 @@ export const ai_helper = {
      * 
      * @param {string} text The text to ask
      */
-    ask: async function(text, service='llama', model=null, api_key=null) {
-        // get config from service
-        let endpoint = this.service[service].endpoint;
-        let model_name = this.service[service].model_name;
-        if (model != null) { model_name = model; }
+
+    ask: async function(question, config) {
+        if (config.service_type == 'openai') {
+            return await this._ask_openai(
+                question,
+                config
+            );
+        }
+    },
+
+    _ask_openai: async function(question, config) {
+        // e.g., "endpoint": "https://api.openai.com/v1/chat/completions",
+        let endpoint = config.endpoint;
+
+        // e.g., "model_name": "gpt-4o-mini",
+        let model_name = config.model_name;
 
         // customize header
         let headers = {
             'Content-Type': 'application/json',
         };
-        if (api_key != null) {
-            headers['Authorization'] = `Bearer ${api_key}`;
+        if (config.api_key != null) {
+            headers['Authorization'] = `Bearer ${config.api_key}`;
         }
 
         // send request
@@ -70,7 +81,7 @@ export const ai_helper = {
                         },
                         {
                             "role": "user",
-                            "content": text
+                            "content": question
                         }
                     ]
                 })
@@ -79,6 +90,19 @@ export const ai_helper = {
 
         const data = await rsp.json();
 
-        return data;
-    }
+        // maybe format the response here before return
+        let ret = {
+            raw: data.choices[0].message.content,
+            answer: data.choices[0].message.content
+        };
+        return ret;
+
+    },
+
+    _ask_gemini: async function(question, config) {
+    },
+
+    _ask_claude: async function(question, config) {
+    },
+
 }

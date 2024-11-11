@@ -7,55 +7,57 @@ const store = useDataStore();
 
 const status = ref({});
 
-const isReviewing = (model) => {
-    if (status.value.hasOwnProperty(model)) {
-        return status.value[model] == 'reviewing';
+const isReviewing = (model_id) => {
+    if (status.value.hasOwnProperty(model_id)) {
+        return status.value[model_id] == 'reviewing';
     }
 
     return false;
 }
 
-async function onClickAccept(model, result) {
+async function onClickAccept(model_id, result) {
     store.setWorkingItemDecision(
-        model,
+        model_id,
         result
     );
 }
 
-async function onClickReview(model) {
+async function onClickReview(model_id) {
     // set flag
-    status.value[model] = 'reviewing';
+    status.value[model_id] = 'reviewing';
 
-    console.log(`* AI Helper [${model}] is thinking ...`);
+    console.log(`* AI Helper [${model_id}] is thinking ...`);
 
+    // first generate the prompot
     let question = ai_helper.generateQuestionFromTemplate(
         store.llm_prompt_template,
         store.working_item
     );
+
+    // then try to ask question
     let d = await ai_helper.ask(
         question,
-        model
+        store.config.ai_models[model_id]
     );
 
-    console.log(`* AI Helper [${model}]`, d);
-    console.log(`* AI Helper [${model}]`, d.choices[0].message.content);
+    console.log(`* AI Helper [${model_id}]`, d);
 
-    let result_ai = d.choices[0].message.content;
-    
     // update working item
-    store.setWorkingItemResult(model, result_ai);
+    store.setWorkingItemResult(model_id, d);
 
-    status.value[model] = 'reviewed';
+    status.value[model_id] = 'reviewed';
 }
 
 async function onClickReviewAll() {
-    for (let model of store.config.ai_models) {
+    for (let model_id in store.config.ai_models) {
+        let model = store.config.ai_models[model_id];
         onClickReview(model.id);
     }
 }
 
 function isAllReviewed() {
-    for (let model of store.config.ai_models) {
+    for (let model_id in store.config.ai_models) {
+        let model = store.config.ai_models[model_id];
         if (isReviewing(model.id)) {
             return false;
         }
@@ -89,7 +91,7 @@ function isAllReviewed() {
 
     </div>
     <div class="model-list">
-        <fieldset v-for="model in store.config.ai_models"
+        <fieldset v-for="model, model_id in store.config.ai_models"
             class="model border border-solid border-gray-400 p-2 m-2">
             <legend class="model-title">
                 <i class="fa-solid fa-cube"></i>
