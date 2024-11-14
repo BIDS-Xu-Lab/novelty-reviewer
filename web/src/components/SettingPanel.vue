@@ -23,6 +23,34 @@ function onClickSaveKeywords() {
     store.msg('Updated keywords');
 }
 
+function onClickSave() {
+    // just save everything to localstorage
+    localStorage.setItem(
+        "config",
+        JSON.stringify(store.config)
+    )
+    store.msg('Saved all settings to your local environment');
+}
+
+function onClickLoad() {
+    // just load the object from localstorage
+    let x = localStorage.getItem('config');
+
+    if (x == null) {
+        store.msg('No settings from local');
+        return;
+    }
+
+    // parse
+    let cfg = JSON.parse(x);
+
+    // copy the items from cfg to store.config
+    for (let key in cfg) {
+        store.config[key] = cfg[key];
+    }
+
+    store.msg
+}
 </script>
 
 <template>
@@ -33,7 +61,32 @@ function onClickSaveKeywords() {
             <i class="fa fa-cog"></i>
             Settings
         </div>
-        <div class="opers">
+        <div class="opers flex flex-row">
+            <Button label="Save" 
+                icon="pi pi-save"
+                severity="secondary"
+                size="small"
+                @click="onClickSave"
+                class="mr-2"/>
+
+            <Button label="Save" 
+                icon="pi pi-save"
+                severity="secondary"
+                size="small"
+                @click="onClickLoad"
+                class="mr-2"/>
+
+
+            <Button label="Import"
+                severity="secondary"
+                size="small"
+                class="mr-2"
+                icon="pi pi-upload"/>
+            <Button label="Export"
+                severity="secondary"
+                size="small"
+                class="mr-2"
+                icon="pi pi-download"/>
             <Button icon="pi pi-times" 
                 @click="onClickClose"
                 severity="secondary" />
@@ -45,9 +98,46 @@ function onClickSaveKeywords() {
             <TabList>
                 <Tab value="0">General</Tab>
                 <Tab value="1">Backend</Tab>
+                <Tab value="chatbot">Chatbot</Tab>
                 <Tab value="2">Other</Tab>
             </TabList>
             <TabPanels>
+                <TabPanel value="chatbot">
+                    <div>
+                        <Button label="Add Model"
+                            severity="secondary"
+                            size="small"
+                            icon="pi pi-plus">
+                        </Button>
+                    </div>
+                    <template v-for="model in store.config.ai_models">
+                    <div class="mb-3">
+                        <p class="m-0 section">
+                            <i class="fa fa-cube"></i>
+                            {{ model.name }}
+                        </p>
+
+                        <div class="label">
+                            Endpoint
+                        </div>
+                        <div class="mb-2">
+                            <InputText v-model="model.endpoint" 
+                                style="width: 100%;"
+                                class="w-100"/>
+                        </div>
+
+                        <div class="label">
+                            API Key
+                        </div>
+                        <div class="mb-3">
+                            <InputText v-model="model.api_key" 
+                                class="w-100"/>
+                        </div>
+                    </div>
+                    </template>
+
+                </TabPanel>
+
                 <TabPanel value="0">
                     <p class="m-0">
                         Hightlight Keywords
@@ -118,5 +208,11 @@ function onClickSaveKeywords() {
 .title {
     font-weight: bold;
     padding: 0 1rem;
+}
+.section {
+    font-weight: bold;
+}
+.label {
+    font-size: small;
 }
 </style>

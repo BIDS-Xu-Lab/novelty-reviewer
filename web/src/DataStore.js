@@ -10,6 +10,13 @@ state: () => ({
         // list of AI models
         // each model has an id, name, enabled flag, and api_key
         ai_models: {
+
+        // OK, the settings of those models should be able to 
+        // import from local file, a JSON object
+        // and some basic information maybe also can be edit?
+        // but I don't want to everytime to load the JSON manually
+        // so it can also be saved in to the lcoalstorage for quick access
+        // 
         openai: {
             "id": "openai",
             // service_type is the type of the AI service
@@ -23,15 +30,6 @@ state: () => ({
             "endpoint": "https://api.openai.com/v1/chat/completions",
             // "model_name": "llama3.1",
             // "endpoint": "http://localhost:11434/v1/chat/completions",
-            "enabled": true,
-            "api_key": ""
-        },
-        claude: {
-            "id": "claude",
-            "service_type": "openai",
-            "name": "Claude 3.5 Haki",
-            "model_name": "llama3.1",
-            "endpoint": "http://localhost:11434/v1/chat/completions",
             "enabled": true,
             "api_key": ""
         },
