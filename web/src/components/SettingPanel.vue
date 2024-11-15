@@ -181,7 +181,7 @@ const toggle = (event) => {
                     <ul>
                         <li v-for="keyword in store.config.keywords"
                             class="keyword">
-                            <div>
+                            <div v-if="typeof(keyword) == 'object'">
                                 <span class="px-1 mr-1"
                                     :style="'background:' + keyword.bgcolor">
                                     <i class="fa fa-tag"></i>
@@ -190,9 +190,13 @@ const toggle = (event) => {
                                     {{ keyword.token }}
                                 </span>
                             </div>
-                            <div>
-                                <span class="btn">
-                                    <i class="fa fa-trash"></i>
+                            <div v-else>
+                                <span class="px-1 mr-1"
+                                    :style="'background: yellow'">
+                                    <i class="fa fa-tag"></i>
+                                </span>
+                                <span>
+                                    {{ keyword }}
                                 </span>
                             </div>
                         </li>
