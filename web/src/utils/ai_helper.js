@@ -61,6 +61,13 @@ export const ai_helper = {
                 config
             );
         }
+
+        if (config.service_type == 'claude') {
+            return await this._ask_claude(
+                question,
+                config
+            );
+        }
     },
 
     _ask_openai: async function(question, config) {
@@ -91,14 +98,14 @@ export const ai_helper = {
                         "type": "json_object",
                     },
                     "messages": [
-                        {
-                            "role": "system",
-                            "content": "You are a helpful assistant."
-                        },
-                        {
-                            "role": "user",
-                            "content": question
-                        }
+                    {
+                        "role": "system",
+                        "content": "You are a helpful assistant."
+                    },
+                    {
+                        "role": "user",
+                        "content": question
+                    }
                     ]
                 })
             }
@@ -106,10 +113,9 @@ export const ai_helper = {
 
         const data = await rsp.json();
 
-        console.log(data);
-        
         let s = data.choices[0].message.content;
         let result = JSON.parse(s);
+        console.log("* openai result: ", result);
 
         // maybe format the response here before return
         let ret = {
@@ -124,6 +130,61 @@ export const ai_helper = {
     },
 
     _ask_claude: async function(question, config) {
+        let endpoint = config.endpoint;
+
+        // e.g., "model_name": "gpt-4o-mini",
+        let model_name = config.model_name;
+
+        // customize header
+        let headers = {
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+            "anthropic-dangerous-direct-browser-access": "true",
+            "x-api-key": config.api_key,
+        };
+
+        const rsp = await fetch(endpoint, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({
+                model: model_name,
+                max_tokens: 1024,
+                messages: [
+                {
+                    role: "user",
+                    content: [
+                    {
+                        type: "text", 
+                        text: question
+                    },
+                    ],
+                },
+                // {
+                //     "role": "assistant",
+                //     "content": [{
+                //         "type": "text",
+                //         "text": "Here is the JSON requested:\n{"
+                //     }]
+                // }
+                ],
+            }),
+        });
+
+        const data = await rsp.json();
+
+        console.log(data)
+
+        let s = data.content[0].text;
+        let result = JSON.parse(s);
+        // let result = JSON.parse("{" + s + "}");
+        console.log("* claude result: ", result);
+
+        // maybe format the response here before return
+        let ret = {
+            reason: result['reason'],
+            answer: result['category']
+        };
+        return ret;
     },
 
     _ask_ollama: async function(question, config) {

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import ItemList from "./components/ItemList.vue";
 import ItemDetail from "./components/ItemDetail.vue";
 import AIHelper from "./components/AIHelper.vue";
@@ -12,7 +12,9 @@ import DecisionPanel from "./components/DecisionPanel.vue";
 
 const store = useDataStore();
 
-
+onMounted(() => {
+  store.loadSettingsFromLocalStorage();
+});
 </script>
 
 <template>

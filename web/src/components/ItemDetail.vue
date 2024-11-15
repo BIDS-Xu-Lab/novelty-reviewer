@@ -14,7 +14,7 @@ function highlightText(text) {
     if (store.flag.enable_highlight) {
         return store.highlight(
             text,
-            store.keywords,
+            store.config.keywords,
         )
     }
     return text;

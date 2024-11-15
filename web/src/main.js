@@ -7,7 +7,10 @@ import Aura from '@primevue/themes/aura';
 import App from './App.vue';
 import { createPinia } from 'pinia';
 import { useDataStore } from "./DataStore";
+import { ai_helper } from "./utils/ai_helper";
 import ToastService from 'primevue/toastservice';
+
+window.ai_helper = ai_helper;
 
 const pinia = createPinia()
 const app = createApp(App);
@@ -23,9 +26,5 @@ app.use(ToastService);
 
 const store = useDataStore();
 window.store = store;
-
-// load the data from the local storage
-store.loadSettingsFromLocalStorage();
-
 
 app.mount('#app');

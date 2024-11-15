@@ -7,6 +7,11 @@ state: () => ({
         api_server_url: "http://localhost:8123",
         api_server_token: "",
 
+        keywords: [
+            {token: "cancer", bgcolor:"#ECDCAC"},
+            {token: "data", bgcolor:"#FFA704"},
+        ],
+
         // list of AI models
         // each model has an id, name, enabled flag, and api_key
         ai_models: {
@@ -33,6 +38,15 @@ state: () => ({
             "enabled": true,
             "api_key": ""
         },
+        claude: {
+            "id": "claude",
+            "service_type": "claude",
+            "name": "Claude 3.5 Haiku",
+            "model_name": "claude-3-5-haiku-20241022",
+            "endpoint": "https://api.anthropic.com/v1/messages",
+            "enabled": true,
+            "api_key": ""
+        },
         llama: {
             "id": "llama",
             "service_type": "ollama",
@@ -44,7 +58,6 @@ state: () => ({
         },
         },
 
-        keywords: [],
     },
     // global variables for all components
     /*
@@ -149,7 +162,7 @@ getters: {
     },
 
     keywords_list(state) {
-        return state.keywords.join("\n");
+        return state.config.keywords.join("\n");
     },
 
     has_working_item_title(state) {
@@ -305,9 +318,28 @@ actions: {
     // highlight keywords in text
     // the given keywords are a list of strings
     highlight: function(text, keywords) {
-        let re = new RegExp(keywords.join("|"), "gi");
-        return text.replace(re, function(matched){
-            return "<mark>" + matched + "</mark>";
+        // convert keywords to a dictionary
+        let kws = [];
+        let kwd = {};
+        for (let i in keywords) {
+            let kw = keywords[i];
+            
+            // if kw is a string, convert it to an object
+            if (typeof kw === 'string') {
+                kws.push(kw);
+                kwd[kw] = 'yellow';
+            } else {
+                // put the token to lowercase
+                kws.push(kw.token);
+                kwd[kw.token.toLowerCase()] = kw.bgcolor;
+            }
+        }
+        let re = new RegExp(kws.join("|"), "gi");
+        return text.replace(re, (matched) => {
+            let kw = matched.toLowerCase();
+            let clr = kwd[kw];
+            return `<mark style="background: ${clr};">${matched}</mark>`;
+            // return "<mark>" + matched + "</mark>";
         });
     },
 
@@ -358,16 +390,35 @@ actions: {
         this.llm_prompt_template = text;
     },
 
+    updateSettingsByJSON: function(json) {
+        // copy the items from json to store.config
+        for (let key in this.config) {
+            if (json.hasOwnProperty(key)) {
+                this.config[key] = json[key];
+            }
+        }
+    },
+
     loadSettingsFromLocalStorage: function() {
-        // get keywords from local storage
-        try {
-            let keywords = JSON.parse(localStorage.getItem("keywords"));
-            this.keywords = keywords;
-        } catch (e) {
-            console.log(e);
+        // just load the object from localstorage
+        let x = localStorage.getItem('config');
+
+        if (x == null) {
+            store.msg('No settings from local');
+            return;
         }
 
+        // parse
+        let cfg = JSON.parse(x);
+        console.log('* local storage config:', cfg);
+
+        this.updateSettingsByJSON(cfg);
+
         console.log('* loaded settings from local storage');
+    },
+
+    clearSettingsFromLocalStorage: function() {
+        localStorage.removeItem('config');
     },
 
     msg: function(text, type='info') {

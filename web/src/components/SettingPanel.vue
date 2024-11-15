@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import { useDataStore } from "../DataStore";
+import dayjs from "dayjs";
+import { fsOpenFile } from "../utils/fs_helper";
+
 const store = useDataStore();
 
 function onClickClose() {
@@ -13,14 +16,8 @@ function onClickRefreshKeywords() {
     keywords.value = store.keywords.join('\n');
 }
 
-function onClickSaveKeywords() {
-    let _v = keywords.value.trim();
-    store.keywords = _v.split('\n');
+function onClickSaveKeywords () {
 
-    // save into the local storage
-    localStorage.setItem('keywords', JSON.stringify(store.keywords));
-
-    store.msg('Updated keywords');
 }
 
 function onClickSave() {
@@ -32,64 +29,100 @@ function onClickSave() {
     store.msg('Saved all settings to your local environment');
 }
 
-function onClickLoad() {
-    // just load the object from localstorage
-    let x = localStorage.getItem('config');
+async function onClickImportSetting() {
+    let { fh, file } = await fsOpenFile({
+        types: [{
+            description: 'Config JSON file',
+            accept: { 'application/json': ['.json'] }
+        }],
+        multiple: false,
+    });
 
-    if (x == null) {
-        store.msg('No settings from local');
-        return;
-    }
+    let text = await file.text();
 
-    // parse
-    let cfg = JSON.parse(x);
-
-    // copy the items from cfg to store.config
-    for (let key in cfg) {
-        store.config[key] = cfg[key];
-    }
-
-    store.msg
+    // parse the content
+    let cfg = JSON.parse(text);
+    store.updateSettingsByJSON(cfg);
 }
+
+function onClickExportSetting() {
+    let blob = new Blob(
+        [JSON.stringify(store.config, null, 2)],
+        { type: 'application/json' }
+    );
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    let d = dayjs().format('YYYYMMDD-HHmmss');
+    a.download = `config-${d}.json`;
+    a.click();
+}
+
+function onClickReset() {
+    store.clearSettingsFromLocalStorage();
+    store.msg('Reset all settings to default');
+}
+
+const menu = ref();
+const items = ref([
+    {
+        label: 'Options',
+        items: [
+            {
+                label: 'Import',
+                icon: 'pi pi-upload',
+                command: onClickImportSetting
+            },
+            {
+                label: 'Export',
+                icon: 'pi pi-download',
+                command: onClickExportSetting
+            }
+        ]
+    },
+    {
+        label: 'Others',
+        items: [
+            {
+                label: 'Reset to default',
+                icon: 'pi pi-refresh',
+                command: onClickReset
+            },
+        ]
+    }
+]);
+
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
+
 </script>
 
 <template>
 <div v-if="store.flag.show_setting_panel"
     class="setting-panel">
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+    <div class="flex flex-row justify-between py-2">
         <div class="title">
             <i class="fa fa-cog"></i>
             Settings
         </div>
         <div class="opers flex flex-row">
-            <Button label="Save" 
-                icon="pi pi-save"
-                severity="secondary"
-                size="small"
+            <Button icon="pi pi-save"
+                label="Save settings"
                 @click="onClickSave"
-                class="mr-2"/>
-
-            <Button label="Save" 
-                icon="pi pi-save"
-                severity="secondary"
-                size="small"
-                @click="onClickLoad"
-                class="mr-2"/>
-
-
-            <Button label="Import"
-                severity="secondary"
                 size="small"
                 class="mr-2"
-                icon="pi pi-upload"/>
-            <Button label="Export"
-                severity="secondary"
-                size="small"
-                class="mr-2"
-                icon="pi pi-download"/>
-            <Button icon="pi pi-times" 
-                @click="onClickClose"
                 severity="secondary" />
+
+            <Button type="button" 
+                class="mr-2"
+                size="small"
+                severity="secondary"
+                icon="pi pi-ellipsis-v" 
+                @click="toggle" aria-haspopup="true" 
+                aria-controls="overlay_menu" />
+            <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+
         </div>
     </div>
 
@@ -97,19 +130,12 @@ function onClickLoad() {
         <Tabs value="0">
             <TabList>
                 <Tab value="0">General</Tab>
-                <Tab value="1">Backend</Tab>
+                <!-- <Tab value="1">Backend</Tab> -->
                 <Tab value="chatbot">Chatbot</Tab>
                 <Tab value="2">Other</Tab>
             </TabList>
             <TabPanels>
                 <TabPanel value="chatbot">
-                    <div>
-                        <Button label="Add Model"
-                            severity="secondary"
-                            size="small"
-                            icon="pi pi-plus">
-                        </Button>
-                    </div>
                     <template v-for="model in store.config.ai_models">
                     <div class="mb-3">
                         <p class="m-0 section">
@@ -126,12 +152,12 @@ function onClickLoad() {
                                 class="w-100"/>
                         </div>
 
-                        <div class="label">
+                        <div class="label w-full">
                             API Key
                         </div>
                         <div class="mb-3">
                             <InputText v-model="model.api_key" 
-                                class="w-100"/>
+                                class="w-full"/>
                         </div>
                     </div>
                     </template>
@@ -142,18 +168,35 @@ function onClickLoad() {
                     <p class="m-0">
                         Hightlight Keywords
                     </p>
-                    <Textarea v-model="keywords" 
-                        style="width: 100%;"
-                        rows="5" />
 
-                    <p class="m-0">
-                        <Button @click="onClickRefreshKeywords"
-                            severity="secondary"
-                            label="Get current keywords"></Button>
-                        &nbsp;
+                    <!-- <div class="my-2">
                         <Button @click="onClickSaveKeywords"
-                            label="Update keywords"></Button>
-                    </p>
+                            icon="pi pi-save"
+                            size="small"
+                            severity="secondary"
+                            label="Update keywords">
+                        </Button>
+                    </div> -->
+                    
+                    <ul>
+                        <li v-for="keyword in store.config.keywords"
+                            class="keyword">
+                            <div>
+                                <span class="px-1 mr-1"
+                                    :style="'background:' + keyword.bgcolor">
+                                    <i class="fa fa-tag"></i>
+                                </span>
+                                <span>
+                                    {{ keyword.token }}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="btn">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
 
                 </TabPanel>
 
@@ -214,5 +257,15 @@ function onClickLoad() {
 }
 .label {
     font-size: small;
+}
+.keyword {
+    padding: 0.2rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.keyword:hover {
+    background-color: #f8f8f8;
+    font-weight: bold;
 }
 </style>
