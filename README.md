@@ -25,9 +25,17 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.6.2
+
+- Updated AI model selection
+- Fixed footer text
+- Updated visual layout
+- Updated default openai model
+
 ## 0.6.0
 
 - Add new template for loading taxonomy
+- Add dependency for loading prompt
 - Fixed layout
 - Fixed import loading issue
 

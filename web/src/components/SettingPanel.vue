@@ -212,7 +212,7 @@ const toggle = (event) => {
 
                 <TabPanel value="chatbot">
                     <template v-for="model in store.config.ai_models">
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <p class="m-0 section">
                             <i class="fa fa-cube"></i>
                             {{ model.name }}
@@ -223,8 +223,15 @@ const toggle = (event) => {
                         </div>
                         <div class="mb-2">
                             <InputText v-model="model.endpoint" 
-                                style="width: 100%;"
-                                class="w-100"/>
+                                class="w-full"/>
+                        </div>
+
+                        <div class="label">
+                            Model Name
+                        </div>
+                        <div class="mb-2">
+                            <InputText v-model="model.model_name" 
+                                class="w-full"/>
                         </div>
 
                         <div class="label w-full">
@@ -277,7 +284,8 @@ const toggle = (event) => {
 
                             <div>
                                 <span @click="onClickDeleteKeyword(keyword_index)"
-                                    class="text-red-100 cursor-pointer">
+                                    title="Delete this keyword"
+                                    class="text-red-100 cursor-pointer delete-link">
                                     <i class="fa fa-trash"></i>
                                 </span>
                             </div>
@@ -374,5 +382,11 @@ const toggle = (event) => {
 .keyword:hover {
     background-color: #f8f8f8;
     font-weight: bold;
+}
+.delete-link {
+    font-size: small;
+}
+.delete-link:hover {
+    color: red;
 }
 </style>

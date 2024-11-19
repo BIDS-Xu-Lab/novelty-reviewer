@@ -44,7 +44,7 @@ onMounted(() => {
 <div class="footer">
   <div>
     <i class="fa-regular fa-clipboard"></i>
-    {{ store.taxonomy_file?.fn }}:
+    {{ store.taxonomy_file?.name }}:
     <b>{{ store.taxonomy.length }}</b> taxonomies
     |
     <i class="fa fa-database"></i>
@@ -78,7 +78,7 @@ onMounted(() => {
   height: 4rem;
   display: flex;
   flex-direction: column;
-  background-color: #cacaca;
+  background-color: #dfdfdf;
 }
 .footer {
   position: absolute;
@@ -89,7 +89,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #cacaca;
+  background-color: #dfdfdf;
   justify-content: space-between;
 }
 .oper-bar {
@@ -113,14 +113,14 @@ onMounted(() => {
   width: 25rem;
   height: calc(100vh - 7rem);
   overflow-y: hidden;
-  background-color: #f4f4f4;
+  background-color: #eaeaea;
 }
 .right {
   flex: 1;
   width: calc(100% - 25rem);
   padding: 10px;
   height: calc(100vh - 7rem);
-  background-color: #e4e4e4;
+  background-color: #f9f9f9;
   display: flex;
   flex-direction: row;
 }

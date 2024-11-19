@@ -230,6 +230,7 @@ const items = ref([
     overflow: hidden;
     width: 100%;
     text-overflow: ellipsis;
+    line-height: 0.9rem;
 }
 .current-item {
     background-color: #7abdf3;

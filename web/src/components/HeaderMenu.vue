@@ -25,6 +25,17 @@ async function onTaxonomyFileChange(e) {
 }
 
 async function onPromptFileChange(e) {
+  // check if taxonomy are loaded
+  if (!store.taxonomy_file) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please load the taxonomy file first',
+      life: 3000
+    });
+    return;
+  }
+
   let { fh, file } = await fs_helper.fsOpenFile({
     types: [{
           description: 'Text File',

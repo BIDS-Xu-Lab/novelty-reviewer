@@ -3,7 +3,7 @@ import { useToast } from "primevue/usetoast";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.6.0',
+    version: '0.6.2',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
@@ -30,8 +30,8 @@ state: () => ({
                 // we need to know which service is used
                 // for ollama, vllm, 
                 "service_type": "openai",
-                "name": "OpenAI 4o mini",
-                "model_name": "gpt-4o-mini",
+                "name": "OpenAI 4o",
+                "model_name": "gpt-4o",
                 "endpoint": "https://api.openai.com/v1/chat/completions",
                 "enabled": true,
                 "api_key": ""
