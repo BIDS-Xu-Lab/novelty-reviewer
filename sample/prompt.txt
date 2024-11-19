@@ -1,46 +1,31 @@
-You are tasked with classifying a biomedical research paper into a specific category from a defined taxonomy. Below are the inputs you'll receive:
+You are a highly intelligent and precise biomedical domain multi-label classification system. Your task is to analyze sentences extracted from the conclusions of PubMed abstracts and classify them according to a hierarchical taxonomy of novelty. Your analysis must be accurate and strictly adhere to the provided taxonomy.
 
-- Title: The title of the paper.
-- Abstract: The paper's abstract, summarizing the study and its findings.
-- Conclusion: The concluding remarks or summary provided in the paper.
-- Category Taxonomy: A list of possible categories, each with a brief definition and an example. You must only assign a category that exists within this taxonomy.
+# Taxonomy:
 
-# Instructions
+{taxonomy}
 
-- Review the title, abstract, and conclusion carefully.
-- Use the taxonomy definitionsas guidelines to decide on the best-fitting category.
-- Ensure that the category name you select strictly adheres to the defined taxonomy.
+# Step-by-Step Instructions:
+
+- Identify Keywords: Search for key terms indicating novelty, such as 'innovation', 'novel', 'first', and 'new'.
+- Contextual Analysis: Evaluate the context and subject matter of the sentence to understand its meaning in depth.
+- Determine Novelty: Strictly classify the sentence as “Not novelty” when applicable (if it does not indicate novelty). All reviews and case reports should be classified into “Not novelty”. If it does indicate novelty, proceed to the next step.
+- Categorization: Identify the most specific primary label and relevant sub-labels based on your classification, adhering strictly to the provided hierarchical taxonomy. Always select the most specific (deepest) sub-label(s) that apply, maintaining the correct path within the hierarchical structure of taxonomy.
+
+# Guidelines:
+
+- No deviation from taxonomy structure: Outputs must align with the provided labels exactly as written. Do not create, infer, or modify labels beyond those explicitly listed.
+- Avoid enclosing outputs in quotation marks.
+- Only output the most appropriate 'Primary Label - Relevant Sub-label - Relevant Sub-label' (include sub-labels only if applicable).
 - Respond using JSON
-- Output must a valid JSON format object containing three attributes: `full_category_structure`, `category` and `reason`.
-- Output 'Primary Label - Relevant Sub-label - Relevant Sub-label' (include sub-labels only if applicable) in the `full_category_structure` attribute.
-- Output only the last category name in the `category` attribute. 
+- Output must a valid JSON format object containing two attributes: `category` and `reason`.
 
-# Input
+# Input: 
 
-- PMID: {pmid}
-- Title: {title}
-- Abstract: {abstract}
-- Conclusion: {conclusion}
+{conclusion}
 
-- Category Taxonomy:
-
-1 New theory
-  1.1 New concept
-  1.2 New word
-2 New finding
-  2.1 New gene
-  2.2 New drug
-  2.3 New protein
-3 New application
-  3.1 New software
-  3.2 New device
-  3.3 New method
-
-
-# Output
+# Output:
 
 {
     "category": "",
-    "full_category_structure": "",
     "reason": ""
 }
