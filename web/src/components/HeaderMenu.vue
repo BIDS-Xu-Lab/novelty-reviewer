@@ -37,7 +37,7 @@ async function onPromptFileChange(e) {
 
   // update the taxonomy list
   store.prompt_file = fh;
-  store.setPrompt(text)
+  store.setPromptByText(text)
 }
 
 async function onDatasetFileChange(e) {

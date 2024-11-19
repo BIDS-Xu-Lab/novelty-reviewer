@@ -106,12 +106,11 @@ const items = ref([
                             {{ item.pmid }}
                         </div>
                         <div class="item-info">
-                            {{ item.decision }} / 
                             {{ item.decision_by }}
                         </div>
                     </div>
-                    <div class="item-inline-title">
-                        {{ item.title }}
+                    <div class="item-info">
+                        {{ item.decision }}
                     </div>
                 </div>
                 
@@ -224,11 +223,13 @@ const items = ref([
     display: inline;
     height: 1rem;
     max-width: calc(100% - 2rem);
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 .item-info {
     font-size: smaller;
+    color: #494949;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
 }
 .current-item {
     background-color: #7abdf3;

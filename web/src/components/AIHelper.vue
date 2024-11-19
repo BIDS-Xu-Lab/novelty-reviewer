@@ -31,7 +31,8 @@ async function onClickReview(model_id) {
     // first generate the prompot
     let question = ai_helper.generateQuestionFromTemplate(
         store.llm_prompt_template,
-        store.working_item
+        store.working_item,
+        store.taxonomy_text
     );
 
     // then try to ask question

@@ -23,8 +23,8 @@ function onClickAccept() {
     <select v-model="store.working_item.result_human"
         class="review-select">
         <option v-for="option in store.taxonomy"
-            :value="option.value">
-            {{ option.name }}
+            :value="option.value"
+            v-html="option.html">
         </option>
     </select>
     <Button label="Accept"

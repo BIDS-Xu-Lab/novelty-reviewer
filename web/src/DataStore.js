@@ -3,6 +3,7 @@ import { useToast } from "primevue/usetoast";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
+    version: '0.6.0',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
@@ -100,6 +101,7 @@ state: () => ({
 
     // taxonomy
     taxonomy_file: null,
+    taxonomy_text: '',
     
     /*
     taxonomy is a list of objects, each object has two fields:
@@ -375,6 +377,9 @@ actions: {
     },
 
     setTaxonomyByText: function(text) {
+        // set the raw text
+        this.taxonomy_text = text;
+
         // the given text is a string
         // each line is a taxonomy item
         // we need to split the text by line
@@ -385,31 +390,32 @@ actions: {
         let result = [];
         for (let line of lines) {
             // trim the line
-            line = line.trim();
+            let _line = line.trim();
 
             // if line is empty, skip
-            if (line == "") {
+            if (_line == "") {
                 continue;
             }
+            // find the index of the first colon
+            let index = line.indexOf(":");
 
-            // split
-            let parts = line.split(" ");
+            // first, the number and name
+            let num_name = line.substring(0, index);
+            let description = line.substring(index + 1).trim();
 
-            // get the first part
-            let num = parts[0];
-            if (num.match(/^\d+(\.\d+)*$/)) {
-                // this line has number, remove it
-                result.push({
-                    name: line,
-                    value: line.replace(/^\d+(\.\d+)*\s*/, "")
-                });
-            } else {
-                // this line does not have number
-                result.push({
-                    name: line,
-                    value: line
-                });
-            }
+            // then, find the name
+            let _num_name = num_name.trim();
+            let index2 = _num_name.indexOf(" ");
+
+            let num = _num_name.substring(0, index2);
+            let name = _num_name.substring(index2 + 1).trim();
+
+            result.push({ 
+                html: num_name.replaceAll(' ', '&nbsp;'),
+                num: num,
+                value: name,
+                description: description,
+            });
         }
 
         // update the local taxonomy
@@ -419,7 +425,7 @@ actions: {
     },
 
 
-    setPrompt: function(text) {
+    setPromptByText: function(text) {
         this.llm_prompt_template = text;
     },
 
@@ -477,6 +483,9 @@ actions: {
 
     clearSettingsFromLocalStorage: function() {
         localStorage.removeItem('config');
+
+        // reload the page
+        window.location.reload();
     },
 
     msg: function(text, type='info') {

@@ -70,6 +70,11 @@ async function onClickImportSetting() {
     // parse the content
     let cfg = JSON.parse(text);
     store.updateSettingsByJSON(cfg);
+
+    store.msg('Imported settings from the file and updated local settings');
+
+    // save to localstorage
+    store.saveSettingsToLocalStorage();
 }
 
 function onClickExportSetting() {
@@ -86,6 +91,11 @@ function onClickExportSetting() {
 }
 
 function onClickReset() {
+    // let user to confirm
+    let confirm = window.confirm('Are you sure to reset all settings to default?');
+    if (!confirm) {
+        return;
+    }
     store.clearSettingsFromLocalStorage();
     store.msg('Reset all settings to default');
 }
@@ -171,8 +181,9 @@ const toggle = (event) => {
                         </p>
                     </template>
                     <template v-else>
-                    <div v-for="option in store.taxonomy">
-                        <p class="m-0">
+                    <div style="height: 100%; max-height: calc(100vh - 18rem); overflow-y: auto;">
+                        <p v-for="option in store.taxonomy"
+                            class="m-0">
                             {{ option.name }}
                         </p>
                     </div>

@@ -9,7 +9,7 @@ export const ai_helper = {
 - Cell
 `,
 
-    generateQuestionFromTemplate: function(tpl, p) {
+    generateQuestionFromTemplate: function(tpl, p, t) {
         // TODO, format the text based on tpl
         // and use item as input
         if (tpl == null) {
@@ -30,7 +30,8 @@ export const ai_helper = {
             {
                 title: title,
                 abstract: abstract,
-                conclusion: conclusion
+                conclusion: conclusion,
+                taxonomy: t
             }
         )
         

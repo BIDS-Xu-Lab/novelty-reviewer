@@ -60,7 +60,7 @@ onMounted(() => {
       target="_blank">
       <i class="fa-brands fa-pagelines"></i>
       Novelty Reviewer
-      v0.5.0
+      v{{ store.version }}
       |
       <i class="fa-brands fa-github"></i>
     </a>
