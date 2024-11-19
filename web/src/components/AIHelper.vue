@@ -35,15 +35,20 @@ async function onClickReview(model_id) {
     );
 
     // then try to ask question
-    let d = await ai_helper.ask(
-        question,
-        store.config.ai_models[model_id]
-    );
+    try {
+        
+        let d = await ai_helper.ask(
+            question,
+            store.config.ai_models[model_id]
+        );
 
-    console.log(`* AI Helper [${model_id}]`, d);
+        console.log(`* AI Helper [${model_id}]`, d);
 
-    // update working item
-    store.setWorkingItemResult(model_id, d);
+        // update working item
+        store.setWorkingItemResult(model_id, d);
+    } catch (err) {
+        // 
+    }
 
     status.value[model_id] = 'reviewed';
 }
@@ -108,12 +113,12 @@ function isAllReviewed() {
                     </div>
                 </div>
 
-                <div>
+                <div class="flex items-center">
                     <template v-if="isReviewing(model.id)">
-                        <span class="mr-2">
+                        <div class="mr-2">
                             Reviewing
                             <i class="fa-solid fa-spinner fa-spin"></i>
-                        </span>
+                        </div>
                     </template>
                     <template v-else>
                     <Button label="Review" 

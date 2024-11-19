@@ -225,7 +225,7 @@ getters: {
     },
 
     n_results_by_ai(state) {
-        return state.items.filter(item => item.decision_by != "human").length;
+        return state.items.filter(item => item.decision_by != "human" && item.decision_by != null && item.decision_by != '').length;
     },
 },  
 actions: {

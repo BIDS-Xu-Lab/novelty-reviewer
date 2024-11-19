@@ -1,4 +1,4 @@
-import { formatString } from "./toolbox";
+import * as toolbox from "./toolbox";
 
 export const ai_helper = {
 
@@ -25,7 +25,7 @@ export const ai_helper = {
         if (p.hasOwnProperty('conclusion')) { conclusion = p.conclusion; }
 
         // format question
-        let text = formatString(
+        let text = toolbox.formatString(
             tpl, 
             {
                 title: title,
@@ -148,7 +148,7 @@ export const ai_helper = {
             headers: headers,
             body: JSON.stringify({
                 model: model_name,
-                max_tokens: 1024,
+                max_tokens: 4096,
                 messages: [
                 {
                     role: "user",
@@ -175,7 +175,9 @@ export const ai_helper = {
         console.log(data)
 
         let s = data.content[0].text;
-        let result = JSON.parse(s);
+
+        let result = toolbox.extractJson(s);
+        
         // let result = JSON.parse("{" + s + "}");
         console.log("* claude result: ", result);
 
@@ -197,7 +199,7 @@ export const ai_helper = {
         let headers = {
             'Content-Type': 'application/json',
         };
-        if (config.api_key != null) {
+        if (config.api_key != null || config.api_key != '') {
             headers['Authorization'] = `Bearer ${config.api_key}`;
         }
 
