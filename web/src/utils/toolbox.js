@@ -23,6 +23,12 @@ export const formatString = function(str, args) {
  * @returns real label part
  */
 export const getLabel = function(str) {
+    if (typeof(str) == 'undefined') {
+        return "";
+    }
+    if (str == null) {
+        return "";
+    }
     let _str = str.trim();
     let parts = _str.split(" ");
 

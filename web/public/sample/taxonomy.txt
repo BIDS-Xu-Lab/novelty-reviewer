@@ -1,0 +1,12 @@
+1 New concept
+  1.1 New theory
+  1.2 New hypothesis
+  1.3 New something
+
+2 New finding
+  2.1 New gene
+  2.2 New cell
+
+3 New application
+  3.1 New tool/device
+  3.2 New treatment

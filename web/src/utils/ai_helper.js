@@ -117,10 +117,13 @@ export const ai_helper = {
         let result = JSON.parse(s);
         console.log("* openai result: ", result);
 
+        let answer = toolbox.getLabel(result['category']);
+
         // maybe format the response here before return
         let ret = {
             reason: result['reason'],
-            answer: result['category']
+            answer: answer,
+            raw: s.replace(/\n/g, " ")
         };
         return ret;
 
@@ -176,15 +179,17 @@ export const ai_helper = {
 
         let s = data.content[0].text;
 
-        let result = toolbox.extractJson(s);
-        
-        // let result = JSON.parse("{" + s + "}");
+        let result = toolbox.extractJson(s);        
         console.log("* claude result: ", result);
+
+        // get answer from the result
+        let answer = toolbox.getLabel(result['category']);
 
         // maybe format the response here before return
         let ret = {
             reason: result['reason'],
-            answer: result['category']
+            answer: answer,
+            raw: s.replace(/\n/g, " ")
         };
         return ret;
     },
@@ -234,10 +239,14 @@ export const ai_helper = {
         let s = data.message.content;
         let result = JSON.parse(s);
 
+        // get answer from the result
+        let answer = toolbox.getLabel(result['category']);
+
         // maybe format the response here before return
         let ret = {
             reason: result['reason'],
-            answer: result['category']
+            answer: answer,
+            raw: s.replace(/\n/g, " ")
         };
         return ret;
     },

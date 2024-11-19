@@ -65,21 +65,22 @@ const items = ref([
                     <InputIcon>
                         <i class="pi pi-search" />
                     </InputIcon>
-                    <InputText placeholder="Search" size="small" style="width: 160px;" />
+                    <InputText v-model="store.filter_keyword"
+                        placeholder="Filter by keyword" size="small" style="width: 160px;" />
                 </IconField>
             </template>
 
             <template #end> 
-                <SplitButton 
+                <!-- <SplitButton 
                     label="Sort" 
                     severity='secondary' 
                     size="small" :model="items">
-                </SplitButton>
+                </SplitButton> -->
             </template>
         </Toolbar>
     </div>
     <div class="item-main-list">
-        <div v-for="item, item_idx in store.items" :key="item.id"
+        <div v-for="item, item_idx in store.filterred_items" :key="item.id"
             :class="{'current-item': store.working_item_idx == item_idx}"
             @click="onClickItem(item)"
             class="item">
@@ -97,17 +98,22 @@ const items = ref([
                     class="item-icon item-unchecked">
                     <i class="fa-regular fa-circle-question"></i>
                 </span>
-                <div class="item-brief">
-                    <span class="item-id">
-                        {{ item.pmid }}
-                    </span>
-                    <span class="item-info">
-                        {{ item.decision }} / 
-                        {{ item.decision_by }}
-                    </span>
-                </div>
             </div>
             <div class="right">
+                <div class="item-brief">
+                    <div class="item-main">
+                        <div class="item-id mr-1">
+                            {{ item.pmid }}
+                        </div>
+                        <div class="item-info">
+                            {{ item.decision }} / 
+                            {{ item.decision_by }}
+                        </div>
+                    </div>
+                    <div class="item-inline-title">
+                        {{ item.title }}
+                    </div>
+                </div>
                 
             </div>
         </div>
@@ -183,17 +189,13 @@ const items = ref([
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
-.item .right {
-    display: none;
-    margin-left: auto;
-    margin-right: 10px;
-}
-
 .item-idx {
     width: 30px;
     color: #d4d4d4;
     display: inline-block;
+    text-align: center;
 }
 .item-icon {
     width: 20px;
@@ -209,6 +211,21 @@ const items = ref([
 .item-brief {
     display: flex;
     flex-direction: column;
+}
+.item-main {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.item-inline-title {
+    font-size: smaller;
+    color: #494949;
+    display: inline;
+    height: 1rem;
+    max-width: calc(100% - 2rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .item-info {
     font-size: smaller;

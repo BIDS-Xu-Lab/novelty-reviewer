@@ -11,7 +11,7 @@ const status = ref({
 });
 
 function highlightText(text) {
-    if (store.flag.enable_highlight) {
+    if (store.config.features.auto_highlight.enabled) {
         return store.highlight(
             text,
             store.config.keywords,

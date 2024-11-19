@@ -41,6 +41,18 @@ async function onPromptFileChange(e) {
 }
 
 async function onDatasetFileChange(e) {
+  // check if prompt and taxonomy are loaded
+  if (!store.prompt_file || !store.taxonomy_file) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please load the prompt file and taxonomy file first',
+      life: 3000
+    });
+    return;
+  }
+
+  // ok, let's load the dataset file
   let { fh, file } = await fs_helper.fsOpenFile({
     types: [{
           description: 'TSV Files',
@@ -119,7 +131,8 @@ function onClickSetting() {
       <label class="file-label">
         <i class="fa-regular fa-clipboard"></i>
         Taxonomy File
-        <a href=""
+        <a target="_blank"
+          href="./sample/taxonomy.txt"
           title="Download example taxonomy">
           <i class="fa-regular fa-question-circle"></i>
         </a>
@@ -143,7 +156,8 @@ function onClickSetting() {
       <label class="file-label">
         <i class="fa-regular fa-file-code"></i>
         Prompt Template File
-        <a href=""
+        <a target="_blank"
+          href="./sample/prompt.txt"
           title="Download example prompt">
           <i class="fa-regular fa-question-circle"></i>
         </a>
@@ -167,7 +181,8 @@ function onClickSetting() {
       <label class="file-label">
         <i class="fa-regular fa-file-lines"></i>
         Dataset File
-        <a href=""
+        <a target="_blank"
+          href="./sample/dataset.tsv"
           title="Download example dataset">
           <i class="fa-regular fa-question-circle"></i>
         </a>
@@ -217,7 +232,9 @@ function onClickSetting() {
       @click="onClickSetting"
       class="mr-1"
       severity="secondary" />
-    <Button label="Help" icon="pi pi-question" severity="secondary" />
+    <!-- <Button label="Help" 
+      icon="pi pi-question" 
+      severity="secondary" /> -->
   </div>
 </div>
 </template>

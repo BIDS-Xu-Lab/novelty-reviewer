@@ -15,49 +15,55 @@ state: () => ({
         // list of AI models
         // each model has an id, name, enabled flag, and api_key
         ai_models: {
-
-        // OK, the settings of those models should be able to 
-        // import from local file, a JSON object
-        // and some basic information maybe also can be edit?
-        // but I don't want to everytime to load the JSON manually
-        // so it can also be saved in to the lcoalstorage for quick access
-        // 
-        openai: {
-            "id": "openai",
-            // service_type is the type of the AI service
-            // it can be openai, claude, etc.
-            // as not all AI services provide the same API interface
-            // we need to know which service is used
-            // for ollama, vllm, 
-            "service_type": "openai",
-            "name": "OpenAI 4o mini",
-            "model_name": "gpt-4o-mini",
-            "endpoint": "https://api.openai.com/v1/chat/completions",
-            // "model_name": "llama3.1",
-            // "endpoint": "http://localhost:11434/v1/chat/completions",
-            "enabled": true,
-            "api_key": ""
-        },
-        claude: {
-            "id": "claude",
-            "service_type": "claude",
-            "name": "Claude 3.5 Haiku",
-            "model_name": "claude-3-5-haiku-20241022",
-            "endpoint": "https://api.anthropic.com/v1/messages",
-            "enabled": true,
-            "api_key": ""
-        },
-        llama: {
-            "id": "llama",
-            "service_type": "ollama",
-            "name": "Llama 3.1 8B",
-            "model_name": "llama3.1",
-            "endpoint": "http://localhost:11434/api/chat",
-            "enabled": true,
-            "api_key": ""
-        },
+            // OK, the settings of those models should be able to 
+            // import from local file, a JSON object
+            // and some basic information maybe also can be edit?
+            // but I don't want to everytime to load the JSON manually
+            // so it can also be saved in to the lcoalstorage for quick access
+            // 
+            openai: {
+                "id": "openai",
+                // service_type is the type of the AI service
+                // it can be openai, claude, etc.
+                // as not all AI services provide the same API interface
+                // we need to know which service is used
+                // for ollama, vllm, 
+                "service_type": "openai",
+                "name": "OpenAI 4o mini",
+                "model_name": "gpt-4o-mini",
+                "endpoint": "https://api.openai.com/v1/chat/completions",
+                "enabled": true,
+                "api_key": ""
+            },
+            claude: {
+                "id": "claude",
+                "service_type": "claude",
+                "name": "Claude 3.5 Haiku",
+                "model_name": "claude-3-5-haiku-20241022",
+                "endpoint": "https://api.anthropic.com/v1/messages",
+                "enabled": true,
+                "api_key": ""
+            },
+            // llama: {
+            //     "id": "llama",
+            //     "service_type": "ollama",
+            //     "name": "Llama 3.1 8B",
+            //     "model_name": "llama3.1",
+            //     "endpoint": "http://localhost:11434/api/chat",
+            //     "enabled": true,
+            //     "api_key": ""
+            // },
         },
 
+        features: {
+            auto_save: {
+                enabled: false,
+            },
+
+            auto_highlight: {
+                enabled: true,
+            },
+        }
     },
     // global variables for all components
     /*
@@ -141,11 +147,10 @@ state: () => ({
         is_translating: false,
         is_saving_dataset_file: false,
         has_data_unsaved: false,
-
         show_setting_panel: false,
-
-        enable_auto_save: false,
     },
+
+    filter_keyword: '',
 
     status: {
         error: null,
@@ -154,6 +159,17 @@ state: () => ({
     toast: useToast(),
 }),
 getters: {
+    filterred_items(state) {
+        if (state.filter_keyword == '') {
+            return state.items;
+        }
+        return state.items.filter(item => {
+            return item.pmid.toLowerCase().includes(state.filter_keyword.toLowerCase()) ||
+                item.decision.toLowerCase().includes(state.filter_keyword.toLowerCase()) ||
+                item.decision_by.toLowerCase().includes(state.filter_keyword.toLowerCase());
+        });
+    },
+
     working_item(state) {
         if (state.working_item_idx == -1) {
             return null;
@@ -234,11 +250,16 @@ actions: {
         this.working_item.decision_by = model_id;
         this.working_item.decision_datetime = new Date().toLocaleString();
 
+        // update the decision related info
+        this.working_item['prompt_version'] = this.prompt_file.name;
+        this.working_item['taxonomy_version'] = this.taxonomy_file.name;
+
         this.flag.has_data_unsaved = true;
     },
 
     setWorkingItemResult(model_id, result) {
         this.working_item['result_' + model_id] = result.answer;
+        this.working_item['result_raw_' + model_id] = result.raw;
         this.working_item['result_reason_' + model_id] = result.reason;
         this.flag.has_data_unsaved = true;
     },
@@ -248,6 +269,9 @@ actions: {
             return false;
         }
         if (item.title == null) {
+            return false;
+        }
+        if (item.title == '') {
             return false;
         }
         return true;
@@ -288,13 +312,20 @@ actions: {
             'result_human',
 
             'result_openai',
+            'result_raw_openai',
             'result_reason_openai',
 
             'result_claude',
+            'result_raw_claude',
             'result_reason_claude',
 
             'result_llama',
+            'result_raw_llama',
             'result_reason_llama',
+
+            // for tracking the version of the data
+            'prompt_version',
+            'taxonomy_version',
         ];
 
         for (let attr of attrs) {
@@ -383,6 +414,8 @@ actions: {
 
         // update the local taxonomy
         this.taxonomy = result;
+
+        this.msg('Loaded ' + result.length + ' taxonomy items');
     },
 
 
@@ -399,12 +432,37 @@ actions: {
         }
     },
 
+    hasKeywordInSettings: function(keyword) {
+        for (let kw of this.config.keywords) {
+            if (typeof kw === 'string') {
+                if (kw == keyword) {
+                    return true;
+                }
+            } else if (kw.token == keyword) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    removeKeywordFromSettings: function(index) {
+        this.config.keywords.splice(index, 1);
+    },
+
+    saveSettingsToLocalStorage: function() {
+        localStorage.setItem(
+            "config",
+            JSON.stringify(this.config)
+        );
+        console.log('* saved config to local storage');
+    },
+
     loadSettingsFromLocalStorage: function() {
         // just load the object from localstorage
         let x = localStorage.getItem('config');
 
         if (x == null) {
-            store.msg('No settings from local');
+            console.log('* not found config from local');
             return;
         }
 
@@ -414,7 +472,7 @@ actions: {
 
         this.updateSettingsByJSON(cfg);
 
-        console.log('* loaded settings from local storage');
+        console.log('* loaded config from local storage');
     },
 
     clearSettingsFromLocalStorage: function() {

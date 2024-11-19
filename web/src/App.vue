@@ -59,8 +59,8 @@ onMounted(() => {
     <a href="https://github.com/BIDS-Xu-Lab/novelty-reviewer"
       target="_blank">
       <i class="fa-brands fa-pagelines"></i>
-      Waffle
-      v0.1.0
+      Novelty Reviewer
+      v0.5.0
       |
       <i class="fa-brands fa-github"></i>
     </a>

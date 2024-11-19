@@ -16,8 +16,35 @@ function onClickRefreshKeywords() {
     keywords.value = store.keywords.join('\n');
 }
 
-function onClickSaveKeywords () {
+function onClickAddKeywords () {
+    // ask for a new keyword
+    let token = prompt('Please enter a new keyword');
+    if (token == null) {
+        return;
+    }
 
+    // search if this token is already in the list
+    if (store.hasKeywordInSettings(token)) {
+        store.msg('This keyword is already in the list');
+        return;
+    }
+    
+    // add this token to store
+    store.config.keywords.push(token);
+
+    // save to localstorage
+    store.saveSettingsToLocalStorage();
+
+    store.msg('Added a new keyword to the list');
+}
+
+function onClickDeleteKeyword(idx) {
+    store.removeKeywordFromSettings(idx);
+
+    // save to localstorage
+    store.saveSettingsToLocalStorage();
+
+    store.msg('Deleted a keyword from the list');
 }
 
 function onClickSave() {
@@ -130,11 +157,48 @@ const toggle = (event) => {
         <Tabs value="0">
             <TabList>
                 <Tab value="0">General</Tab>
-                <!-- <Tab value="1">Backend</Tab> -->
                 <Tab value="chatbot">Chatbot</Tab>
+                <Tab value="taxonomy">Taxonomy</Tab>
+                <Tab value="prompt">Prompt</Tab>
+                <!-- <Tab value="1">Backend</Tab> -->
                 <Tab value="2">Other</Tab>
             </TabList>
             <TabPanels>
+                <TabPanel value="taxonomy">
+                    <template v-if="store.taxonomy_file == null">
+                        <p>
+                            Taxonomy file is not loaded yet.
+                        </p>
+                    </template>
+                    <template v-else>
+                    <div v-for="option in store.taxonomy">
+                        <p class="m-0">
+                            {{ option.name }}
+                        </p>
+                    </div>
+                    </template>
+
+                </TabPanel>
+
+
+                <TabPanel value="prompt">
+                    <template v-if="store.prompt_file == null">
+                        <p>
+                            Prompt file is not loaded yet.
+                        </p>
+                    </template>
+                    <template v-else>
+                        <p class="mb-1 pb-1 border-b">
+                            ATTENTION: This is a template for the prompt. Any change here will affect the chatbot directly.
+                        </p>
+                        <textarea class="w-full p-1"
+                            style="height: calc(100vh - 22rem);"
+                            v-model="store.llm_prompt_template"></textarea>
+                    </template>
+
+                </TabPanel>
+
+
                 <TabPanel value="chatbot">
                     <template v-for="model in store.config.ai_models">
                     <div class="mb-3">
@@ -169,17 +233,17 @@ const toggle = (event) => {
                         Hightlight Keywords
                     </p>
 
-                    <!-- <div class="my-2">
-                        <Button @click="onClickSaveKeywords"
-                            icon="pi pi-save"
+                    <div class="my-2">
+                        <Button @click="onClickAddKeywords"
+                            icon="pi pi-plus"
                             size="small"
                             severity="secondary"
-                            label="Update keywords">
+                            label="Add keyword">
                         </Button>
-                    </div> -->
+                    </div>
                     
                     <ul>
-                        <li v-for="keyword in store.config.keywords"
+                        <li v-for="keyword, keyword_index in store.config.keywords"
                             class="keyword">
                             <div v-if="typeof(keyword) == 'object'">
                                 <span class="px-1 mr-1"
@@ -197,6 +261,13 @@ const toggle = (event) => {
                                 </span>
                                 <span>
                                     {{ keyword }}
+                                </span>
+                            </div>
+
+                            <div>
+                                <span @click="onClickDeleteKeyword(keyword_index)"
+                                    class="text-red-100 cursor-pointer">
+                                    <i class="fa fa-trash"></i>
                                 </span>
                             </div>
                         </li>
@@ -221,13 +292,34 @@ const toggle = (event) => {
 
 
                 <TabPanel value="2">
-                    <p class="m-0">
-                        Auto Save
-                    </p>
-                    <Checkbox v-model="store.flag.enable_auto_save" 
+                    <div class="mb-3">
+                        <p class="m-0 section">
+                            <i class="fa fa-save"></i>
+                            Auto highlight keywords
+                        </p>
+                        
+                        <div>
+                            <Checkbox v-model="store.config.features.auto_highlight.enabled" 
+                                inputId="auto_highlight" 
+                                binary />
+                            <label for="auto_highlight"> Highlight keywords in title, conclusion, and abstract. </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="m-0 section">
+                            <i class="fa fa-save"></i>
+                            Auto Save
+                        </p>
+                        
+                        <div>
+                            TBD
+                        </div>
+                    </div>
+                    <!-- <Checkbox v-model="store.flag.enable_auto_save" 
                         inputId="ingredient1" 
                         binary />
-                    <label for="ingredient1"> Save dataset file when made any changes </label>
+                    <label for="ingredient1"> Save dataset file when made any changes </label> -->
                 </TabPanel>
             </TabPanels>
         </Tabs>
