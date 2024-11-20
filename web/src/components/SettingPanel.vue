@@ -68,7 +68,14 @@ async function onClickImportSetting() {
     let text = await file.text();
 
     // parse the content
-    let cfg = JSON.parse(text);
+    let cfg = null;
+    try {
+        cfg = JSON.parse(text);
+    } catch (e) {
+        store.msg(`Failed to parse the content of the file: ${e}`, 'error');
+        return;
+    }
+
     store.updateSettingsByJSON(cfg);
 
     store.msg('Imported settings from the file and updated local settings');

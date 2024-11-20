@@ -27,6 +27,7 @@ The translate, llama model, and other services can be started separately. Please
 
 ## 0.6.8
 
+- Add try-catch for importing JSON config
 - Fixed light mode bg color
 - Updated colors
 - Updated filter search box
