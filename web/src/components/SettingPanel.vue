@@ -353,11 +353,9 @@ const toggle = (event) => {
     height: calc(100% - 8rem);
     right: 0;
     top: 4rem;
-    background-color: white;
+    background-color: var(--general-bg-color);
     overflow-x: hidden;
     overflow-y: auto;
-    box-shadow: 0 0 10px #ccc;
-    border-left: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     z-index: 100;
@@ -380,7 +378,7 @@ const toggle = (event) => {
     justify-content: space-between;
 }
 .keyword:hover {
-    background-color: #f8f8f8;
+    background-color: var(--general-bg-color);
     font-weight: bold;
 }
 .delete-link {

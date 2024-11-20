@@ -3,7 +3,7 @@ import { useToast } from "primevue/usetoast";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.6.2',
+    version: '0.6.3',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",

@@ -78,7 +78,7 @@ onMounted(() => {
   height: 4rem;
   display: flex;
   flex-direction: column;
-  background-color: #dfdfdf;
+  background-color: var(--header-bg-color);
 }
 .footer {
   position: absolute;
@@ -89,7 +89,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #dfdfdf;
+  background-color: var(--footer-bg-color);
   justify-content: space-between;
 }
 .oper-bar {
@@ -107,20 +107,19 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   height: calc(100vh - 7rem);
-  background-color: #d4d4d4;
 }
 .left {
   width: 25rem;
   height: calc(100vh - 7rem);
   overflow-y: hidden;
-  background-color: #eaeaea;
+  background-color: var(--leftpane-bg-color);
 }
 .right {
   flex: 1;
   width: calc(100% - 25rem);
   padding: 10px;
   height: calc(100vh - 7rem);
-  background-color: #f9f9f9;
+  background-color: var(--rightpane-bg-color);
   display: flex;
   flex-direction: row;
 }
@@ -132,6 +131,6 @@ onMounted(() => {
 .review-panel {
   width: 50%;
   max-width: 700px;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 </style>

@@ -77,14 +77,18 @@ async function onClickTranslate() {
     // update the storage
     store.translation[store.working_item.pmid] = {}
 
-    let d = await translator.translate(
-        store.working_item.abstract
-    );
+    try {
+        let d = await translator.translate(
+            store.working_item.abstract
+        );
 
-    console.log('* translation:', d.translatedText);
+        console.log('* translation:', d.translatedText);
 
-    store.translation[store.working_item.pmid]['abstract'] = d.translatedText;
+        store.translation[store.working_item.pmid]['abstract'] = d.translatedText;
 
+    } catch (e) {
+        console.error(e);
+    }
     // set the flag
     store.flag.is_translating = false;
 }
@@ -202,6 +206,5 @@ async function onClickTranslate() {
     padding: 1rem 0 0 0;
     margin: 1rem 0 0 0;
     font-size: 1rem;
-    color: #222222;
 }
 </style>

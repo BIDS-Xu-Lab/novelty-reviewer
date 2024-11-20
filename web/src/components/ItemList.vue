@@ -153,7 +153,7 @@ const items = ref([
     justify-content: flex-start;
     align-items: center;
     padding: 0 10px;
-    border-bottom: 1px solid #d4d4d4;
+    /* border-bottom: 1px solid #d4d4d4; */
     overflow-y: auto;
 }
 
@@ -217,16 +217,8 @@ const items = ref([
     justify-content: flex-start;
     align-items: center;
 }
-.item-inline-title {
-    font-size: smaller;
-    color: #494949;
-    display: inline;
-    height: 1rem;
-    max-width: calc(100% - 2rem);
-}
 .item-info {
     font-size: smaller;
-    color: #494949;
     overflow: hidden;
     width: 100%;
     text-overflow: ellipsis;
@@ -237,5 +229,13 @@ const items = ref([
 }
 .current-item .item-id {
     font-weight: bold;
+}
+@media (prefers-color-scheme: dark) {
+    .item:hover {
+        background-color: #494949;
+    }
+    .current-item {
+        background-color: #295070;
+    }
 }
 </style>

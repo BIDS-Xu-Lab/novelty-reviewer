@@ -25,6 +25,10 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.6.3
+
+- Updated dark mode for night reading
+
 ## 0.6.2
 
 - Updated AI model selection

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color: #111111;
+  --general-bg-color: #f8f8f8;
+  --header-bg-color: #dfdfdf;
+  --footer-bg-color: #dfdfdf;
+  --leftpane-bg-color: #eaeaea;
+  --rightpane-bg-color: #f9f9f9;
+}
 html {
   font-size: 14px;
 }
@@ -34,4 +42,14 @@ a:hover {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #e5e7eb;
+    --general-bg-color: #18181b;
+    --header-bg-color: #1e1e1e;
+    --footer-bg-color: #1e1e1e;
+    --leftpane-bg-color: #2a2a2a;
+    --rightpane-bg-color: #363636;
+  }
 }

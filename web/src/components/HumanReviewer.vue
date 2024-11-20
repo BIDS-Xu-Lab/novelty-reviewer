@@ -58,10 +58,7 @@ function onClickAccept() {
     margin-bottom: 1rem;
     padding: 0.5rem;
     font-size: 1rem;
-    border: 1px solid #ccc;
     border-radius: 0.5rem;
-    background-color: #f8f8f8;
-    color: #333;
     margin-right: 0.5em;
 }
 .hr-main {

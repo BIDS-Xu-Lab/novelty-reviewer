@@ -190,10 +190,10 @@ function isAllReviewed() {
     max-width: calc(100% - 200px);
 }
 .category {
+    font-size: 1.2rem;
     font-weight: bold;
 }
 .raw {
-    font-size: 0.7em;
-    color: #3d3d3d;
+    font-size: 0.95rem;
 }
 </style>
