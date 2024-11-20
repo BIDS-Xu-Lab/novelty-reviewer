@@ -183,8 +183,8 @@ const toggle = (event) => {
                     <template v-else>
                     <div style="height: 100%; max-height: calc(100vh - 18rem); overflow-y: auto;">
                         <p v-for="option in store.taxonomy"
+                            v-html="option.html"
                             class="m-0">
-                            {{ option.name }}
                         </p>
                     </div>
                     </template>
