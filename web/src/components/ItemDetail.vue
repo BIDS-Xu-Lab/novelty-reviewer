@@ -87,7 +87,7 @@ async function onClickTranslate() {
         store.translation[store.working_item.pmid]['abstract'] = d.translatedText;
 
     } catch (e) {
-        console.error(e);
+        store.msg('Translation service is not available. Please setup the translation service first.', 'error');
     }
     // set the flag
     store.flag.is_translating = false;

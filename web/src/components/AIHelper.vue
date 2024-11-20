@@ -152,7 +152,6 @@ function isAllReviewed() {
 }
 .ai-helper {
     width: 100%;
-    height: 100%;
     padding: 0 1rem;
     overflow-x: hidden;
     overflow-y: auto;
@@ -167,9 +166,6 @@ function isAllReviewed() {
 }
 .model-list {
     width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }

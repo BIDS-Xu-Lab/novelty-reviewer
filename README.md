@@ -30,6 +30,8 @@ The translate, llama model, and other services can be started separately. Please
 - Added close button for setting panel
 - Added tooltip for save button
 - Updated colors
+- Fixed AI helper layout bug
+- Fixed translation error message bug
 
 ## 0.6.3
 
