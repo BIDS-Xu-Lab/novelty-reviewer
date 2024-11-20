@@ -25,11 +25,16 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.6.8
+
+- Fixed light mode bg color
+- Updated colors
+- Updated filter search box
+
 ## 0.6.5
 
 - Added close button for setting panel
 - Added tooltip for save button
-- Updated colors
 - Fixed AI helper layout bug
 - Fixed translation error message bug
 

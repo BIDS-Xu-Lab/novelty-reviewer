@@ -167,7 +167,6 @@ const toggle = (event) => {
                 class="mr-2"
                 size="small"
                 severity="secondary"
-                v-tooltip.bottom="'Close settings panel'"
                 icon="pi pi-times" 
                 @click="onClickClose" />
         </div>

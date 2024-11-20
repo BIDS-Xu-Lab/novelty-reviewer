@@ -250,7 +250,7 @@ function onClickSetting() {
       icon="pi pi-cog" 
       @click="onClickSetting"
       class="mr-1"
-      v-tooltip.bottom="'Show the settings panel'"
+      v-tooltip.left="'Change tool settings'"
       severity="secondary" />
     <!-- <Button label="Help" 
       icon="pi pi-question" 

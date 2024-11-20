@@ -59,14 +59,15 @@ const items = ref([
 
 <div class="item-list">
     <div class="item-list-top">
-        <Toolbar style="width: 100%; border: 0; background: transparent;">
+        <Toolbar style="background: transparent;"
+            class="w-full border-0 !px-0 ">
             <template #start>
                 <IconField>
                     <InputIcon>
                         <i class="pi pi-search" />
                     </InputIcon>
                     <InputText v-model="store.filter_keyword"
-                        placeholder="Filter by keyword" size="small" style="width: 160px;" />
+                        placeholder="Filter by keyword" size="small" style="width: 200px;" />
                 </IconField>
             </template>
 
