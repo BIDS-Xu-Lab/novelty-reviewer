@@ -158,8 +158,18 @@ const toggle = (event) => {
                 icon="pi pi-ellipsis-v" 
                 @click="toggle" aria-haspopup="true" 
                 aria-controls="overlay_menu" />
-            <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
 
+            <Menu ref="menu" id="overlay_menu" 
+                :model="items" 
+                :popup="true" />
+
+            <Button type="button" 
+                class="mr-2"
+                size="small"
+                severity="secondary"
+                v-tooltip.bottom="'Close settings panel'"
+                icon="pi pi-times" 
+                @click="onClickClose" />
         </div>
     </div>
 

@@ -215,14 +215,19 @@ function onClickSetting() {
       icon="pi pi-upload" 
       severity="secondary" />
     &nbsp; -->
+
     <Button label="Clear Dataset"
       severity="secondary"
       @click="onClickClearDataset"
       icon="pi pi-trash">
     </Button>
+
     <Divider layout="vertical" />
-    <Button label="Save dataset file" 
+
+    <Button type="button"
+      label="Save dataset file" 
       icon="pi pi-save" 
+      v-tooltip.bottom="{ value: 'Save the current working dataset', showDelay: 1000, hideDelay: 300 }"
       @click="onClickSaveDataset"
       severity="secondary" />
 
@@ -233,15 +238,19 @@ function onClickSetting() {
         </span>
       </template>
       <template v-else>
-        <i class="fa-regular fa-circle-check"></i>
+        <span style="color: green;">
+          <i class="fa-regular fa-circle-check"></i>
+        </span>
       </template>
     </div>
   </div>
 
   <div class="right">
-    <Button label="Setting" icon="pi pi-cog" 
+    <Button label="Setting"
+      icon="pi pi-cog" 
       @click="onClickSetting"
       class="mr-1"
+      v-tooltip.bottom="'Show the settings panel'"
       severity="secondary" />
     <!-- <Button label="Help" 
       icon="pi pi-question" 

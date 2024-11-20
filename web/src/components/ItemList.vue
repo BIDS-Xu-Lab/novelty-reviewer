@@ -205,7 +205,7 @@ const items = ref([
     color: green;
 }
 .item-unchecked {
-    color: #494949;
+    
 }
 .item-brief {
     display: flex;

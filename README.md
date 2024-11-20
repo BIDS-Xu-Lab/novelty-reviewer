@@ -25,6 +25,12 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.6.5
+
+- Added close button for setting panel
+- Added tooltip for save button
+- Updated colors
+
 ## 0.6.3
 
 - Updated dark mode for night reading
