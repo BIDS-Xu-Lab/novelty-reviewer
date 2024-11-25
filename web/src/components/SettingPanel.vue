@@ -107,6 +107,10 @@ function onClickReset() {
     store.msg('Reset all settings to default');
 }
 
+function onClickResetSystemPrompt(model_id) {
+    store.config.ai_models[model_id].system_prompt = "You are a helpful assistant.";
+}
+
 const menu = ref();
 const items = ref([
     {
@@ -259,17 +263,23 @@ const toggle = (event) => {
                         </div>
 
                         <div class="label">
-                            Temperature (0-1)
+                            Temperature (0-2)
                         </div>
                         <div class="mb-2">
                             <InputNumber v-model.number="model.temperature" 
-                                :min="0" :max="1"
+                                :min="0" :max="2"
                                 :minFractionDigits="2"
                                 class="w-full"/>
                         </div>
 
                         <div class="label">
-                            System Prompt
+                            System Prompt 
+                            (
+                            <span class="cursor-pointer"
+                                @click="onClickResetSystemPrompt(model.id)">
+                                reset to default
+                            </span>
+                            )
                         </div>
                         <div class="mb-2">
                             <InputText v-model="model.system_prompt" 
