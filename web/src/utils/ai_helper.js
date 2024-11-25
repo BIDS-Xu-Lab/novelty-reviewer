@@ -72,6 +72,7 @@ export const ai_helper = {
     },
 
     _ask_openai: async function(question, config) {
+        console.log(`* asking openai ...`);
         // e.g., "endpoint": "https://api.openai.com/v1/chat/completions",
         let endpoint = config.endpoint;
 
@@ -95,13 +96,14 @@ export const ai_helper = {
                 body: JSON.stringify({
                     "model": model_name,
                     "format": "json",
+                    "temperature": config.temperature,
                     "response_format": {
                         "type": "json_object",
                     },
                     "messages": [
                     {
                         "role": "system",
-                        "content": "You are a helpful assistant."
+                        "content": config.system_prompt
                     },
                     {
                         "role": "user",
@@ -131,9 +133,11 @@ export const ai_helper = {
     },
 
     _ask_gemini: async function(question, config) {
+        console.log(`* asking gemini ...`);
     },
 
     _ask_claude: async function(question, config) {
+        console.log(`* asking claude ...`);
         let endpoint = config.endpoint;
 
         // e.g., "model_name": "gpt-4o-mini",
@@ -153,6 +157,7 @@ export const ai_helper = {
             body: JSON.stringify({
                 model: model_name,
                 max_tokens: 4096,
+                temperature: config.temperature,
                 messages: [
                 {
                     role: "user",
@@ -162,6 +167,13 @@ export const ai_helper = {
                         text: question
                     },
                     ],
+                },
+                {
+                    role: "assistant", 
+                    content: [{
+                        type: "text", 
+                        text: config.system_prompt
+                    }]
                 },
                 // {
                 //     "role": "assistant",

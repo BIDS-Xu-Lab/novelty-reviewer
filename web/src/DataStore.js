@@ -3,7 +3,7 @@ import { useToast } from "primevue/usetoast";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.6.8',
+    version: '0.7.0',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
@@ -34,7 +34,9 @@ state: () => ({
                 "model_name": "gpt-4o",
                 "endpoint": "https://api.openai.com/v1/chat/completions",
                 "enabled": true,
-                "api_key": ""
+                "api_key": "",
+                "temperature": 0,
+                "system_prompt": "You are a helpful assistant.",
             },
             claude: {
                 "id": "claude",
@@ -43,7 +45,9 @@ state: () => ({
                 "model_name": "claude-3-5-haiku-20241022",
                 "endpoint": "https://api.anthropic.com/v1/messages",
                 "enabled": true,
-                "api_key": ""
+                "api_key": "",
+                "temperature": 0,
+                "system_prompt": "You are a helpful assistant.",
             },
             // llama: {
             //     "id": "llama",
@@ -433,7 +437,23 @@ actions: {
         // copy the items from json to store.config
         for (let key in this.config) {
             if (json.hasOwnProperty(key)) {
-                this.config[key] = json[key];
+                // special rule for ai models
+                if (key == 'ai_models') {
+                    // for this case, search all settings from the json
+                    for (let model_id in json[key]) {
+                        if (this.config[key].hasOwnProperty(model_id)) {
+                            for (let model_attribute in json[key][model_id]) {
+                                this.config[key][model_id][model_attribute] = json[key][model_id][model_attribute];
+                            }
+                        } else {
+                            // just copy the whole content if not found
+                            // which means the localStorage has custmoized settings
+                            this.config[key][model_id] = json[key][model_id];
+                        }
+                    }
+                } else {
+                    this.config[key] = json[key];
+                }
             }
         }
     },

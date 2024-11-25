@@ -26,8 +26,6 @@ async function onClickReview(model_id) {
     // set flag
     status.value[model_id] = 'reviewing';
 
-    console.log(`* AI Helper [${model_id}] is thinking ...`);
-
     // first generate the prompot
     let question = ai_helper.generateQuestionFromTemplate(
         store.llm_prompt_template,

@@ -25,6 +25,11 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.7.0
+
+- Add "temperature slider" for AI model
+- Add "system role" prompt for AI model
+
 ## 0.6.8
 
 - Add try-catch for importing JSON config

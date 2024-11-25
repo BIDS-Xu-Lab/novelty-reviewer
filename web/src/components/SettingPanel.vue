@@ -257,6 +257,24 @@ const toggle = (event) => {
                             <InputText v-model="model.api_key" 
                                 class="w-full"/>
                         </div>
+
+                        <div class="label">
+                            Temperature (0-1)
+                        </div>
+                        <div class="mb-2">
+                            <InputNumber v-model.number="model.temperature" 
+                                :min="0" :max="1"
+                                :minFractionDigits="2"
+                                class="w-full"/>
+                        </div>
+
+                        <div class="label">
+                            System Prompt
+                        </div>
+                        <div class="mb-2">
+                            <InputText v-model="model.system_prompt" 
+                                class="w-full"/>
+                        </div>
                     </div>
                     </template>
 
