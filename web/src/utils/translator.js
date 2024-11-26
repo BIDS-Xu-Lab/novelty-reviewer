@@ -1,7 +1,9 @@
 export const translator = {
+    endpoint: 'http://127.0.0.1:5000/translate',
+
     translate: async function(text, target='zh') {
         const rsp = await fetch(
-            'http://127.0.0.1:5000/translate',
+            this.endpoint,
             {
                 method: 'POST',
                 headers: {

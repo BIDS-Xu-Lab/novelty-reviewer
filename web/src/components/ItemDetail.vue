@@ -77,6 +77,21 @@ async function onClickTranslate() {
     // update the storage
     store.translation[store.working_item.pmid] = {}
 
+    // update the endpoint
+    translator.endpoint = store.config.translation.endpoint;
+
+    try {
+        let dc = await translator.translate(
+            "" + store.working_item.conclusion
+        );
+
+        console.log('* translation:', dc.translatedText);
+
+        store.translation[store.working_item.pmid]['conclusion'] = dc.translatedText;
+    } catch (e) {
+        store.msg('Translation service is not available. Please setup the translation service first.', 'error');
+    }
+
     try {
         let d = await translator.translate(
             store.working_item.abstract
@@ -152,6 +167,9 @@ async function onClickTranslate() {
             <div v-else>
                 No conclusion available.
             </div>
+            <template v-if="store.hasWorkingItemTranslation('conclusion')">
+                <div v-html="store.getWorkingItemTranslation('conclusion')" class="translation-text"></div>
+            </template>
         </fieldset>
         <fieldset class="border border-solid border-gray-400 p-2 m-2">
             <legend>Abstract</legend>
@@ -205,6 +223,6 @@ async function onClickTranslate() {
     border-top: 1px solid #ccc;
     padding: 1rem 0 0 0;
     margin: 1rem 0 0 0;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 </style>

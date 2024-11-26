@@ -111,6 +111,10 @@ function onClickResetSystemPrompt(model_id) {
     store.config.ai_models[model_id].system_prompt = "You are a helpful assistant.";
 }
 
+function onClickResetTranslationEndpoint() {
+    store.config.translation.endpoint = "http://127.0.0.1:5000/translate";
+}
+
 const menu = ref();
 const items = ref([
     {
@@ -190,7 +194,6 @@ const toggle = (event) => {
                 <Tab value="chatbot">Chatbot</Tab>
                 <Tab value="taxonomy">Taxonomy</Tab>
                 <Tab value="prompt">Prompt</Tab>
-                <!-- <Tab value="1">Backend</Tab> -->
                 <Tab value="2">Other</Tab>
             </TabList>
             <TabPanels>
@@ -291,7 +294,7 @@ const toggle = (event) => {
                 </TabPanel>
 
                 <TabPanel value="0">
-                    <p class="m-0">
+                    <p class="m-0 section">
                         Hightlight Keywords
                     </p>
 
@@ -339,19 +342,6 @@ const toggle = (event) => {
                 </TabPanel>
 
 
-                <TabPanel value="1">
-                    <p class="m-0">
-                        API Server URL
-                    </p>
-                    <InputText v-model="store.config.api_server_url" 
-                        style="width: 100%;"/>
-
-                    <p class="">
-                        API Server Token
-                    </p>
-                    <InputText v-model="store.config.api_server_token" 
-                        style="width: 100%;"/>
-                </TabPanel>
 
 
                 <TabPanel value="2">
@@ -377,6 +367,27 @@ const toggle = (event) => {
                         
                         <div>
                             TBD
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="m-0 section">
+                            <i class="fa fa-server"></i>
+                            Translation Server
+                        </p>
+
+                        <div class="mb-3">
+                            <p>
+                                Endpoint
+                                (
+                                    <span class="cursor-pointer" 
+                                        @click="onClickResetTranslationEndpoint">
+                                        Reset to default
+                                    </span>
+                                )
+                            </p>
+                            <InputText v-model="store.config.translation.endpoint" 
+                                class="w-full"/>
                         </div>
                     </div>
                     <!-- <Checkbox v-model="store.flag.enable_auto_save" 

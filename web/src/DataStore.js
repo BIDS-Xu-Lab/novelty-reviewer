@@ -1,12 +1,16 @@
 import { defineStore } from 'pinia';
 import { useToast } from "primevue/usetoast";
+import { translator } from './utils/translator';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.7.0',
+    version: '0.7.1',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
+        translation: {
+            endpoint: "http://127.0.0.1:5000/translate",
+        },
 
         keywords: [
             {token: "cancer", bgcolor:"#ECDCAC"},

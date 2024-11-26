@@ -25,6 +25,11 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.7.1
+
+- Add setting for translation service
+- Add conclusion translation
+
 ## 0.7.0
 
 - Add "temperature slider" for AI model
