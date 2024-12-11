@@ -25,6 +25,11 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.7.2
+
+- Fixed selection color bug
+- Updated style of hovering
+
 ## 0.7.1
 
 - Add setting for translation service

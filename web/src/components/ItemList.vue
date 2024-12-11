@@ -51,7 +51,14 @@ const items = ref([
         label: 'By PMID (desc)',
         icon: 'pi pi-sort-numeric-down-alt'
     }
-])
+]);
+
+function isCurrentItem(item) {
+    if (store.working_item == null) {
+        return false;
+    }
+    return store.working_item.pmid == item.pmid;
+}
 </script>
 
 
@@ -81,8 +88,8 @@ const items = ref([
         </Toolbar>
     </div>
     <div class="item-main-list">
-        <div v-for="item, item_idx in store.filterred_items" :key="item.id"
-            :class="{'current-item': store.working_item_idx == item_idx}"
+        <div v-for="item, item_idx in store.filterred_items" :key="item.pmid"
+            :class="{'current-item': isCurrentItem(item)}"
             @click="onClickItem(item)"
             class="item">
             <div class="left">
@@ -179,7 +186,7 @@ const items = ref([
     align-items: center;
 }
 .item:hover {
-    background-color: #eaeaea;
+    background-color: #d9d9d9;
 }
 .item:hover .right {
     display: inline-block;
@@ -228,6 +235,9 @@ const items = ref([
 .current-item {
     background-color: #7abdf3;
 }
+.current-item:hover {
+    background-color: #acd6f9;
+}
 .current-item .item-id {
     font-weight: bold;
 }
@@ -237,6 +247,9 @@ const items = ref([
     }
     .current-item {
         background-color: #295070;
+    }
+    .current-item:hover {
+        background-color: #314f67;
     }
 }
 </style>

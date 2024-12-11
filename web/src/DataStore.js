@@ -4,7 +4,7 @@ import { translator } from './utils/translator';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.7.1',
+    version: '0.7.2',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
