@@ -130,6 +130,16 @@ async function onClickClearDataset() {
 function onClickSetting() {
   store.flag.show_setting_panel = !store.flag.show_setting_panel;
 }
+
+function onClickLoadSample() {
+  store.loadSampleDataset();
+}
+
+function onClickHelp() {
+  // open a new tab to wiki page
+  window.open('https://github.com/BIDS-Xu-Lab/novelty-reviewer/wiki', '_blank');
+}
+
 </script>
 
 
@@ -218,6 +228,7 @@ function onClickSetting() {
 
     <Button label="Clear Dataset"
       severity="secondary"
+      :disabled="!store.items.length"
       @click="onClickClearDataset"
       icon="pi pi-trash">
     </Button>
@@ -227,6 +238,7 @@ function onClickSetting() {
     <Button type="button"
       label="Save dataset file" 
       icon="pi pi-save" 
+      :disabled="!store.dataset_file"
       v-tooltip.bottom="{ value: 'Save the current working dataset', showDelay: 1000, hideDelay: 300 }"
       @click="onClickSaveDataset"
       severity="secondary" />
@@ -252,9 +264,21 @@ function onClickSetting() {
       class="mr-1"
       v-tooltip.left="'Change tool settings'"
       severity="secondary" />
-    <!-- <Button label="Help" 
+
+    <Button label="Sample" 
+      icon="pi pi-file" 
+      class="mr-1"
+      @click="onClickLoadSample"
+      v-tooltip.bottom="'Load sample dataset for demo'"
+      severity="secondary" />
+
+    <Button label="Help" 
       icon="pi pi-question" 
-      severity="secondary" /> -->
+      class="mr-1"
+      @click="onClickHelp"
+      v-tooltip.bottom="'How to use this tool'"
+      severity="secondary" />
+
   </div>
 </div>
 </template>

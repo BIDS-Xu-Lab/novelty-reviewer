@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { useToast } from "primevue/usetoast";
 import { translator } from './utils/translator';
+import Papa from "papaparse";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.7.3',
+    version: '0.7.4',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
@@ -510,6 +511,45 @@ actions: {
 
         // reload the page
         window.location.reload();
+    },
+
+    // async function to load the taxonomy file
+    loadSampleDataset: async function() {
+        // as this will overwrite the current data
+        // ask the user to confirm
+        if (!confirm('Loading sample dataset will overwrite the current dataset, are you sure?')) {
+            return;
+        }
+
+        // load the sample taxonomy
+        let req = await fetch('./sample/taxonomy.txt');
+        let txt = await req.text();
+        console.log('Taxonomy: ', txt);
+        this.taxonomy_file = {name: 'sample_taxonomy.txt'};
+        this.setTaxonomyByText(txt);
+
+        // load the prompt
+        req = await fetch('./sample/prompt.txt');
+        txt = await req.text();
+        console.log('Prompt: ', txt);
+        this.prompt_file = {name: 'sample_prompt.txt'};
+        this.setPromptByText(txt);
+
+        // load the sample dataset
+        this.dataset_file = {name: 'sample_dataset.tsv'};
+        store.items = [];
+        Papa.parse(
+            './sample/dataset.tsv', {        
+            download: true,
+            skipEmptyLines: true,
+            delimiter: '\t',
+            header: true,
+            dynamicTyping: true,
+            step: (row) => {
+                let formatted_row = store.formatTsvRow(row.data);
+                store.items.push(formatted_row);
+            }
+        });
     },
 
     msg: function(text, type='info') {

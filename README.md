@@ -25,6 +25,10 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.7.4
+
+- Add load sample
+
 ## 0.7.3
 
 - Fixed toolbar border bug
