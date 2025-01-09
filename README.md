@@ -25,6 +25,11 @@ The translate, llama model, and other services can be started separately. Please
 
 # Updates
 
+## 0.7.3
+
+- Fixed toolbar border bug
+- Updated favicon
+
 ## 0.7.2
 
 - Fixed selection color bug

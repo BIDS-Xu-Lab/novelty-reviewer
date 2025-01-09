@@ -67,7 +67,7 @@ function isCurrentItem(item) {
 <div class="item-list">
     <div class="item-list-top">
         <Toolbar style="background: transparent;"
-            class="w-full border-0 !px-0 ">
+            class="w-full !border-0 !px-0 ">
             <template #start>
                 <IconField>
                     <InputIcon>
