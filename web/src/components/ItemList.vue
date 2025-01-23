@@ -83,7 +83,7 @@ function isCurrentItem(item) {
                     <i class="pi pi-search" />
                 </InputIcon>
                 <InputText v-model="store.filter_keyword"
-                    class="w-32"
+                    class="w-48"
                     placeholder="Filter by keyword" size="normal" />
             </IconField>
         </div>
