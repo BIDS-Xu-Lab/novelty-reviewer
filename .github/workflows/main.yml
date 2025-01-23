@@ -24,6 +24,8 @@ jobs:
 
       - name: Build project
         working-directory: ./web
+        env:
+          VITE_BASE_PATH: '/novelty-reviewer/'
         run: npm run build
 
       - name: Upload production-ready build files
