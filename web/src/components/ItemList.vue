@@ -78,7 +78,7 @@ function isCurrentItem(item) {
                 </div>
             </div>
 
-            <IconField>
+            <IconField v-tooltip="'Filter the list by keyword'">
                 <InputIcon>
                     <i class="pi pi-search" />
                 </InputIcon>
