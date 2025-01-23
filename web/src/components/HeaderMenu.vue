@@ -335,7 +335,7 @@ function onClickHelp() {
                 class="menu-button"
                 v-tooltip.bottom="'Load samples for demo.'"
                 @click="onClickLoadSample()">
-                <font-awesome-icon :icon="['fas', 'users-between-lines']" class="menu-icon" />
+                <i class="fa-regular fa-clone menu-icon"></i>
                 <span>
                     Sample Data
                 </span>

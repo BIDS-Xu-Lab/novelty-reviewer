@@ -93,7 +93,7 @@ function isAllReviewed() {
                 <div class="panel-subtitle text-sm">
                     <template v-if="store.working_item">
                         <i class="far fa-file"></i>
-                        For {{ store.working_item?.pmid }}
+                        {{ store.working_item?.pmid }}
                     </template>
                     <template v-else>
                         No paper selected
