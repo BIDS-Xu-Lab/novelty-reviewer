@@ -144,169 +144,230 @@ function onClickHelp() {
 
 
 <template>
-<div class="header-menu">
-  
-  <div class="left">
+  <div id="navi">
+    <div class="navi-left prevent-select">
+      <!-- <div class="navi-item home" @click="store.gotoPage('')">
+        <font-awesome-icon :icon="['fa', 'home']" />
+        Home
+      </div> -->
 
-    <div class="oper-item">
-      <label class="file-label">
-        <i class="fa-regular fa-clipboard"></i>
-        Taxonomy File
-        <a target="_blank"
-          href="./sample/taxonomy.txt"
-          title="Download example taxonomy">
-          <i class="fa-regular fa-question-circle"></i>
-        </a>
-      </label>
-      <div class="file-zone"
-        :class="{ 'file-zone-loaded': store.taxonomy_file }"
-        @click="onTaxonomyFileChange">
-        <template v-if="store.taxonomy_file">
-          {{ store.taxonomy_file.name }}
-        </template>
-        <template v-else>
-          Load the taxonomy file
-        </template>
+      <div class="navi-item ml-2" 
+        v-tooltip.bottom="'Review the dataset'" 
+        @click="store.gotoPage('/')"
+        :class="{'active-page': store.current_page==''}">
+        <font-awesome-icon :icon="['far', 'rectangle-list']" />
+        Review
       </div>
     </div>
 
-    <Divider layout="vertical" />
+    <div class="navi-right">
 
-    <div class="oper-item">
 
-      <label class="file-label">
-        <i class="fa-regular fa-file-code"></i>
-        Prompt Template File
-        <a target="_blank"
-          href="./sample/prompt.txt"
-          title="Download example prompt">
-          <i class="fa-regular fa-question-circle"></i>
-        </a>
-      </label>
-      <div class="file-zone"
-        :class="{ 'file-zone-loaded': store.prompt_file }"
-        @click="onPromptFileChange">
-        <template v-if="store.prompt_file">
-          {{ store.prompt_file.name }}
-        </template>
-        <template v-else>
-          Load the prompt file
-        </template>
-      </div>
-    </div>
+      <div class="navi-item !mx-0"
+            v-tooltip.bottom="'Change system settings'"
+            @click="onClickSetting">
+            <font-awesome-icon :icon="['fas', 'cog']" class="mr-1" />
+            <span>
+                Settings
+            </span>
+        </div>
 
-    <Divider layout="vertical" />
-
-    <div class="oper-item">
-
-      <label class="file-label">
-        <i class="fa-regular fa-file-lines"></i>
-        Dataset File
-        <a target="_blank"
-          href="./sample/dataset.tsv"
-          title="Download example dataset">
-          <i class="fa-regular fa-question-circle"></i>
-        </a>
-      </label>
-      <div class="file-zone"
-        :class="{ 'file-zone-loaded': store.dataset_file }"
-        @click="onDatasetFileChange">
-        <template v-if="store.dataset_file">
-          {{ store.dataset_file.name }}
-        </template>
-        <template v-else>
-          Load the dataset file
-        </template>
-      </div>
-    </div>
-
-    <Divider layout="vertical" />
-    <!-- <Button label="Load the files" 
-      icon="pi pi-upload" 
-      severity="secondary" />
-    &nbsp; -->
-
-    <Button label="Clear Dataset"
-      severity="secondary"
-      :disabled="!store.items.length"
-      @click="onClickClearDataset"
-      icon="pi pi-trash">
-    </Button>
-
-    <Divider layout="vertical" />
-
-    <Button type="button"
-      label="Save dataset file" 
-      icon="pi pi-save" 
-      :disabled="!store.dataset_file"
-      v-tooltip.bottom="{ value: 'Save the current working dataset', showDelay: 1000, hideDelay: 300 }"
-      @click="onClickSaveDataset"
-      severity="secondary" />
-
-    <div class="save-status">
-      <template v-if="store.flag.has_data_unsaved">
-        <span style="color: red;">
-          Unsaved changes!
-        </span>
-      </template>
-      <template v-else>
-        <span style="color: green;">
-          <i class="fa-regular fa-circle-check"></i>
-        </span>
-      </template>
     </div>
   </div>
 
-  <div class="right">
-    <Button label="Setting"
-      icon="pi pi-cog" 
-      @click="onClickSetting"
-      class="mr-1"
-      v-tooltip.left="'Change tool settings'"
-      severity="secondary" />
+  <div class="menu">
 
-    <Button label="Sample" 
-      icon="pi pi-file" 
-      class="mr-1"
-      @click="onClickLoadSample"
-      v-tooltip.bottom="'Load sample dataset for demo'"
-      severity="secondary" />
+    <div class="menu-group">
 
-    <Button label="Help" 
-      icon="pi pi-question" 
-      class="mr-1"
-      @click="onClickHelp"
-      v-tooltip.bottom="'How to use this tool'"
-      severity="secondary" />
+      <div class="menu-group-box">
+        <div class="flex flex-col mr-2 px-4">
+          <div class="oper-item">
+            <label class="file-label">
+              <i class="fa-regular fa-clipboard"></i>
+              Taxonomy File
+              <a target="_blank" 
+                href="./sample/taxonomy.txt" 
+                title="Download example taxonomy">
+                <i class="fa-regular fa-question-circle"></i>
+              </a>
+            </label>
+            <div class="file-zone" 
+              v-tooltip.bottom="'Load the taxonomy file for review'" 
+              :class="{ 'file-zone-loaded': store.taxonomy_file }" @click="onTaxonomyFileChange">
+              <template v-if="store.taxonomy_file">
+                {{ store.taxonomy_file.name }}
+              </template>
+              <template v-else>
+                Load the taxonomy file
+              </template>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flex flex-col mr-2 px-4">
+          <div class="oper-item">
+
+            <label class="file-label">
+              <i class="fa-regular fa-file-code"></i>
+              Prompt Template File
+              <a target="_blank" href="./sample/prompt.txt" title="Download example prompt">
+                <i class="fa-regular fa-question-circle"></i>
+              </a>
+            </label>
+            <div class="file-zone" 
+              v-tooltip.bottom="'Load the prompt file for LLMs'" 
+              :class="{ 'file-zone-loaded': store.prompt_file }" 
+              @click="onPromptFileChange">
+              <template v-if="store.prompt_file">
+                {{ store.prompt_file.name }}
+              </template>
+              <template v-else>
+                Load the prompt file
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col mr-2 px-4">
+          <div class="oper-item">
+
+            <label class="file-label">
+              <i class="fa-regular fa-file-lines"></i>
+              Dataset File
+              <a target="_blank" href="./sample/dataset.tsv" title="Download example dataset">
+                <i class="fa-regular fa-question-circle"></i>
+              </a>
+            </label>
+            <div class="file-zone" 
+              v-tooltip.bottom="'Load the dataset file containing the literature data'" 
+              :class="{ 'file-zone-loaded': store.dataset_file }" 
+              @click="onDatasetFileChange">
+              <template v-if="store.dataset_file">
+                {{ store.dataset_file.name }}
+              </template>
+              <template v-else>
+                Load the dataset file
+              </template>
+            </div>
+          </div>
+        </div>
+
+
+
+        <Button text
+            class="menu-button"
+            v-tooltip.bottom="'Clear all the current dataset'"
+            @click="onClickClearDataset">
+            <font-awesome-icon :icon="['far', 'trash-can']" class="menu-icon" />
+            <span>
+                Clear
+            </span>
+        </Button>
+
+      </div>
+      <div class="menu-group-title">
+        Files
+      </div>
+    </div>
+
+
+    <div class="menu-group">
+        <div class="menu-group-box">
+          <div v-tooltip.bottom="'Current status of the dataset file'"
+            class="flex flex-col justify-center mr-2">
+              <template v-if="store.flag.has_data_unsaved">
+                <div class="text-3xl text-center" style="color: red;">
+                  <i class="fa-solid fa-times-circle"></i>
+                </div>
+                <div>
+                  Unsaved
+                </div>
+              </template>
+              <template v-else-if="!store.dataset_file">
+                <div class="text-3xl text-center" style="margin-bottom: 2px">
+                  <i class="fa-regular fa-file"></i>
+                </div>
+                <div>
+                  No file
+                </div>
+              </template>
+              <template v-else>
+                <div class="text-3xl text-center" style="color: green; margin-bottom: 2px">
+                  <i class="fa-regular fa-circle-check"></i>
+                </div>
+                <div>
+                  Saved
+                </div>
+              </template>
+          </div>
+
+          <Button text
+              class="menu-button"
+              v-tooltip.bottom="'Save the current review results'"
+              @click="onClickSaveDataset">
+              <font-awesome-icon :icon="['far', 'floppy-disk']" class="menu-icon" />
+              <span>
+                  Save Dataset File
+              </span>
+          </Button>
+
+
+            
+
+      <div class="save-status">
+        
+      </div>
+
+
+        </div>
+        <div class="menu-group-title">
+            File Operations
+        </div>
+    </div>
+
+
+
+    <div class="menu-group">
+        <div class="menu-group-box">
+
+            <Button text
+                class="menu-button"
+                v-tooltip.bottom="'Load samples for demo.'"
+                @click="onClickLoadSample()">
+                <font-awesome-icon :icon="['fas', 'users-between-lines']" class="menu-icon" />
+                <span>
+                    Sample Data
+                </span>
+            </Button>
+
+            <Button text
+                class="menu-button"
+                v-tooltip.bottom="'Show the detailed user manual in a new window.'"
+                @click="onClickHelp()">
+                <font-awesome-icon icon="fa-solid fa-book" class="menu-icon" />
+                <span>
+                    How-to Guide
+                </span>
+            </Button>
+        </div>
+        <div class="menu-group-title">
+            Help
+        </div>
+    </div>
+
 
   </div>
-</div>
+
 </template>
 
 <style scoped>
-.header-menu {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+.home {
+    color: white;
+    background: #7f1616;
 }
-.left {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  padding: 0.5rem;
-}
-.right {
-  padding: 0 1rem 0 0;
-}
-.oper-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  padding: 0.5rem;
-  width: 15rem;
+.home:hover {
+    background: #7f1616;
 }
 .file-zone {
   display: flex;
@@ -315,16 +376,15 @@ function onClickHelp() {
   cursor: pointer;
   border: 1px solid #7f7f7f;
   border-radius: 0.5rem;
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0 2rem;
 }
 .file-zone-loaded {
   border-color: green;
-  color: #004900;
+  color: var(--text-color);
 }
 .file-label {
   font-size: 0.8rem;
-}
-.save-status {
-  font-size: 0.8rem;
-  margin: 0 0.5rem;
 }
 </style>

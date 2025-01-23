@@ -63,119 +63,84 @@ function isCurrentItem(item) {
 
 
 <template>
-
-<div class="item-list">
-    <div class="item-list-top">
-        <Toolbar style="background: transparent;"
-            class="w-full !border-0 !px-0 ">
-            <template #start>
-                <IconField>
-                    <InputIcon>
-                        <i class="pi pi-search" />
-                    </InputIcon>
-                    <InputText v-model="store.filter_keyword"
-                        placeholder="Filter by keyword" size="small" style="width: 200px;" />
-                </IconField>
-            </template>
-
-            <template #end> 
-                <!-- <SplitButton 
-                    label="Sort" 
-                    severity='secondary' 
-                    size="small" :model="items">
-                </SplitButton> -->
-            </template>
-        </Toolbar>
-    </div>
-    <div class="item-main-list">
-        <div v-for="item, item_idx in store.filterred_items" :key="item.pmid"
-            :class="{'current-item': isCurrentItem(item)}"
-            @click="onClickItem(item)"
-            class="item">
-            <div class="left">
-                <span class="item-idx">
-                    <template v-if="store.hasMetadata(item)">
-                        <i class="fa-regular fa-file-lines"></i>
-                    </template>
-                </span>
-                <span v-if="isDecided(item)"
-                    class="item-icon item-checked">
-                    <i class="fa-solid fa-circle-check"></i>
-                </span>
-                <span v-else
-                    class="item-icon item-unchecked">
-                    <i class="fa-regular fa-circle-question"></i>
-                </span>
-            </div>
-            <div class="right">
-                <div class="item-brief">
-                    <div class="item-main">
-                        <div class="item-id mr-1">
-                            {{ item.pmid }}
-                        </div>
-                        <div class="item-info">
-                            {{ item.decision_by }}
-                        </div>
-                    </div>
-                    <div class="item-info">
-                        {{ item.decision }}
-                    </div>
+<Panel class="w-1/5 h-full mr-2">
+<template #header>
+    <div class="w-full flex justify-between">
+        <div class="flex items-center gap-2">
+            <div class="flex-col">
+                <div class="text-lg font-bold">
+                    <font-awesome-icon :icon="['far', 'file']" />
+                    Papers
                 </div>
-                
+                <div class="panel-subtitle text-sm">
+                    <i class="fa fa-list"></i>
+                    {{ store.items.length }} papers
+                </div>
             </div>
+
+            <IconField>
+                <InputIcon>
+                    <i class="pi pi-search" />
+                </InputIcon>
+                <InputText v-model="store.filter_keyword"
+                    class="w-32"
+                    placeholder="Filter by keyword" size="normal" />
+            </IconField>
+        </div>
+        <div>
+
         </div>
     </div>
-    <div class="item-list-bottom">
-        Pager
+</template>
+
+<div class="flex flex-col"
+    style="height: calc(100svh - 17.5rem); overflow-y: auto;">
+    <div v-for="item, item_idx in store.filterred_items" :key="item.pmid"
+        :class="{'current-item': isCurrentItem(item)}"
+        @click="onClickItem(item)"
+        class="item">
+        <div class="left">
+            <span v-if="isDecided(item)"
+                class="item-icon item-checked">
+                <i class="fa-solid fa-circle-check"></i>
+            </span>
+            <span v-else
+                class="item-icon item-unchecked">
+                <i class="fa-regular fa-circle-question"></i>
+            </span>
+            <span class="item-idx">
+                <template v-if="store.hasMetadata(item)">
+                    <i class="fa-regular fa-file-lines"></i>
+                </template>
+            </span>
+        </div>
+        <div class="right">
+            <div class="item-brief">
+                <div class="item-main">
+                    <div class="item-id mr-3">
+                        {{ item.pmid }}
+                    </div>
+                    <div class="item-info">
+                        <i v-if="item.decision_by == 'human'" class="fa fa-user"></i>
+                        <i v-else-if="item.decision_by == 'openai'" class="fa fa-robot"></i>
+                        <i v-else class="fa fa-question"></i>
+                        {{ item.decision_by }}
+                    </div>
+                </div>
+                <div class="item-info">
+                    {{ item.decision }}
+                </div>
+            </div>
+            
+        </div>
     </div>
 </div>
 
+</Panel>
 </template>
 
 
 <style scoped>
-
-.item-list {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.item-list-top {
-    position: relative;
-    top: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-    border-bottom: 1px solid #d4d4d4;
-}
-
-.item-main-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0 10px;
-    /* border-bottom: 1px solid #d4d4d4; */
-    overflow-y: auto;
-}
-
-.item-list-bottom {
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #d4d4d4;
-}
-
 .item {
     width: 100%;
     border-bottom: 1px solid #d4d4d4;
@@ -199,14 +164,14 @@ function isCurrentItem(item) {
     justify-content: center;
 }
 .item-idx {
-    width: 30px;
+    width: 2rem;
     color: #d4d4d4;
     display: inline-block;
     text-align: center;
 }
 .item-icon {
     width: 20px;
-    margin: 0 5px;
+    padding: 0 5px;
     display: inline-block;
 }
 .item-checked {

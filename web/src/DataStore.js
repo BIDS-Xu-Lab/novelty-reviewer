@@ -5,7 +5,8 @@ import Papa from "papaparse";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.7.4',
+    version: '0.8.4',
+    current_page: 'review',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
@@ -256,6 +257,10 @@ getters: {
     },
 },  
 actions: {
+    gotoPage(page) {
+        this.current_page = page.substring(1);
+    },
+
     setWorkingItemDecision(model_id, result) {
         this.working_item.decision = result;
         this.working_item.decision_by = model_id;

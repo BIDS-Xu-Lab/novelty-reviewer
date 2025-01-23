@@ -110,33 +110,61 @@ async function onClickTranslate() {
 </script>
 
 <template>
-<div v-if="store.working_item_idx != -1"
-    class="item-detail">
-    <div class="oper-bar">
-        <Button 
-            severity="secondary"
-            label="Fetch Metadata"
-            icon="pi pi-download"
-            @click="onClickFetch">
-        </Button>
-        &nbsp;
-        <template v-if="store.flag.is_translating">
-            Translating... Please wait. 
-            <i class="fa-solid fa-spinner fa-spin"></i>
-        </template>
-        <template v-else>
-            <Button label="Translate" 
-                @click="onClickTranslate"
-                severity="secondary">
-                <template #icon>
-                    <i class="fa-solid fa-language"></i>
-                </template>
-            </Button>
-        </template>
+<Panel class="flex flex-col w-2/5 mr-2">
 
-    </div>
+    <template #header>
+        <div class="w-full flex justify-between">
+            <div class="flex items-center gap-2">
+                <div class="flex-col items-center">
+                    <div class="text-lg font-bold">
+                        <font-awesome-icon :icon="['far', 'file']" />
+                        Paper Detail
+                    </div>
+                    <div class="panel-subtitle text-sm">
+                        <template v-if="store.working_item">
+                            <i class="far fa-file"></i>
+                            {{ store.working_item?.pmid }}
+                        </template>
+                        <template v-else>
+                            No paper selected
+                        </template>
+                    </div>
+                </div>
 
-    <div v-if="store.working_item">
+                <div class="flex items-center">
+                    <Button size="normal"
+                        severity="secondary"
+                        label="Fetch Metadata"
+                        icon="pi pi-download"
+                        @click="onClickFetch">
+                    </Button>
+                    &nbsp;
+                    <template v-if="store.flag.is_translating">
+                        Translating... Please wait. 
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                    </template>
+                    <template v-else>
+                        <Button label="Translate" 
+                            size="normal"
+                            @click="onClickTranslate"
+                            severity="secondary">
+                            <template #icon>
+                                <i class="fa-solid fa-language"></i>
+                            </template>
+                        </Button>
+                    </template>
+                </div>
+            </div>
+            <div>
+
+            </div>
+        </div>
+    </template>
+
+<div class="flex"
+    style="height: calc(100svh - 18rem); overflow-y: auto;">
+    
+    <div v-if="store.working_item_idx != -1 && store.working_item">
         <div v-if="store.flag.is_fetching_metadata">
             Fetching metadata... Please wait. 
             <i class="fa-solid fa-spinner spin"></i>
@@ -159,7 +187,7 @@ async function onClickTranslate() {
                 PMID: {{ store.working_item?.pmid }}
             </span>
         </div>
-        <fieldset class="border border-solid border-gray-400 p-2 m-2">
+        <fieldset class="border border-solid border-gray-400 p-2">
             <legend>Conclusion</legend>
             <div v-if="store.has_working_item_conclusion"
                 v-html="highlightText(store.working_item?.conclusion)">
@@ -171,7 +199,7 @@ async function onClickTranslate() {
                 <div v-html="store.getWorkingItemTranslation('conclusion')" class="translation-text"></div>
             </template>
         </fieldset>
-        <fieldset class="border border-solid border-gray-400 p-2 m-2">
+        <fieldset class="border border-solid border-gray-400 p-2">
             <legend>Abstract</legend>
             <div v-if="store.has_working_item_abstract"
                 v-html="highlightText(store.working_item?.abstract)">
@@ -185,17 +213,10 @@ async function onClickTranslate() {
         </fieldset>
     </div>
 </div>
+</Panel>
 </template>
 
 <style scoped>
-.item-detail {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
 .oper-bar {
     height: 3rem;
     padding: 0 0 1rem 0;
@@ -205,11 +226,10 @@ async function onClickTranslate() {
 }
 .title {
     font-size: 1.5rem;
+    line-height: 1.6rem;
     font-weight: bold;
-    padding: 10px;
 }
 .info {
-    padding: 0 1rem;
     margin: 0 0 1rem 0;
     font-style: italic;
 }
