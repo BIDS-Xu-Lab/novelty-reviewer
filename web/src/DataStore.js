@@ -5,7 +5,7 @@ import Papa from "papaparse";
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.8.6',
+    version: '0.8.8',
     current_page: 'review',
     config: {
         api_server_url: "http://localhost:8123",

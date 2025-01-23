@@ -162,7 +162,7 @@ async function onClickTranslate() {
 </template>
 
 <div class="flex"
-    style="height: calc(100svh - 18rem); overflow-y: auto;">
+    style="height: calc(100svh - 18.5rem); overflow-y: auto;">
     
     <div v-if="store.working_item_idx != -1 && store.working_item">
         <div v-if="store.flag.is_fetching_metadata">

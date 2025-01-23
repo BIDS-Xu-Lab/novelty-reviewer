@@ -13,6 +13,8 @@
 
   color: #242424;
   background-color: #ffffff;
+
+  --main-color: #b51c1c;
   
   --link-color: #08488d;
   --link-hover-color: #1b72c4;
@@ -191,6 +193,11 @@ a:hover {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+
+.home {
+  color: white;
+  background: var(--main-color);
 }
 
 .w-101 {

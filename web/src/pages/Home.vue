@@ -1,26 +1,28 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import ItemList from "../components/ItemList.vue";
+import PaperList from "../components/PaperList.vue";
 import PaperDetail from "../components/PaperDetail.vue";
-import HeaderMenu from "../components/HeaderMenu.vue";
+import HomeMenu from "../components/menus/HomeMenu.vue";
 import Footer from "../components/Footer.vue";
 
 import { useDataStore } from "../DataStore";
 import DecisionPanel from "../components/DecisionPanel.vue";
+import NaviMenu from "../components/menus/NaviMenu.vue";
 
 const store = useDataStore();
 
 onMounted(() => {
-  store.loadSettingsFromLocalStorage();
+    store.loadSettingsFromLocalStorage();
 });
 </script>
 
 <template>
 
-<HeaderMenu />
+<NaviMenu />
+<HomeMenu />
 
 <div class="main">
-<ItemList />
+<PaperList />
 
 <PaperDetail />
 

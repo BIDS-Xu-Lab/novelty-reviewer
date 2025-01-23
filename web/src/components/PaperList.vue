@@ -94,7 +94,7 @@ function isCurrentItem(item) {
 </template>
 
 <div class="flex flex-col"
-    style="height: calc(100svh - 17.5rem); overflow-y: auto;">
+    style="height: calc(100svh - 18.5rem); overflow-y: auto;">
     <div v-for="item, item_idx in store.filterred_items" :key="item.pmid"
         :class="{'current-item': isCurrentItem(item)}"
         @click="onClickItem(item)"

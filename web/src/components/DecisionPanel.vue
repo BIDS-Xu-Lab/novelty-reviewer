@@ -120,7 +120,7 @@ function isAllReviewed() {
 </template>
 
 <div class="flex flex-col"
-    style="height: calc(100svh - 18rem); overflow-y: auto;">
+    style="height: calc(100svh - 18.5rem); overflow-y: auto;">
 
     <div v-if="store.has_working_item_decision"
         class="dp-info">
