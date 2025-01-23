@@ -185,7 +185,7 @@ function onClickHelp() {
   <div class="menu-group">
 
     <div class="menu-group-box">
-      <div class="flex flex-col mr-2 px-4">
+      <div class="flex flex-col mr-2 px-3">
         <div class="oper-item">
           <label class="file-label">
             <i class="fa-regular fa-clipboard"></i>
@@ -210,7 +210,7 @@ function onClickHelp() {
       </div>
 
 
-      <div class="flex flex-col mr-2 px-4">
+      <div class="flex flex-col mr-2 px-3">
         <div class="oper-item">
 
           <label class="file-label">
@@ -234,7 +234,7 @@ function onClickHelp() {
         </div>
       </div>
 
-      <div class="flex flex-col mr-2 px-4">
+      <div class="flex flex-col mr-2 px-3">
         <div class="oper-item">
 
           <label class="file-label">
@@ -384,9 +384,13 @@ function onClickHelp() {
   cursor: pointer;
   border: 1px solid #7f7f7f;
   border-radius: 0.5rem;
-  height: 2rem;
-  line-height: 2rem;
-  padding: 0 2rem;
+  padding: 0.2rem 2rem;
+  width: 12rem;
+
+  /* hide the long text as dots */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .file-zone-loaded {
   border-color: green;
