@@ -21,7 +21,9 @@ async function onTaxonomyFileChange(e) {
 
   // update the taxonomy list
   store.taxonomy_file = fh;
-  store.setTaxonomyByText(text)
+  store.setTaxonomyByText(text);
+
+  store.msg('Loaded ' + store.taxonomy.length + ' taxonomy items');
 }
 
 async function onPromptFileChange(e) {
@@ -94,27 +96,8 @@ async function onDatasetFileChange(e) {
 }
 
 async function onClickSaveDataset() {
-  // if no dataset_file, just return
-  if (!store.dataset_file) {
-    store.msg('Please load the dataset file first', 'error');
-    return;
-  }
   console.log('* saving dataset file ' + store.dataset_file.name);
-  let content = Papa.unparse(
-    store.items, { 
-      delimiter: '\t' 
-    }
-  );
-  
-  // write back to the tsv file
-  await fs_helper.fsWriteFile(
-    store.dataset_file, 
-    content
-  );
-
-  store.flag.has_data_unsaved = false;
-  console.log('* saved to ' + store.dataset_file.name);
-  store.msg('Saved to ' + store.dataset_file.name);
+  store.saveDatasetToFile();
 }
 
 async function onClickSaveCopy() {

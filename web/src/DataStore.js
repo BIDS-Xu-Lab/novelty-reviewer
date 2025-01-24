@@ -4,6 +4,7 @@ import { translator } from './utils/translator';
 import * as toolbox from './utils/toolbox';
 import Papa from "papaparse";
 import router from './router';
+import * as fs_helper from './utils/fs_helper';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
@@ -454,14 +455,54 @@ actions: {
             text,
             'Novelty Taxonomy'
         );
-
-        this.msg('Loaded ' + result.length + ' taxonomy items');
     },
 
+    saveTaxonomyToFile: async function() {
+        // write back to the file
+        await fs_helper.fsWriteFile(
+            this.taxonomy_file, 
+            this.taxonomy_text
+        );
+    },
 
     setPromptByText: function(text) {
         this.llm_prompt_template = text;
     },
+
+    savePromptToFile: async function() {
+        // write back to the file
+        await fs_helper.fsWriteFile(
+            this.prompt_file, 
+            this.llm_prompt_template
+        );
+    },
+
+    saveDatasetToFile: async function () {
+        // if no dataset_file, just return
+        if (!this.dataset_file) {
+            this.msg('Please load the dataset file first', 'error');
+            return;
+        }
+
+        // write back to the file
+        let content = Papa.unparse(
+            this.items, 
+            {
+                delimiter: '\t'
+            }
+        );
+
+        // write back to the tsv file
+        await fs_helper.fsWriteFile(
+            this.dataset_file,
+            content
+        );
+
+        this.flag.has_data_unsaved = false;
+        console.log('* saved to ' + this.dataset_file.name);
+        this.msg('Saved to ' + this.dataset_file.name);
+    },
+    
 
     updateSettingsByJSON: function(json) {
         // copy the items from json to store.config

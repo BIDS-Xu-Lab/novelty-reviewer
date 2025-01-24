@@ -115,6 +115,22 @@ function onClickResetTranslationEndpoint() {
     store.config.translation.endpoint = "http://127.0.0.1:5000/translate";
 }
 
+function onClickSaveTaxonomy() {
+    store.saveTaxonomyToFile();
+}
+
+function onClickSavePrompt() {
+    store.savePromptToFile();
+}
+
+function onClickUpdateTaxonomy() {
+    store.setTaxonomyByText(
+        store.taxonomy_text
+    );
+
+    store.msg('Updated the taxonomy dropdown list from the text area');
+}
+
 const menu = ref();
 const items = ref([
 {
@@ -220,11 +236,32 @@ const toggle = (event) => {
         </p>
     </template>
     <template v-else>
-        <p class="mb-1 pb-1 border-b">
-            ATTENTION: This is the raw taxonomy. Any change here affects the prompt.
-        </p>
+        <div class="flex flex-col mb-1 pb-1 border-b">
+            <span>
+                ATTENTION: Any change here affects the prompt.
+            </span>
+            
+            <div class="flex gap-2">
+                <Button severity="secondary"
+                    icon="pi pi-file"
+                    label="Update"
+                    size="small"
+                    v-tooltip.bottom="'Updat the current dropdown list'"
+                    @click="onClickUpdateTaxonomy">
+                </Button>
+
+                <Button severity="secondary"
+                    icon="pi pi-save"
+                    label="Save to file"
+                    size="small"
+                    v-tooltip.bottom="'Save the content to the current taxonomy file ' + store.taxonomy_file.name"
+                    @click="onClickSaveTaxonomy">
+                </Button>
+            </div>
+
+        </div>
         <textarea class="w-full p-2 font-mono"
-            style="height: calc(100svh - 21rem);"
+            style="height: calc(100svh - 23rem);"
             v-model="store.taxonomy_text"></textarea>
     </template>
 
@@ -238,11 +275,21 @@ const toggle = (event) => {
         </p>
     </template>
     <template v-else>
-        <p class="mb-1 pb-1 border-b">
-            ATTENTION: This is a template for the prompt. Any change here will affect the chatbot directly.
-        </p>
+        <div class="mb-1 pb-1 border-b">
+            <span>
+                ATTENTION: Any change here affects the performance.
+            </span>
+            
+            <Button severity="secondary"
+                icon="pi pi-save"
+                size="small"
+                label="Save to file"
+                v-tooltip.bottom="'Save the content to the current taxonomy file ' + store.prompt_file.name"
+                @click="onClickSavePrompt">
+            </Button>
+        </div>
         <textarea class="w-full p-2"
-            style="height: calc(100svh - 21rem);"
+            style="height: calc(100svh - 23rem);"
             v-model="store.llm_prompt_template"></textarea>
     </template>
 
