@@ -71,3 +71,89 @@ export const extractJson = function(s) {
     
     return null;
 }
+
+/**
+ * Build a taxonomy tree from a text
+ * 
+ * @param {string} taxonomy_text 
+ */
+export const buildTaxonomyTree = function(taxonomy_text, root_name="Taxonomy") {
+    function findParent(root, parentParts) {
+        let currentNode = root;
+        for (const part of parentParts) {
+            const index = part - 1; // Convert to zero-based index
+            if (!currentNode.children || currentNode.children.length <= index) {
+                throw new Error(`Invalid input: Parent node for '${parentParts.join('.')}' not found. Check line order.`);
+            }
+            currentNode = currentNode.children[index];
+        }
+        return currentNode;
+    }
+
+    const lines = taxonomy_text.split('\n').map(line => line.trim()).filter(line => line);
+    const root = { 
+        name: root_name, 
+        children: [] 
+    };
+
+    for (const line of lines) {
+        const match = line.match(/^(\d+(?:\.\d+)*)\.?\s+(.+)$/);
+        if (!match) continue;
+
+        const number = match[1];
+        const name = match[2];
+
+        const _t = getTaxonomyItem(line);
+        if (!_t) continue;
+
+        const parts = number.split('.').map(part => parseInt(part, 10));
+        const parentParts = parts.slice(0, -1);
+
+        let parent = root;
+        if (parentParts.length > 0) {
+            parent = findParent(root, parentParts);
+        }
+
+        if (!parent.children) parent.children = [];
+
+        const _name = _t.name;
+        const description = _t.description;
+
+        parent.children.push({ 
+            number: number,
+            name: _name ,
+            description: description,
+        });
+    }
+
+    return root;
+}
+
+export const getTaxonomyItem = function(taxonomy_line) {
+    // trim the line
+    let _line = taxonomy_line.trim();
+
+    // if line is empty, skip
+    if (_line == "") {
+        return null;
+    }
+    // find the index of the first colon
+    let index = taxonomy_line.indexOf(":");
+
+    // first, the number and name
+    let num_name = taxonomy_line.substring(0, index);
+    let description = taxonomy_line.substring(index + 1).trim();
+
+    // then, find the name
+    let _num_name = num_name.trim();
+    let index2 = _num_name.indexOf(" ");
+
+    let num = _num_name.substring(0, index2);
+    let name = _num_name.substring(index2 + 1).trim();
+
+    return {
+        num: num,
+        name: name,
+        description: description
+    }
+}

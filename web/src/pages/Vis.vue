@@ -13,10 +13,6 @@ provide(THEME_KEY, 'light');
 
 const store = useDataStore();
 
-onMounted(() => {
-    store.loadSettingsFromLocalStorage();
-});
-
 function onClickVisFile(vis_file) {
     store.setCurrentVisFile(vis_file);
 }
@@ -25,139 +21,254 @@ function onClickRemoveVisFile(vis_file) {
     store.removeVisFile(vis_file);
 }
 
-const data = {
-    name: 'Novelty',
-    children: [
-        {
-            name: 'data',
-            value: 10000,
-            children: [
-                {
-                    name: 'converters',
-                    value: 3322
-                },
-                {
-                    name: 'DataUtil',
-                    value: 3322
-                }
-            ]
-        },
-        {
-            name: 'display',
-            children: [
-                { name: 'DirtySprite', value: 8833 },
-                { name: 'LineSprite', value: 1732 },
-                { name: 'RectSprite', value: 3623 }
-            ]
-        },
-        {
-            name: 'flex',
-            children: [{ name: 'FlareVis', value: 4116 }]
-        },
-        {
-            name: 'query',
-            children: [
-                { name: 'AggregateExpression', value: 1616 },
-                { name: 'And', value: 1027 },
-                { name: 'Arithmetic', value: 3891 },
-                { name: 'Average', value: 891 },
-                { name: 'BinaryExpression', value: 2893 },
-                { name: 'Comparison', value: 5103 },
-                { name: 'IsA', value: 2039 },
-                { name: 'Literal', value: 1214 },
-                { name: 'Match', value: 3748 },
-                { name: 'Maximum', value: 843 },
-                { name: 'Minimum', value: 843 },
-                { name: 'Not', value: 1554 },
-                { name: 'Or', value: 970 },
-                { name: 'Query', value: 13896 },
-                { name: 'Range', value: 1594 },
-                { name: 'StringUtil', value: 4130 },
-                { name: 'Sum', value: 791 },
-                { name: 'Variable', value: 1124 },
-                { name: 'Variance', value: 1876 },
-                { name: 'Xor', value: 1101 }
-            ]
-        },
-        {
-            name: 'scale',
-            children: [
-                { name: 'IScaleMap', value: 2105 },
-                { name: 'LinearScale', value: 1316 },
-                { name: 'LogScale', value: 3151 },
-                { name: 'OrdinalScale', value: 3770 },
-                { name: 'QuantileScale', value: 2435 },
-                { name: 'QuantitativeScale', value: 4839 },
-                { name: 'RootScale', value: 1756 },
-                { name: 'Scale', value: 4268 },
-                { name: 'ScaleType', value: 1821 },
-                { name: 'TimeScale', value: 5833 }
-            ]
-        }
-    ]
-};
+// {
+//     name: 'Novelty',
+//     children: [
+//         {
+//             name: 'data',
+//             value: 10000,
+//             children: [
+//                 {
+//                     name: 'converters',
+//                     value: 3322
+//                 },
+//                 {
+//                     name: 'DataUtil',
+//                     value: 3322
+//                 }
+//             ]
+//         },
+//         {
+//             name: 'display',
+//             children: [
+//                 { name: 'DirtySprite', value: 8833 },
+//                 { name: 'LineSprite', value: 1732 },
+//                 { name: 'RectSprite', value: 3623 }
+//             ]
+//         },
+//         {
+//             name: 'flex',
+//             children: [{ name: 'FlareVis', value: 4116 }]
+//         },
+//         {
+//             name: 'query',
+//             children: [
+//                 { name: 'AggregateExpression', value: 1616 },
+//                 { name: 'And', value: 1027 },
+//                 { name: 'Arithmetic', value: 3891 },
+//                 { name: 'Average', value: 891 },
+//             ]
+//         },
+//         {
+//             name: 'scale',
+//             children: [
+//                 { name: 'IScaleMap', value: 2105 },
+//                 { name: 'LinearScale', value: 1316 },
+//                 { name: 'LogScale', value: 3151 },
+//             ]
+//         }
+//     ]
+// };
+const data = { name: 'Novelty', children: [] };
 
 const option = ref({
     tooltip: {
         trigger: 'item',
-        triggerOn: 'mousemove'
+        triggerOn: 'mousemove',
     },
     series: [
-        {
-            type: 'tree',
-            id: 0,
-            name: 'tree1',
-            data: [data],
-            top: '20',
-            left: '10%',
-            bottom: '20',
-            right: '30%',
-            symbolSize: 7,
-            edgeShape: 'polyline',
-            edgeForkPosition: '63%',
-            initialTreeDepth: 3,
-            lineStyle: {
-                width: 2
-            },
-            label: {
-                backgroundColor: '#fff',
-                position: 'left',
-                verticalAlign: 'middle',
-                align: 'right',
-                formatter: (params) => {
-                    let label = params.data.name;
-                    if (params.data.value) {
-                        label += ' (' + params.data.value + ')';
-                    }
-                    return label;
-                }
-            },
-            leaves: {
-                label: {
-                    position: 'right',
-                    verticalAlign: 'middle',
-                    align: 'left'
-                }
-            },
-            emphasis: {
-                focus: 'descendant'
-            },
-            expandAndCollapse: true,
-            animationDuration: 550,
-            animationDurationUpdate: 750
-        }
+    {
+        type: 'tree',
+        id: 0,
+        name: 'tree1',
+        data: [data],
+        top: '20',
+        left: '10%',
+        bottom: '20',
+        right: '30%',
+        symbolSize: 7,
+        edgeShape: 'polyline',
+        edgeForkPosition: '63%',
+        initialTreeDepth: 3,
+        lineStyle: {
+            width: 2
+        },
+        label: {
+            position: 'left',
+            verticalAlign: 'middle',
+            align: 'left',
+            distance: -10,
+            // formatter: (params) => {
+            //     let label = params.data.name;
+            //     if (params.data.value) {
+            //         label += ' (' + params.data.value + ')';
+            //     }
+            //     return label;
+            // }
+        },
+        // leaves: {
+        //     label: {
+        //         position: 'right',
+        //         verticalAlign: 'middle',
+        //         align: 'left',
+        //         distance: 10,
+        //     }
+        // },
+        emphasis: {
+            focus: 'descendant'
+        },
+        expandAndCollapse: true,
+        animationDuration: 550,
+        animationDurationUpdate: 750
+    }
     ]
 });
+
+
+const files = ref([]);
+
+const parseFile = rawFile => {
+    return new Promise(resolve => {
+        Papa.parse(
+            rawFile,
+            {
+                delimiter: '\t',
+                skipEmptyLines: true,
+                header: true,
+                worker: true,
+                complete: (rs, f) => {
+                    resolve(rs.data);
+                },
+            }
+        );
+    });
+};
+
+async function onVisFilesChange(e) {
+    console.log('onChangeDataFiles', e);
+    files.value = e.target.files;
+
+    if (files.value.length === 0) {
+        store.msg('Please select files to be added to the system.', 'Alert', 'error');
+        return;
+    }
+
+    // process using SheetJS
+    for (let i = 0; i < files.value.length; i++) {
+        const file = files.value[i];
+        let data = await parseFile(file);
+        store.vis_files.push({
+            name: file.name,
+            data: data
+        });
+    }
+
+    store.msg(files.value.length + ' files have been added to the system.');
+
+}
+
+function onClickClearVisFiles() {
+    files.value = [];
+}
+
+const onClickUpdateCharts = () => {
+    if (store.taxonomy_tree) {
+        option.value.series[0].data = [store.taxonomy_tree];
+    }
+};
+
+onMounted(() => {
+    // load the store.taxonomy_tree if available
+    onClickUpdateCharts();
+});
+
 </script>
 
 <template>
 
 <NaviMenu />
-<VisMenu />
+
+
+<div class="menu">
+
+<div class="menu-group">
+
+    <div class="menu-group-box ml-3">
+        <div class="flex flex-col justify-start max-w-64" style="overflow: hidden;">
+            <span class="text-sm">
+                <font-awesome-icon :icon="['far', 'file-excel']" class="mr-1" />
+                Select Files
+            </span>
+            <input type="file" 
+                ref="fileupload" 
+                accept=".tsv" 
+                @change="onVisFilesChange"
+                v-tooltip.bottom="'Select local files to be loaded for visualization.'" multiple="true" />
+        </div>
+
+        <Button text class="menu-button" v-tooltip.bottom="'Clear all the current dataset'"
+            @click="onClickClearVisFiles()">
+            <font-awesome-icon :icon="['far', 'trash-can']" class="menu-icon" />
+            <span>
+                Clear
+            </span>
+        </Button>
+
+    </div>
+    <div class="menu-group-title">
+        Files
+    </div>
+</div>
+
+
+<div class="menu-group">
+    <div class="menu-group-box">
+
+        <Button text class="menu-button" 
+            v-tooltip.bottom="'Update visualization charts with the current data.'"
+            @click="onClickUpdateCharts()">
+            <font-awesome-icon :icon="['fas', 'chart-pie']" class="menu-icon" />
+            <span>
+                Update Charts
+            </span>
+        </Button>
+    </div>
+    <div class="menu-group-title">
+        Visualization
+    </div>
+</div>
+
+
+<div class="menu-group">
+    <div class="menu-group-box">
+
+        <Button text class="menu-button" v-tooltip.bottom="'Load samples for demo.'"
+            @click="store.loadSampleDataset()">
+            <i class="fa-regular fa-clone menu-icon"></i>
+            <span>
+                Sample Data
+            </span>
+        </Button>
+
+        <Button text class="menu-button" v-tooltip.bottom="'Show the detailed user manual in a new window.'"
+            @click="onClickHelp()">
+            <font-awesome-icon icon="fa-solid fa-book" class="menu-icon" />
+            <span>
+                How-to
+            </span>
+        </Button>
+    </div>
+    <div class="menu-group-title">
+        Help
+    </div>
+</div>
+
+
+</div>
+
 
 <div class="main">
-<Panel class="h-full mr-2"
-    style="width: 30rem;">
+<Panel class="h-full mr-2" style="width: 30rem;">
 <template #header>
     <div class="w-full flex justify-between">
         <div class="flex">
@@ -213,7 +324,7 @@ const option = ref({
 </div>
 </Panel>
 
-<Panel class="mr-2" style="width: 40rem;">
+<Panel class="" style="width: calc(100% - 30rem);">
 
 <template #header>
 <div class="w-full flex justify-between">
@@ -238,11 +349,11 @@ const option = ref({
 </div>
 </template>
 
-    <div style="width: 100%; height: calc(100svh - 18rem);">
-        <v-chart class="chart" 
-            :option="option" 
-            autoresize />
-    </div>
+<div style="width: 100%; height: calc(100svh - 18rem);">
+    <v-chart class="chart" 
+        :option="option" 
+        autoresize />
+</div>
 </Panel>
 
 </div>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { useToast } from "primevue/usetoast";
 import { translator } from './utils/translator';
+import * as toolbox from './utils/toolbox';
 import Papa from "papaparse";
 import router from './router';
 
@@ -268,7 +269,7 @@ getters: {
 },  
 actions: {
     gotoPage(page) {
-        this.current_page = page.substring(1);
+        this.current_page = page;
         this.router.push("/" + page);
     },
 
@@ -413,6 +414,7 @@ actions: {
         // the result is a list of strings
         let lines = text.split("\n");
         let result = [];
+
         for (let line of lines) {
             // trim the line
             let _line = line.trim();
@@ -445,6 +447,12 @@ actions: {
 
         // update the local taxonomy
         this.taxonomy = result;
+
+        // now build the tree
+        this.taxonomy_tree = toolbox.buildTaxonomyTree(
+            text,
+            'Novelty Taxonomy'
+        );
 
         this.msg('Loaded ' + result.length + ' taxonomy items');
     },
@@ -574,7 +582,7 @@ actions: {
     setCurrentVisFile: function(vis_file) {
         this.current_vis_file = vis_file;
     },
-    
+
     removeVisFile: function(vis_file) {
         let index = this.vis_files.indexOf(vis_file);
         this.vis_files.splice(index, 1);
