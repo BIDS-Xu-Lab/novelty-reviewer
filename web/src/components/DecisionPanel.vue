@@ -5,6 +5,7 @@ import { ai_helper } from "../utils/ai_helper";
 
 const store = useDataStore();
 const status = ref({});
+const visible_prompt_full_text = ref(false);
 
 function onClickAcceptHuman() {
     store.setWorkingItemDecision(
@@ -75,6 +76,19 @@ function isAllReviewed() {
     }
 
     return true;
+}
+
+function onClickCopyPrompt() {
+    navigator.clipboard.writeText(
+        ai_helper.generateQuestionFromTemplate(
+            store.llm_prompt_template,
+            store.working_item,
+            store.taxonomy_text
+        )
+    );
+
+    // show message
+    store.msg('Prompt copied to clipboard', 'success');
 }
 
 </script>
@@ -193,12 +207,21 @@ function isAllReviewed() {
 
     <div v-if="store.working_item"
         class="flex flex-col gap-4">
-        <div class="model-output-detail">
+        <div v-if="store.working_item['result_' + model.id]"
+            class="model-output-detail">
             <div class="category">
                 {{ store.working_item['result_' + model.id] }}
             </div>
             <div class="raw">
                 {{ store.working_item['result_reason_' + model.id] }}
+            </div>
+            <div class="text-sm italic text-right">
+                <span v-tooltip="'Prompt used for this model'"
+                    @click="visible_prompt_full_text = true"
+                    class="cursor-pointer">
+                    <font-awesome-icon :icon="['far', 'circle-question']" />
+                    Prompt
+                </span>
             </div>
         </div>
 
@@ -210,14 +233,14 @@ function isAllReviewed() {
                 </div>
             </template>
             <template v-else>
-            <Button label="Review" 
-                @click="onClickReview(model.id)"
-                class="mr-2"
-                severity="secondary">
-                <template #icon>
-                    <i class="fa-solid fa-bolt"></i>
-                </template>
-            </Button>
+                <Button label="Review" 
+                    @click="onClickReview(model.id)"
+                    class="mr-2"
+                    severity="secondary">
+                    <template #icon>
+                        <i class="fa-solid fa-bolt"></i>
+                    </template>
+                </Button>
             </template>
             
             <Button label="Accept" 
@@ -231,8 +254,36 @@ function isAllReviewed() {
 
 </div>
 
-
 </Panel>
+
+<Drawer v-model:visible="visible_prompt_full_text"
+    style="width: 50rem;"
+    position="right">
+<template #header>
+    <div class="flex justify-between items-center gap-2">
+        <div class="text-xl font-bold">
+            Full-text of Prompt
+        </div>
+        <div>
+            <Button severity="secondary"
+                v-tooltip.bottom="'Copy the full-text of prompt'"
+                @click="onClickCopyPrompt">
+                <font-awesome-icon :icon="['far', 'copy']" />
+                Copy
+            </Button>
+        </div>
+    </div>
+</template>
+
+<pre class="p-4 prompt-full-text">{{ 
+    ai_helper.generateQuestionFromTemplate(
+        store.llm_prompt_template,
+        store.working_item,
+        store.taxonomy_text
+    ) 
+    }}</pre>
+</Drawer>
+
 </template>
 
 <style scoped>
@@ -272,5 +323,12 @@ function isAllReviewed() {
 }
 .raw {
     font-size: 0.95rem;
+}
+.prompt-full-text {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 </style>

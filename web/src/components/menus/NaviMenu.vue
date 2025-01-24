@@ -27,13 +27,13 @@ function onClickSetting() {
         Review
     </div>
 
-    <div class="navi-item ml-2" 
+    <!-- <div class="navi-item ml-2" 
         v-tooltip.bottom="'Visualize the given datasets'" 
         @click="store.gotoPage('vis')"
         :class="{ 'active-page': store.current_page == 'vis' }">
         <font-awesome-icon :icon="['far', 'chart-bar']" />
         Visualization
-    </div>
+    </div> -->
 
 </div>
 
