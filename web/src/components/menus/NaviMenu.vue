@@ -151,10 +151,16 @@ function onClickHelp() {
 Home
 </div> -->
 
-        <div class="navi-item ml-2" v-tooltip.bottom="'Review the dataset'" @click="store.gotoPage('/')"
+        <div class="navi-item ml-2" v-tooltip.bottom="'Review the dataset'" @click="store.gotoPage('')"
             :class="{ 'active-page': store.current_page == '' }">
             <font-awesome-icon :icon="['far', 'rectangle-list']" />
             Review
+        </div>
+
+        <div class="navi-item ml-2" v-tooltip.bottom="'Visualize the given datasets'" @click="store.gotoPage('vis')"
+            :class="{ 'active-page': store.current_page == 'vis' }">
+            <font-awesome-icon :icon="['far', 'chart-bar']" />
+            Visualization
         </div>
     </div>
 

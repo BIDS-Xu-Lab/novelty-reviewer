@@ -32,8 +32,6 @@ onMounted(() => {
 <Footer />
 
 
-
-<Toast />
 </template>
 
 <style scoped>

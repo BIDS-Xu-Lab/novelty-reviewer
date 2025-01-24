@@ -362,7 +362,7 @@ function onClickHelp() {
               @click="onClickHelp()">
               <font-awesome-icon icon="fa-solid fa-book" class="menu-icon" />
               <span>
-                  How-to Guide
+                  How-to
               </span>
           </Button>
       </div>

@@ -2,11 +2,12 @@ import { defineStore } from 'pinia';
 import { useToast } from "primevue/usetoast";
 import { translator } from './utils/translator';
 import Papa from "papaparse";
+import router from './router';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.8.8',
-    current_page: 'review',
+    version: '0.9.0',
+    current_page: '',
     config: {
         api_server_url: "http://localhost:8123",
         api_server_token: "",
@@ -144,9 +145,15 @@ state: () => ({
      */
     taxonomy: [],
 
+    // dataset file for review
+    dataset_file: null,
+
+    // files for visualization
+    vis_files: [],
+    current_vis_file: null,
+
     // translation
     // dictionary of paper and tranlsated texts
-    // 
     translation: {},
 
     // prompt
@@ -169,6 +176,9 @@ state: () => ({
     },
 
     toast: useToast(),
+
+    // for the router
+    router: router,
 }),
 getters: {
     filterred_items(state) {
@@ -259,6 +269,7 @@ getters: {
 actions: {
     gotoPage(page) {
         this.current_page = page.substring(1);
+        this.router.push("/" + page);
     },
 
     setWorkingItemDecision(model_id, result) {
@@ -555,6 +566,18 @@ actions: {
                 store.items.push(formatted_row);
             }
         });
+    },
+
+    ///////////////////////////////////////////////////////
+    // functions for the visualization files
+    ///////////////////////////////////////////////////////
+    setCurrentVisFile: function(vis_file) {
+        this.current_vis_file = vis_file;
+    },
+    
+    removeVisFile: function(vis_file) {
+        let index = this.vis_files.indexOf(vis_file);
+        this.vis_files.splice(index, 1);
     },
 
     msg: function(text, type='info') {
