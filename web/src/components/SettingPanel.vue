@@ -220,9 +220,12 @@ const toggle = (event) => {
         </p>
     </template>
     <template v-else>
-        <div v-for="option in store.taxonomy"
-            v-html="option.html">
-        </div>
+        <p class="mb-1 pb-1 border-b">
+            ATTENTION: This is the raw taxonomy. Any change here affects the prompt.
+        </p>
+        <textarea class="w-full p-2 font-mono"
+            style="height: calc(100svh - 21rem);"
+            v-model="store.taxonomy_text"></textarea>
     </template>
 
 </TabPanel>
@@ -238,7 +241,7 @@ const toggle = (event) => {
         <p class="mb-1 pb-1 border-b">
             ATTENTION: This is a template for the prompt. Any change here will affect the chatbot directly.
         </p>
-        <textarea class="w-full p-1"
+        <textarea class="w-full p-2"
             style="height: calc(100svh - 21rem);"
             v-model="store.llm_prompt_template"></textarea>
     </template>

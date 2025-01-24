@@ -114,6 +114,8 @@ state: () => ({
     // taxonomy
     taxonomy_file: null,
     taxonomy_text: '',
+    taxonomy_tree: null,
+    taxonomy: [],
     
     /*
     taxonomy is a list of objects, each object has two fields:
@@ -144,7 +146,6 @@ state: () => ({
     },
     ],
      */
-    taxonomy: [],
 
     // dataset file for review
     dataset_file: null,

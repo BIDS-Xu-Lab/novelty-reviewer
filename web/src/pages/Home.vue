@@ -29,9 +29,6 @@ onMounted(() => {
 <DecisionPanel />
 </div>
 
-<Footer />
-
-
 </template>
 
 <style scoped>

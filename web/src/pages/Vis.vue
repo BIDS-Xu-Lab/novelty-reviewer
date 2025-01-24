@@ -170,6 +170,10 @@ function onClickClearVisFiles() {
     files.value = [];
 }
 
+function onClickLoadSampleData() {
+    store.loadSampleDataset();
+}
+
 const onClickUpdateCharts = () => {
     if (store.taxonomy_tree) {
         option.value.series[0].data = [store.taxonomy_tree];
@@ -242,7 +246,7 @@ onMounted(() => {
     <div class="menu-group-box">
 
         <Button text class="menu-button" v-tooltip.bottom="'Load samples for demo.'"
-            @click="store.loadSampleDataset()">
+            @click="onClickLoadSampleData()">
             <i class="fa-regular fa-clone menu-icon"></i>
             <span>
                 Sample Data
@@ -323,41 +327,47 @@ onMounted(() => {
 </div>
 </Panel>
 
-<Panel class="" style="width: calc(100% - 30rem);">
 
-<template #header>
-<div class="w-full flex justify-between">
-    <div class="flex">
-        <div class="flex-col">
-            <div class="text-lg font-bold">
-                <font-awesome-icon :icon="['far', 'folder-open']" />
-                Taxonomy
-            </div>
-            <div class="panel-subtitle text-sm">
-                <b>
-                    {{ store.vis_files.length }}
-                </b>
-                Terms
-            </div>
+<Tabs value="0" style="width: calc(100% - 30rem);">
+<TabList>
+    <Tab value="0">
+        <font-awesome-icon :icon="['fas', 'chart-diagram']" />
+        Taxonomy Structure
+    </Tab>
+    <Tab value="1">
+        <font-awesome-icon :icon="['fas', 'chart-pie']" />
+        Distribution
+    </Tab>
+    <Tab value="2">
+        <font-awesome-icon :icon="['fas', 'ranking-star']" />
+        Summary
+    </Tab>
+</TabList>
+<TabPanels style="height: calc(100svh - 20rem);">
+    <TabPanel value="0">
+        <div style="width: 100%; height: calc(100svh - 22rem);">
+            <v-chart class="chart" 
+                :option="option" 
+                autoresize />
         </div>
-    </div>
+    </TabPanel>
+    <TabPanel value="1">
+        <p class="m-0">
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+            ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+        </p>
+    </TabPanel>
+    <TabPanel value="2">
+        <p class="m-0">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+        </p>
+    </TabPanel>
+</TabPanels>
+</Tabs>
 
-    <div>
 
-    </div>
 </div>
-</template>
-
-<div style="width: 100%; height: calc(100svh - 18rem);">
-    <v-chart class="chart" 
-        :option="option" 
-        autoresize />
-</div>
-</Panel>
-
-</div>
-
-<Footer />
 
 </template>
 
