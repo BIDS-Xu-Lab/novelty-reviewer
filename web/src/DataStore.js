@@ -563,7 +563,7 @@ actions: {
         this.dataset_file = {name: 'sample_dataset.tsv'};
         store.items = [];
         Papa.parse(
-            './sample/dataset.tsv', {        
+            './sample/dataset_with_data.tsv', {
             download: true,
             skipEmptyLines: true,
             delimiter: '\t',

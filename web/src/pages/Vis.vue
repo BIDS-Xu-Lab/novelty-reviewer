@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { provide } from "vue";
-import VisMenu from "../components/menus/VisMenu.vue";
 import Footer from "../components/Footer.vue";
 
 import { useDataStore } from "../DataStore";

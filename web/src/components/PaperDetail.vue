@@ -136,9 +136,11 @@ async function onClickTranslate() {
                     severity="secondary"
                     label="Fetch Metadata"
                     icon="pi pi-download"
+                    v-tooltip.bottom="'Fetch metadata from PubMed'"
+                    class="mr-2"
                     @click="onClickFetch">
                 </Button>
-                &nbsp;
+                
                 <template v-if="store.flag.is_translating">
                     Translating... Please wait. 
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -146,6 +148,7 @@ async function onClickTranslate() {
                 <template v-else>
                     <Button label="Translate" 
                         size="normal"
+                        v-tooltip.bottom="'Translate the conclusion and abstract'"
                         @click="onClickTranslate"
                         severity="secondary">
                         <template #icon>
@@ -170,25 +173,30 @@ async function onClickTranslate() {
             <i class="fa-solid fa-spinner spin"></i>
         </div>
         <div v-if="store.has_working_item_title"
-            class="title">
-            {{ store.working_item?.title }}
+            class="mb-2">
+            <p class="title">
+                {{ store.working_item?.title }}
+            </p>
+            <p class="info">
+                <span class="journal">
+                    {{ store.working_item?.journal }}
+                </span>
+                &nbsp;
+                <span class="year">
+                    {{ store.working_item?.year }}
+                </span>
+                <br>
+                <span>
+                    PMID: {{ store.working_item?.pmid }}
+                </span>
+            </p>
         </div>
-        <div v-if="store.has_working_item_title"
-            class="info">
-            <span class="journal">
-                {{ store.working_item?.journal }}
-            </span>
-            &nbsp;
-            <span class="year">
-                {{ store.working_item?.year }}
-            </span>
-            <br>
-            <span>
-                PMID: {{ store.working_item?.pmid }}
-            </span>
+        <div v-else
+            class="mb-2">
+            No metadata available. You can fetch the metadata by clicking the "Fetch Metadata" button.
         </div>
 
-        <Fieldset class="p-2">
+        <Fieldset class="w-full p-2">
             <template #legend>
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-align-left"></i>
