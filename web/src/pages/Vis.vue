@@ -5,6 +5,7 @@ import Footer from "../components/Footer.vue";
 
 import { useDataStore } from "../DataStore";
 import NaviMenu from "../components/menus/NaviMenu.vue";
+import Papa from "papaparse";
 
 import 'echarts';
 import VChart, { THEME_KEY } from 'vue-echarts';
