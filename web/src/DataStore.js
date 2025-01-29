@@ -8,7 +8,7 @@ import * as fs_helper from './utils/fs_helper';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.9.1',
+    version: '0.9.2',
     current_page: '',
     config: {
         api_server_url: "http://localhost:8123",

@@ -34,13 +34,14 @@ app.use(ToastService);
 
 const store = useDataStore();
 window.store = store;
+store.loadSettingsFromLocalStorage();
 
 // add the router to the app
 app.use(router);
 
 // bind router with store for navigation
 router.beforeEach((to, from, next) => {
-    console.log('from', from, 'to', to);
+    // console.log('from', from, 'to', to);
 
     // set the store.current_page
     store.current_page = to.path.substring(1);

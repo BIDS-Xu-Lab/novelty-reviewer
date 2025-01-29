@@ -182,6 +182,7 @@ const onClickUpdateCharts = () => {
 };
 
 onMounted(() => {
+    console.log("* mounted Vis.vue");
     // load the store.taxonomy_tree if available
     onClickUpdateCharts();
 });

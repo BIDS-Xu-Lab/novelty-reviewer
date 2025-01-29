@@ -12,7 +12,7 @@ import NaviMenu from "../components/menus/NaviMenu.vue";
 const store = useDataStore();
 
 onMounted(() => {
-    store.loadSettingsFromLocalStorage();
+    console.log("* mounted Home.vue");
 });
 </script>
 

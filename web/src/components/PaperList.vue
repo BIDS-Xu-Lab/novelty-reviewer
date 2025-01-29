@@ -63,7 +63,7 @@ function isCurrentItem(item) {
 
 
 <template>
-<Panel class="w-1/5 h-full mr-2">
+<Panel class="w-1/5 h-full mr-2 min-w-[20rem]">
 <template #header>
     <div class="w-full flex justify-between">
         <div class="flex items-center gap-2">

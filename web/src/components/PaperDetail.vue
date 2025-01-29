@@ -110,7 +110,7 @@ async function onClickTranslate() {
 </script>
 
 <template>
-<Panel class="flex flex-col w-2/5 mr-2">
+<Panel class="flex flex-col w-2/5 mr-2 min-w-[48rem]">
 
 <template #header>
     <div class="w-full flex justify-between">

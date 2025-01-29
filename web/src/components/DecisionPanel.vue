@@ -12,6 +12,7 @@ function onClickAcceptHuman() {
         'human',
         store.working_item.result_human
     );
+    store.msg(`Updated human decision [${store.working_item.decision}] to paper ${store.working_item.pmid}`, 'success');
 }
 
 
@@ -28,6 +29,7 @@ async function onClickAccept(model_id, result) {
         model_id,
         result
     );
+    store.msg(`Updated [${model_id}] decision [${store.working_item.decision}] to paper ${store.working_item.pmid}`, 'success');
 }
 
 async function onClickReview(model_id) {
@@ -175,7 +177,7 @@ function onClickCopyPrompt() {
         <div v-if="store.working_item"
             class="flex justify-between">
             <div class="mr-1">
-                <Select v-model="store.working_item.result_human"
+                <!-- <Select v-model="store.working_item.result_human"
                     :options="store.taxonomy"
                     :scrollHeight="'20rem'"
                     filter
@@ -185,7 +187,14 @@ function onClickCopyPrompt() {
                     <template #option="slotProps">
                         <span v-html="slotProps.option.html"></span>
                     </template>
-                </Select>
+                </Select> -->
+                <select v-model="store.working_item.result_human"
+                    class="py-2 px-1 w-96 border">
+                    <option v-for="item in store.taxonomy"
+                        v-html="item.html"
+                        :value="item.value">
+                    </option>
+                </select>
             </div>
             <Button label="Accept"
                 icon="pi pi-check" 
@@ -243,10 +252,13 @@ function onClickCopyPrompt() {
                 </Button>
             </template>
             
+            <template v-if="store.working_item['result_' + model.id]">
+
             <Button label="Accept" 
                 icon="pi pi-check"
                 @click="onClickAccept(model.id, store.working_item['result_' + model.id])"
                 severity="success" />
+            </template>
         </div>
     </div>
         
