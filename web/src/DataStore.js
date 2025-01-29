@@ -9,7 +9,7 @@ import { pubmed } from './utils/pubmed';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.9.3',
+    version: '0.9.3b',
     current_page: '',
     config: {
         api_server_url: "http://localhost:8123",

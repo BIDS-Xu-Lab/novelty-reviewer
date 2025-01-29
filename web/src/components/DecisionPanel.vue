@@ -189,7 +189,7 @@ function onClickCopyPrompt() {
                     </template>
                 </Select> -->
                 <select v-model="store.working_item.result_human"
-                    class="py-2 px-1 w-96 border">
+                    class="py-2 px-1 w-96 border rounded-md">
                     <option v-for="item in store.taxonomy"
                         v-html="item.html"
                         :value="item.value">
@@ -198,6 +198,7 @@ function onClickCopyPrompt() {
             </div>
             <Button label="Accept"
                 icon="pi pi-check" 
+                v-tooltip.bottom="'Accept human decision'"
                 @click="onClickAcceptHuman"
                 severity="success">
             </Button>
@@ -256,6 +257,7 @@ function onClickCopyPrompt() {
 
             <Button label="Accept" 
                 icon="pi pi-check"
+                v-tooltip.bottom="'Accept '+model.id+' decision'"
                 @click="onClickAccept(model.id, store.working_item['result_' + model.id])"
                 severity="success" />
             </template>
@@ -315,7 +317,9 @@ function onClickCopyPrompt() {
 .final {
     font-weight: bold;
     font-size: 1.5rem;
-    height: 2rem;
+    text-align: center;
+    line-height: 1.8rem;
+    width: 80%;
 }
 .final-yes {
     color: green;
