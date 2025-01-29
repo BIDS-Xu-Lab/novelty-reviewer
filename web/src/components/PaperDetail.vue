@@ -54,7 +54,13 @@ async function onClickFetch() {
     store.working_item.year = year;
 
     // get abstract
-    let abstract = await pubmed.efetch(store.working_item.pmid, 'abstract', 'text');
+    // let abstract = await pubmed.efetch(store.working_item.pmid, 'abstract', 'text');
+    let abstract = 'Abstract not available';
+    try {
+        abstract = await pubmed.getAbstract(store.working_item.pmid);
+    } catch (e) {
+        abstract = await pubmed.efetch(store.working_item.pmid, 'abstract', 'text');
+    }
 
     // need to convert the \n to <br>
     abstract = abstract.replace(/\n/g, '<br>');

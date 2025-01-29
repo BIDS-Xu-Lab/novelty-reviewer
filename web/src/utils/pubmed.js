@@ -52,5 +52,34 @@ export const pubmed = {
         }
 
         return data;
+    },
+
+    getAbstract: async function(id) {
+        const xmlText = await this.efetch(id);
+        return this.parseAbstractFromXML(xmlText);
+    },
+
+    parseAbstractFromXML(xmlText) {
+        // Parse XML
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+        // Extract AbstractText
+        const abstractNodes = xmlDoc.querySelectorAll("AbstractText");
+        let abstractParts = [];
+
+        abstractNodes.forEach(node => {
+            let label = node.getAttribute("Label") || ""; // Get the label if available
+            let text = node.textContent.trim(); // Extract text content
+
+            if (label) {
+                abstractParts.push(`${label}: ${text}`); // Format with label
+            } else {
+                abstractParts.push(text); // Append without label
+            }
+        });
+
+        const fullAbstract = abstractParts.join("\n\n"); // Join sections with spacing
+        return fullAbstract;
     }
 };

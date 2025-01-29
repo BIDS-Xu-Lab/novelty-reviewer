@@ -5,10 +5,11 @@ import * as toolbox from './utils/toolbox';
 import Papa from "papaparse";
 import router from './router';
 import * as fs_helper from './utils/fs_helper';
+import { pubmed } from './utils/pubmed';
 
 export const useDataStore = defineStore('jarvis', {
 state: () => ({
-    version: '0.9.2b',
+    version: '0.9.3',
     current_page: '',
     config: {
         api_server_url: "http://localhost:8123",
@@ -182,6 +183,9 @@ state: () => ({
 
     // for the router
     router: router,
+
+    // for the pubmed
+    pubmed: pubmed,
 }),
 getters: {
     filterred_items(state) {
