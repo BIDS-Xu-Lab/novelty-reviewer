@@ -187,7 +187,14 @@ async function onClickTranslate() {
                 </span>
                 <br>
                 <span>
-                    PMID: {{ store.working_item?.pmid }}
+                    PMID: 
+                    <a target="_blank" 
+                        class="px-2"
+                        v-tooltip.right="'Open in PubMed'"
+                        :href="'https://pubmed.ncbi.nlm.nih.gov/' + store.working_item?.pmid ">
+                        <font-awesome-icon :icon="['fas', 'link']" />
+                        {{ store.working_item?.pmid }}
+                    </a>
                 </span>
             </p>
         </div>
